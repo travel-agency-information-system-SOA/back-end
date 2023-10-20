@@ -22,9 +22,26 @@ public class UserDatabaseRepository : IUserRepository
         return _dbContext.Users.FirstOrDefault(user => user.Username == username && user.IsActive);
     }
 
+    public List<User> GetAll()
+    {
+        return _dbContext.Users.ToList();
+    }
+
+    public User? Get(long userId)
+    {
+        return _dbContext.Users.FirstOrDefault(user => user.Id == userId);
+    }
+
     public User Create(User user)
     {
         _dbContext.Users.Add(user);
+        _dbContext.SaveChanges();
+        return user;
+    }
+
+    public User Update(User user)
+    {
+        _dbContext.Users.Update(user);
         _dbContext.SaveChanges();
         return user;
     }
@@ -34,5 +51,12 @@ public class UserDatabaseRepository : IUserRepository
         var person = _dbContext.People.FirstOrDefault(i => i.UserId == userId);
         if (person == null) throw new KeyNotFoundException("Not found.");
         return person.Id;
+    }
+
+    public string GetPersonEmail(long userId)
+    {
+        var person = _dbContext.People.FirstOrDefault(i => i.UserId == userId);
+        if (person == null) throw new KeyNotFoundException("Not found.");
+        return person.Email;
     }
 }
