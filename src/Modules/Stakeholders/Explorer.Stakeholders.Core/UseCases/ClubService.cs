@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
+
     public class ClubService : CrudService<ClubDto, Club>, IClubService
     {
         public ClubService(ICrudRepository<Club> repository, IMapper mapper) : base(repository, mapper) { }
