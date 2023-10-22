@@ -24,6 +24,13 @@ namespace Explorer.API.Controllers.Tourist.Review
             return CreateResponse(result);
         }
 
+        [HttpGet("{id:int}")]
+        public ActionResult<PagedResult<GuideReviewDto>> GetAllByGuideId([FromQuery] int page, [FromQuery] int pageSize, int id)
+        {
+            var result = _guideReviewService.GetByGuideIdPaged(page, pageSize, id);
+            return CreateResponse(result);
+        }
+
         [HttpPost]
         public ActionResult<GuideReviewDto> Create([FromBody] GuideReviewDto review)
         {

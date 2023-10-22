@@ -10,5 +10,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<GuideReviewDto> Create(GuideReviewDto review);
         Result<GuideReviewDto> Update(GuideReviewDto review);
         Result Delete(int id);
+
+        Result<PagedResult<GuideReviewDto>> GetByGuideIdPaged(int page, int pageSize, int id);
     }
 }
