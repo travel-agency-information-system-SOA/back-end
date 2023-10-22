@@ -11,8 +11,8 @@ namespace Explorer.Stakeholders.API.Public
 {
     public interface IAccountManagementService
     {
-        Result<List<AccountDto>> GetAll();
-        Result<AccountDto> Block(AccountDto account);
+        Result<List<AccountDto>> GetAllAccounts();
+        Result<AccountDto> BlockOrUnblock(AccountDto account);
 
     }
 }

@@ -21,7 +21,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             _userRepository = userRepository;
         }
 
-        public Result<List<AccountDto>> GetAll()
+        public Result<List<AccountDto>> GetAllAccounts()
         {
             
             var users = _userRepository.GetAll();
@@ -42,19 +42,23 @@ namespace Explorer.Stakeholders.Core.UseCases
             return accounts;
         }
 
-        public Result<AccountDto> Block(AccountDto account)
+        public Result<AccountDto> BlockOrUnblock(AccountDto account)
         {
+            var user = _userRepository.Get(account.UserId);
+
             if (account.IsActive)
             {
-                var user = _userRepository.Get(account.UserId);
                 user.IsActive = false;
-                _userRepository.Update(user);
-
-                account.IsActive = false;
-                return account;
             }
             else
-                return Result.Fail(FailureCode.InvalidArgument).WithError("Account is already blocked.");
+            {
+                user.IsActive = true;
+            }           
+            
+            _userRepository.Update(user);
+            account.IsActive = user.IsActive;
+            return account;
+
         }
 
         

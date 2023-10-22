@@ -21,16 +21,16 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
-        public ActionResult<List<AccountDto>> GetAll()
+        public ActionResult<List<AccountDto>> GetAllAccounts()
         {
-            var result = _accountManagementService.GetAll();
+            var result = _accountManagementService.GetAllAccounts();
             return CreateResponse(result);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<AccountDto> Update([FromBody] AccountDto account)
+        public ActionResult<AccountDto> BlockOrUnblock([FromBody] AccountDto account)
         {
-            var result = _accountManagementService.Block(account);
+            var result = _accountManagementService.BlockOrUnblock(account);
             return CreateResponse(result);
         }
     }
