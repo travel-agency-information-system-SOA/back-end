@@ -28,7 +28,9 @@ public class ToursProfile : Profile
 		.ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
 		.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
+        CreateMap<TourEquipmentDto, TourEquipment>().ReverseMap();
 
 
-	}
+
+    }
 }
