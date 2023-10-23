@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API;
 using Explorer.Tours.API.Dtos;
@@ -23,11 +24,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			
 		}
 
-		public Result<List<TourDTO>> GetByUserId(int userId, int page, int pageSize)
+		public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
 		{
 		  var allTours = CrudRepository.GetPaged(page, pageSize);
-		 List<Tour> filteredTours = allTours.Results.Where(tour => tour.GuideId==userId).ToList();
-		  return MapToDto(filteredTours);
+			var filteredTours = allTours.Results.Where(tour => tour.GuideId == userId);
+			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
+			return MapToDto(filteredPagedResult);
+
 		}
 	}
 
