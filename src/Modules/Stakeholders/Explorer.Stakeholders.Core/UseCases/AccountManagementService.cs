@@ -52,20 +52,31 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<AccountDto> BlockOrUnblock(AccountDto account)
         {
-            var user = _userRepository.Get(account.UserId);
+            try
+            {
+                var user = _userRepository.Get(account.UserId);
 
-            if (account.IsActive)
-            {
-                user.IsActive = false;
-            }
-            else
-            {
-                user.IsActive = true;
-            }           
+                if (account.IsActive)
+                {
+                    user.IsActive = false;
+                }
+                else
+                {
+                    user.IsActive = true;
+                }           
             
-            _userRepository.Update(user);
-            account.IsActive = user.IsActive;
-            return account;
+                _userRepository.Update(user);
+                account.IsActive = user.IsActive;
+                return account;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
 
         }
 
