@@ -12,16 +12,14 @@ namespace Explorer.Tours.Core.Domain
 {
     public class Problem:Entity
     {
-        string Category {  get; init; }
-        string Priority { get; init; }
-        string Description { get; init; }
-       DateTime Time {  get; init; }
+       public string Category {  get; init; }
+       public string Priority { get; init; }
+       public string Description { get; init; }
+      public  DateTime Time {  get; init; }
 
         public Problem(string category, string priority, string description, DateTime time)
         {
-            if (string.IsNullOrWhiteSpace(category)) throw new ArgumentException("Invalid Category.");
-            if (string.IsNullOrWhiteSpace(priority)) throw new ArgumentException("Invalid Priority.");
-            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid Description.");
+            if (string.IsNullOrWhiteSpace(category) || string.IsNullOrWhiteSpace(priority) || string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Field empty.");
             Category = category;
             Priority = priority;
             Description = description;
