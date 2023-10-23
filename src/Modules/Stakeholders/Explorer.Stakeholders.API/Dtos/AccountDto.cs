@@ -15,7 +15,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public string Role { get; set; }
         public bool IsActive { get; set; }
 
-        public AccountDto(long userId, string username, string password, string email, string role, bool isActive)
+        /*public AccountDto(long userId, string username, string password, string email, string role, bool isActive)
         {
             UserId = userId;
             Username = username;
@@ -23,7 +23,7 @@ namespace Explorer.Stakeholders.API.Dtos
             Email = email;
             Role = role;
             IsActive = isActive;
-        }
+        }*/
     }
 
 }

@@ -35,7 +35,15 @@ namespace Explorer.Stakeholders.Core.UseCases
             List<AccountDto> accounts = new List<AccountDto>();
             foreach (var user in users)
             {
-                var accountDto = new AccountDto(user.Id, user.Username, user.Password, _userRepository.GetPersonEmail(user.Id), user.GetPrimaryRoleName(), user.IsActive);
+                var accountDto = new AccountDto
+                {
+                    UserId = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Email = _userRepository.GetPersonEmail(user.Id),
+                    Role = user.GetPrimaryRoleName(),
+                    IsActive = user.IsActive,
+                };
                 accounts.Add(accountDto);
             }
             
