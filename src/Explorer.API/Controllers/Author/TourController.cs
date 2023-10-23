@@ -19,15 +19,20 @@ namespace Explorer.API.Controllers.Author
 		[HttpPost]
 		public ActionResult<TourDTO> Create([FromBody] TourDTO tour) 
 		{
-			var result = _tourService.Create(tour);
-			return CreateResponse(result);
+		
+				tour.Status = "Draft";
+				tour.Price = 0;
+
+				var result = _tourService.Create(tour);
+				return CreateResponse(result);
+			
 		}
 
-		[HttpGet("{id:int}")]
+		[HttpGet("{userId:int}")]
 
-		public ActionResult<List<TourDTO>> GetByUserId(int userId)
+		public ActionResult<List<TourDTO>> GetByUserId(int userId,[FromQuery] int page,[FromQuery] int pageSize)
 		{
-			var result = _tourService.GetByUserId(userId);
+			var result = _tourService.GetByUserId(userId, page, pageSize);
 			return CreateResponse(result);
 		}
 	}

@@ -11,7 +11,7 @@ namespace Explorer.Tours.Core.Domain
 	{
 		public string Name { get; init; }
 
-		public string DifficultyLevel { get; init; }
+		public DifficultyLevel DifficultyLevel { get; init; }
 
 		public string Description { get; init; }
 
@@ -23,9 +23,14 @@ namespace Explorer.Tours.Core.Domain
 
 		public int GuideId { get; init; }
 
-		public Tour(string name, string difficultyLevel, string? description, int guideId)
+		public Tour(string name, DifficultyLevel difficultyLevel, string? description, int guideId)
 		{
-			if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(difficultyLevel) || guideId == 0) throw new ArgumentException("Field empty.");
+			if (string.IsNullOrWhiteSpace(name) || guideId == 0) throw new ArgumentException("Field empty.");
+
+			if (!Enum.IsDefined(typeof(DifficultyLevel), difficultyLevel))
+			{
+				throw new ArgumentException("Invalid DifficultyLevel value.");
+			}
 			Name = name;
 			DifficultyLevel = difficultyLevel;
 			Description = description;
