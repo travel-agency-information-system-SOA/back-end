@@ -24,14 +24,14 @@ namespace Explorer.API.Controllers.Tourist.Club
         }
 
         [HttpPost]
-        public ActionResult<EquipmentDto> Create([FromBody] ClubDto clubManagement)
+        public ActionResult<ClubDto> Create([FromBody] ClubDto clubManagement)
         {
             var result = _clubManagementService.Create(clubManagement);
             return CreateResponse(result);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<EquipmentDto> Update([FromBody] ClubDto clubManagement)
+        public ActionResult<ClubDto> Update([FromBody] ClubDto clubManagement)
         {
             var result = _clubManagementService.Update(clubManagement);
             return CreateResponse(result);
