@@ -10,5 +10,6 @@ namespace Explorer.Tours.API.Public.Marketplace
         Result<PreferencesDto> Create(PreferencesDto preferences);
         Result<PreferencesDto> Update(PreferencesDto preferences);
         Result Delete(int id);
+        Result<PreferencesDto> GetByUserId(int page, int pageSize, int userId);
     }
 }

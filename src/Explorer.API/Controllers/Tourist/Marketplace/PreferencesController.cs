@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Tourist.Marketplace
 {
-    //[Authorize(Policy = "touristPolicy")]
+    [Authorize(Policy = "touristPolicy")]
     [Route("api/marketplace/preferences")]
     public class PreferencesController : BaseApiController
     {
@@ -42,6 +42,13 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
         public ActionResult<PreferencesDto> Delete(int id)
         {
             var result = _preferencesService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<PreferencesDto> GetByUserId([FromQuery] int page, [FromQuery] int pageSize, int id)
+        {
+            var result = _preferencesService.GetByUserId(page, pageSize, id);
             return CreateResponse(result);
         }
     }
