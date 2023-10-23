@@ -9,26 +9,32 @@ using Explorer.Tours.API;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
 	public class TourService : CrudService<TourDTO, Tour>, ITourService
 	{
-		private readonly ICrudRepository<Tour> _repository;
-		private readonly IMapper _mapper;
+		
 		public TourService(ICrudRepository<Tour> repository, IMapper mapper) : base(repository, mapper)
 		{
-			_repository = repository;
-			_mapper = mapper;
+			
 		}
 
-		public Result<List<TourDTO>> GetByUserId(int userId)
+		public Result<List<TourDTO>> GetByUserId(int userId, int page, int pageSize)
 		{
-			
-			throw new NotImplementedException();
-
-
+		  var allTours = CrudRepository.GetPaged(page, pageSize);
+		 List<Tour> filteredTours = allTours.Results.Where(tour => tour.GuideId==userId).ToList();
+		  return MapToDto(filteredTours);
 		}
 	}
+
+
+
+
+
+
+
 }

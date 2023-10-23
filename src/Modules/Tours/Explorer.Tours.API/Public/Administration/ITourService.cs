@@ -12,6 +12,6 @@ namespace Explorer.Tours.API.Public.Administration
 	{
 		Result<TourDTO> Create(TourDTO tourDto);
 		
-		Result<List<TourDTO>> GetByUserId(int userId);
+		Result<List<TourDTO>> GetByUserId(int userId, int page, int pageSize);
 	}
 }
