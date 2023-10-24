@@ -1,5 +1,6 @@
 ﻿using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,15 +20,27 @@ namespace Explorer.API.Controllers.Author
 		[HttpPost]
 		public ActionResult<TourDTO> Create([FromBody] TourDTO tour) 
 		{
-			var result = _tourService.Create(tour);
+		
+				tour.Status = "Draft";
+				tour.Price = 0;
+
+				var result = _tourService.Create(tour);
+				return CreateResponse(result);
+			
+		}
+
+		[HttpGet("{userId:int}")]
+
+		public ActionResult<List<TourDTO>> GetByUserId(int userId,[FromQuery] int page,[FromQuery] int pageSize)
+		{
+			var result = _tourService.GetByUserId(userId, page, pageSize);
 			return CreateResponse(result);
 		}
 
-		[HttpGet("{id:int}")]
-
-		public ActionResult<List<TourDTO>> GetByUserId(int userId)
+		[HttpDelete("{id:int}")]
+		public ActionResult Delete(int id)
 		{
-			var result = _tourService.GetByUserId(userId);
+			var result = _tourService.Delete(id);
 			return CreateResponse(result);
 		}
 	}
