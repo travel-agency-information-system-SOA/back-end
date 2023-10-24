@@ -30,7 +30,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			var filteredTours = allTours.Results.Where(tour => tour.GuideId == userId);
 			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
 			return MapToDto(filteredPagedResult);
-			//return _mapper.
+			
 		}
 	}
 
