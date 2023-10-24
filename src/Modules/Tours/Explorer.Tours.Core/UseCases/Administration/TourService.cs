@@ -18,10 +18,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
 	public class TourService : CrudService<TourDTO, Tour>, ITourService
 	{
-		
+		private readonly IMapper _mapper;
 		public TourService(ICrudRepository<Tour> repository, IMapper mapper) : base(repository, mapper)
 		{
-			
+			_mapper = mapper;
 		}
 
 		public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
@@ -30,7 +30,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			var filteredTours = allTours.Results.Where(tour => tour.GuideId == userId);
 			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
 			return MapToDto(filteredPagedResult);
-
+			//return _mapper.
 		}
 	}
 
