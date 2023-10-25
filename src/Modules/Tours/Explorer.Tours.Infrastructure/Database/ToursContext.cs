@@ -8,10 +8,10 @@ public class ToursContext : DbContext
 
     public DbSet<TourObject> TourObject { get; set; }
 
+    public DbSet<ObjInTour> ObjInTours { get; set; }
     public DbSet<TourPoint> TourPoint { get; set; }
 
     public DbSet<TourEquipment> TourEquipments { get; set; }
-    public DbSet<TourKeyPoint> TourKeyPoints { get; set; }
 
     public DbSet<Tour> Tours { get; set; }
 

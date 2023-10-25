@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Dtos
 {
-    public class TourKeyPointDto
+    public class ObjInTourDto
     {
-        public long TourId { get; set; }
-        public long PointId { get; set; }
+        public int id { get; set; }
+        public int IdObject { get; set; }
+        public int IdTour { get; set; }
     }
 }

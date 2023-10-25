@@ -15,14 +15,20 @@ public class ToursProfile : Profile
         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
         .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-        .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.Parse(typeof(ObjectCategory), src.Category)));
+        .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.Parse(typeof(ObjectCategory), src.Category)))
+        .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
+        .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude));
 
         CreateMap<TourObject, TourObjectDto>()
         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
         .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-        .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
- 
+        .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
+        .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
+        .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude));
+
+        CreateMap<ObjInTourDto, ObjInTour>().ReverseMap();
+        CreateMap<ObjInTour, ObjInTourDto>().ReverseMap();
 
 		CreateMap<TourDTO, Tour>()
 
@@ -46,12 +52,7 @@ public class ToursProfile : Profile
 
         CreateMap<TourEquipmentDto, TourEquipment>().ReverseMap();
 
-
-		
-	
-
         CreateMap<TourPointDto, TourPoint>().ReverseMap();
-
 
     }
 }
