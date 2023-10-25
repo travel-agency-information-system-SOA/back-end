@@ -24,12 +24,23 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPost]
-        public ActionResult<TourPointDto> Create([FromBody] TourPointDto tourPoint)
+        [HttpPost]/*
+        public (ActionResult<TourPointDto>, int) Create([FromBody] TourPointDto tourPoint)
         {
             var result = _tourPointService.Create(tourPoint);
+            Console.WriteLine("rezultat id:" + result.Value.Id);
+
+            return (CreateResponse(result), result.Value.Id);
+        }*/
+
+        public ActionResult<PagedResult<TourPointDto>> Create([FromBody] TourPointDto tourPoint)
+        {
+            var result = _tourPointService.Create(tourPoint);
+            Console.WriteLine("rezultat id:" + result.Value.Id);
+            
             return CreateResponse(result);
         }
+
 
         [HttpPut("{id:int}")]
         public ActionResult<TourPointDto> Update([FromBody] TourPointDto tourPoint)
