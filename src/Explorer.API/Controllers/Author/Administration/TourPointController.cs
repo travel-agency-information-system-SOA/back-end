@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,5 +56,14 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourPointService.Delete(id);
             return CreateResponse(result);
         }
-    }
+
+
+		[HttpGet("{tourId:int}")]
+
+		public ActionResult<List<TourPointDto>> GetTourPointsByTourId(int tourId)
+		{
+			var result = _tourPointService.GetTourPointsByTourId(tourId);
+			return CreateResponse(result);
+		}
+	}
 }
