@@ -9,8 +9,23 @@ public class ToursProfile : Profile
     public ToursProfile()
     {
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
+        //CreateMap<TourObjectDto, TourObject>().ReverseMap();
+
+         CreateMap<TourObjectDto, TourObject>()
+        .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+        .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+        .ForMember(dest => dest.Category, opt => opt.MapFrom(src => Enum.Parse(typeof(ObjectCategory), src.Category)));
+
+        CreateMap<TourObject, TourObjectDto>()
+        .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+        .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+        .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
+ 
 
 		CreateMap<TourDTO, Tour>()
+
 	 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
 	 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
 	  .ForMember(dest => dest.DifficultyLevel, opt => opt.MapFrom(src => Enum.Parse(typeof(DifficultyLevel), src.DifficultyLevel)))
@@ -18,6 +33,7 @@ public class ToursProfile : Profile
 	 .ForMember(dest => dest.GuideId, opt => opt.MapFrom(src => src.GuideId))
 	 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
 	 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+
 
 		CreateMap<Tour, TourDTO>()
 		.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -35,6 +51,7 @@ public class ToursProfile : Profile
 	
 
         CreateMap<TourPointDto, TourPoint>().ReverseMap();
+
 
     }
 }
