@@ -9,6 +9,7 @@ public class BlogProfile : Profile
     public BlogProfile()
     {
         CreateMap<BlogPostDto, BlogPost>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
@@ -16,6 +17,7 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(BlogPostStatus), src.Status)));
 
         CreateMap<BlogPost, BlogPostDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
