@@ -23,6 +23,8 @@ public class ToursProfile : Profile
         .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
         .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
  
+        CreateMap<ObjInTourDto, ObjInTour>().ReverseMap();
+        CreateMap<ObjInTour, ObjInTourDto>().ReverseMap();
 
 		CreateMap<TourDTO, Tour>()
 
@@ -53,5 +55,6 @@ public class ToursProfile : Profile
         CreateMap<TourPointDto, TourPoint>().ReverseMap();
 
 
+        CreateMap<TourKeyPointDto, TourKeyPoint>().ReverseMap();
     }
 }
