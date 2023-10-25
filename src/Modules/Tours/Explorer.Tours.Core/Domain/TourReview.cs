@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -27,6 +29,14 @@ namespace Explorer.Tours.Core.Domain
             ReviewDate = reviewDate;
             Images = images;
             TourId = tourId;
+
+            Validate();
+        }
+
+        private void Validate()
+        {
+            
+            if (Grade <1 | Grade>5) throw new ArgumentException("Invalid Grade");
         }
     }
 }
