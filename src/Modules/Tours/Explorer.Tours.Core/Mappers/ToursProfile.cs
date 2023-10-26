@@ -9,6 +9,9 @@ public class ToursProfile : Profile
     public ToursProfile()
     {
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
+
+        CreateMap<TourReviewDto, TourReview>().ReverseMap();
+
         //CreateMap<TourObjectDto, TourObject>().ReverseMap();
 
          CreateMap<TourObjectDto, TourObject>()
@@ -67,5 +70,6 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.PreferredDifficulty, opt => opt.MapFrom(src => src.PreferredDifficulty.ToString()))
             .ForMember(dest => dest.TransportationPreferences, opt => opt.MapFrom(src => src.TransportationPreferences))
             .ForMember(dest => dest.InterestTags, opt => opt.MapFrom(src => src.InterestTags));
+
     }
 }
