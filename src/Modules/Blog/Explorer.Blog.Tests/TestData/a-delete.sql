@@ -1,1 +1,1 @@
-﻿DELETE FROM tours."Equipment";
+﻿DELETE from blog."BlogPosts";
