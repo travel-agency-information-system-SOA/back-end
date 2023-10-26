@@ -20,18 +20,12 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet]
-        public ActionResult<ObservableCollection<TouristEquipmentDto>> GetTouristEquipment([FromQuery] TouristEquipmentDto touristEquipment)
+        public ActionResult<PagedResult<TouristEquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _touristEquipmentService.GetTouristEquipment(touristEquipment.TouristId);
+            var result = _touristEquipmentService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
 
-        [HttpGet("/lala")]
-        public ActionResult<ObservableCollection<TouristEquipmentDto>> GetOtherEquipment([FromQuery] TouristEquipmentDto touristEquipment)
-        {
-            var result = _touristEquipmentService.GetOtherEquipment(touristEquipment.TouristId);
-            return CreateResponse(result);
-        }
 
         [HttpPost]
         public ActionResult<TouristEquipmentDto> Create([FromBody] TouristEquipmentDto equipment)

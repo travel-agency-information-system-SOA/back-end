@@ -18,29 +18,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
     public TouristEquipmentService(ICrudRepository<TouristEquipment> repository, IMapper mapper) : base(repository, mapper) { }
 
-
-        public Result<ObservableCollection<TouristEquipmentDto>> GetOtherEquipment(int touristId)
-        {
-            var allEquipment = CrudRepository.GetPaged(0, 0).Results.ToList();
-            var results = new ObservableCollection<TouristEquipmentDto>();
-            foreach (var item in allEquipment)
-            {
-                if (item.TouristId != touristId) results.Add(MapToDto(item));
-            }
-
-            return results;
-        }
-
-        public Result<ObservableCollection<TouristEquipmentDto>> GetTouristEquipment(int touristId)
-        {
-            var allEquipment = CrudRepository.GetPaged(0, 0).Results.ToList();
-            var results = new ObservableCollection<TouristEquipmentDto>();
-            foreach (var item in allEquipment)
-            {
-                if (item.TouristId == touristId) results.Add(MapToDto(item));
-            }
-
-            return results;
-        }
+     
     }
 }
