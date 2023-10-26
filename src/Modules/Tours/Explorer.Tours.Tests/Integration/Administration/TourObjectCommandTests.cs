@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {
+
 	[Collection("Sequential")]
 	public class TourObjectCommandTests : BaseToursIntegrationTest
 	{
@@ -50,6 +51,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			//storedEntity.Id.ShouldBe(result.Id);
 		}
 		/*
+
         [Fact]
         public void Create_fails_invalid_data()
         {
@@ -71,6 +73,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(400);
         }*/
+
 
 		[Fact]
 		public void Updates()
@@ -176,3 +179,4 @@ namespace Explorer.Tours.Tests.Integration.Administration
 		}
 	}
 }
+
