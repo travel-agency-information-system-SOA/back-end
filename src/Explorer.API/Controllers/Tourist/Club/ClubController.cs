@@ -11,36 +11,36 @@ namespace Explorer.API.Controllers.Tourist.Club
     [Route("api/club/club")]
     public class ClubController : BaseApiController
     {
-        private readonly IClubService _clubManagementService;
-        public ClubController(IClubService clubManagementService)
+        private readonly IClubService _clubService;
+        public ClubController(IClubService clubService)
         {
-            _clubManagementService = clubManagementService;
+            _clubService = clubService;
         }
-        [HttpGet]
-        public ActionResult<PagedResult<ClubDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        [HttpGet("{userId:int}")]
+        public ActionResult<PagedResult<ClubDto>> GetByUserID(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _clubManagementService.GetPaged(page, pageSize);
+            var result = _clubService.GetByUserId(userId, page, pageSize);
             return CreateResponse(result);
         }
 
         [HttpPost]
-        public ActionResult<ClubDto> Create([FromBody] ClubDto clubManagement)
+        public ActionResult<ClubDto> Create([FromBody] ClubDto club)
         {
-            var result = _clubManagementService.Create(clubManagement);
+            var result = _clubService.Create(club);
             return CreateResponse(result);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<ClubDto> Update([FromBody] ClubDto clubManagement)
+        public ActionResult<ClubDto> Update([FromBody] ClubDto club)
         {
-            var result = _clubManagementService.Update(clubManagement);
+            var result = _clubService.Update(club);
             return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var result = _clubManagementService.Delete(id);
+            var result = _clubService.Delete(id);
             return CreateResponse(result);
         }
     }
