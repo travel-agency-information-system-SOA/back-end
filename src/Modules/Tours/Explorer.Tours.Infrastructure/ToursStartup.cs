@@ -28,7 +28,11 @@ public static class ToursStartup
         services.AddScoped<IEquipmentService, EquipmentService>();
 
 
+
         services.AddScoped<ITouristEquipmentService, TouristEquipmentService>();
+
+        services.AddScoped<IProblemService, ProblemService>();
+
 
         services.AddScoped<ITourReviewService, TourReviewService>();
 
@@ -41,6 +45,7 @@ public static class ToursStartup
         services.AddScoped<IGuideReviewService, GuideReviewService>();
         services.AddScoped<IPreferencesService, PreferencesService>();
 
+
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -48,7 +53,12 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Equipment>), typeof(CrudDatabaseRepository<Equipment, ToursContext>));
 
 
+
         services.AddScoped(typeof(ICrudRepository<TouristEquipment>), typeof(CrudDatabaseRepository<TouristEquipment, ToursContext>));
+
+
+        services.AddScoped(typeof(ICrudRepository<Problem>), typeof(CrudDatabaseRepository<Problem, ToursContext>));
+
 
         services.AddScoped(typeof(ICrudRepository<TourReview>), typeof(CrudDatabaseRepository<TourReview, ToursContext>));
 
