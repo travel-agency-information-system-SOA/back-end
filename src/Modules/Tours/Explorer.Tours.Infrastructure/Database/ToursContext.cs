@@ -5,6 +5,12 @@ namespace Explorer.Tours.Infrastructure.Database;
 public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
+
+    public DbSet<TouristEquipment> TouristEquipment { get; set; }
+
+    public DbSet<TourReview> TourReviews { get; set; }
+
+
     public DbSet<GuideReview> GuideReviews { get; set; }
     public DbSet<Preferences> Preferences { get; set; }
 
@@ -16,6 +22,7 @@ public class ToursContext : DbContext
     public DbSet<TourEquipment> TourEquipments { get; set; }
 
     public DbSet<Tour> Tours { get; set; }
+
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
