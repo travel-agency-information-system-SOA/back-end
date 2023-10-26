@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
-    [Authorize(Policy = "administratorPolicy")]
+    [Authorize(Policy = "authorPolicy")]
     [Route("api/administration/equipment")]
     public class EquipmentController : BaseApiController
     {
