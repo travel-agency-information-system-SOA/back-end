@@ -9,13 +9,20 @@ public class Person : Entity
     public string Name { get; init; }
     public string Surname { get; init; }
     public string Email { get; init; }
+    public string? ProfileImage { get; init; }
+    public string? Bio { get; init; }
+    public string? Quote { get; init; }
 
-    public Person(long userId, string name, string surname, string email)
+
+    public Person(long userId, string name, string surname, string email, string? profileImage, string? bio, string? quote)
     {
         UserId = userId;
         Name = name;
         Surname = surname;
         Email = email;
+        ProfileImage = profileImage;
+        Bio = bio;
+        Quote = quote;
         Validate();
     }
 

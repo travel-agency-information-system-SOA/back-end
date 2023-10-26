@@ -27,6 +27,8 @@ public static class StakeholdersStartup
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenGenerator, JwtGenerator>();
+        services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<IAccountManagementService, AccountManagementService>();
         services.AddScoped<IAppRatingService, AppRatingService>();  
     }
 
