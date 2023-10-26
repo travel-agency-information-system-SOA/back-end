@@ -8,6 +8,9 @@ public class ToursContext : DbContext
 
     public DbSet<TouristEquipment> TouristEquipment { get; set; }
 
+    public DbSet<TourReview> TourReviews { get; set; }
+
+
     public DbSet<GuideReview> GuideReviews { get; set; }
     public DbSet<Preferences> Preferences { get; set; }
 
