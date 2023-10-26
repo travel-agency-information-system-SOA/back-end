@@ -14,9 +14,9 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
     {
         private readonly DbSet<Problem> _problems;  
 
-        public ProblemRepository(ProblemsContext contex)
+        public ProblemRepository(ToursContext context)
         {
-            _problems = contex.Problems;
+            _problems = context.Problem;
         }
 
         public void Report(Problem problem)
