@@ -36,7 +36,6 @@ public class ToursContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
-        modelBuilder.HasDefaultSchema("problems");
     }
 
    
