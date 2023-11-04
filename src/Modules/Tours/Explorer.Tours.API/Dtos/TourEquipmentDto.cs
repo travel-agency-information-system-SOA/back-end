@@ -8,7 +8,12 @@ namespace Explorer.Tours.API.Dtos
 {
     public class TourEquipmentDto
     {
+
+        public int Id { get; set; }
+
         public long TourId { get; set; } 
         public long EquipmentId { get; set; } 
+
+        public bool IsSelected { get; set; }
     }
 }
