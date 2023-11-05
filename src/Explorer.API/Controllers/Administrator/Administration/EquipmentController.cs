@@ -26,6 +26,13 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
+        [HttpGet("{id:int}")]
+        public ActionResult<EquipmentDto> Get(List<int> ids)
+        {
+            var result = _equipmentService.GetById(ids);
+            return CreateResponse(result);
+        }
+
         [HttpPost]
         public ActionResult<EquipmentDto> Create([FromBody] EquipmentDto equipment)
         {

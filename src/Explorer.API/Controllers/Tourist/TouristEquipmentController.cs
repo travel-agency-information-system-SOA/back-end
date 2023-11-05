@@ -25,6 +25,12 @@ namespace Explorer.API.Controllers.Tourist
             var result = _touristEquipmentService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
+        [HttpGet("{id:int}")]
+        public ActionResult<TouristEquipmentDto> GetByTouristId([FromQuery]int id)
+        {
+            var result =  _touristEquipmentService.GetByTouristId(id); 
+            return CreateResponse(result);
+        }
 
 
         [HttpPost]

@@ -18,6 +18,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
     public TouristEquipmentService(ICrudRepository<TouristEquipment> repository, IMapper mapper) : base(repository, mapper) { }
 
-     
+        public Result<TouristEquipmentDto> GetByTouristId(int id)
+        {
+            var result = CrudRepository.Get(id);
+            return MapToDto(result);
+            
+        }
     }
 }

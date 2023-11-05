@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using AutoMapper.Configuration.Conventions;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using FluentResults;
 using System;
@@ -17,6 +18,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TouristEquipmentDto> Update(TouristEquipmentDto touristEquipment);
         Result<TouristEquipmentDto> Create(TouristEquipmentDto touristEquipment);
         Result Delete(int touristEquipmentDtoId);
+        Result<TouristEquipmentDto> GetByTouristId(int id);
 
     }
 }
