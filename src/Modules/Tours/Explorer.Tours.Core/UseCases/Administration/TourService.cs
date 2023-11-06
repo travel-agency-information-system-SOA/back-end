@@ -9,14 +9,14 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
-	public class TourService : CrudService<TourDTO, Tour>, ITourService
+    public class TourService : CrudService<TourDTO, Tour>, ITourService
 	{
 		private readonly IMapper _mapper;
 		public TourService(ICrudRepository<Tour> repository, IMapper mapper) : base(repository, mapper)
@@ -31,6 +31,23 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
 			return MapToDto(filteredPagedResult);
 			
+		}
+
+		public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transportType)
+		{
+			try
+			{
+
+				var Tour = CrudRepository.Get(tourId);
+				Tour.setCharacteristic(distance, duration, (TransportType)Enum.Parse(typeof(TransportType), transportType));
+				CrudRepository.Update(Tour);
+				return Result.Ok();
+
+			}
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
 		}
 	}
 

@@ -45,6 +45,20 @@ namespace Explorer.API.Controllers.Author
 			return CreateResponse(result);
 		}
 
-		
+		[HttpPut("{id:int}")]
+		public ActionResult<TourDTO> Update([FromBody] TourDTO tourDto)
+		{
+			var result = _tourService.Update(tourDto);
+			return CreateResponse(result);
+		}
+
+
+		[HttpPut("caracteristics/{id:int}")]
+		public ActionResult AddCaracteristics(int id, [FromBody] TourCharacteristicDTO tourCharacteristic)
+		{
+			var result = _tourService.SetTourCharacteristic(id, tourCharacteristic.Distance, tourCharacteristic.Duration, tourCharacteristic.TransportType);
+			return CreateResponse(result);
+		}
+
 	}
 }

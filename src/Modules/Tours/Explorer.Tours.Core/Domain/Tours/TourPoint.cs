@@ -5,18 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Explorer.BuildingBlocks.Core.Domain;
-namespace Explorer.Tours.Core.Domain
+
+namespace Explorer.Tours.Core.Domain.Tours
 {
     public class TourPoint : Entity
     {
         public int IdTour { get; init; }
+
+        public Tour? Tour { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
         public string ImageUrl { get; init; }
 
-        public TourPoint(int idTour,string name, string? description, double latitude, double longitude, string imageUrl)
+        public TourPoint(int idTour, string name, string? description, double latitude, double longitude, string imageUrl)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             IdTour = idTour;
@@ -24,7 +27,7 @@ namespace Explorer.Tours.Core.Domain
             Description = description;
             Latitude = latitude;
             Longitude = longitude;
-            ImageUrl=imageUrl;
+            ImageUrl = imageUrl;
         }
     }
 }

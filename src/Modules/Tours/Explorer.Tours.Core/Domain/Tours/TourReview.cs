@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Tours.Core.Domain.Tours
 {
     public class TourReview : Entity
     {
@@ -20,7 +20,7 @@ namespace Explorer.Tours.Core.Domain
 
         public int TourId { get; init; }
 
-        public TourReview( int grade, string comment, int touristId, DateTime attendanceDate, DateTime reviewDate, List<string> images, int tourId)
+        public TourReview(int grade, string comment, int touristId, DateTime attendanceDate, DateTime reviewDate, List<string> images, int tourId)
         {
             Grade = grade;
             Comment = comment;
@@ -35,8 +35,8 @@ namespace Explorer.Tours.Core.Domain
 
         private void Validate()
         {
-            
-            if (Grade <1 | Grade>5) throw new ArgumentException("Invalid Grade");
+
+            if (Grade < 1 | Grade > 5) throw new ArgumentException("Invalid Grade");
         }
     }
 }

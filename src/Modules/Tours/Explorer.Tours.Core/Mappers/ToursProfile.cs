@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -41,16 +42,16 @@ public class ToursProfile : Profile
         CreateMap<ObjInTourDto, ObjInTour>().ReverseMap();
         CreateMap<ObjInTour, ObjInTourDto>().ReverseMap();
 
-		CreateMap<TourDTO, Tour>()
+        CreateMap<TourDTO, Tour>().IncludeAllDerived()
 
-	 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-	 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-	  .ForMember(dest => dest.DifficultyLevel, opt => opt.MapFrom(src => Enum.Parse(typeof(DifficultyLevel), src.DifficultyLevel)))
+     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+      .ForMember(dest => dest.DifficultyLevel, opt => opt.MapFrom(src => Enum.Parse(typeof(DifficultyLevel), src.DifficultyLevel)))
       .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourStatus), src.Status)))
-	 .ForMember(dest => dest.GuideId, opt => opt.MapFrom(src => src.GuideId))
-	 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-	 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
-
+     .ForMember(dest => dest.GuideId, opt => opt.MapFrom(src => src.GuideId))
+     .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+     .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+	 
 
 		CreateMap<Tour, TourDTO>()
 		.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -79,5 +80,14 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.TransportationPreferences, opt => opt.MapFrom(src => src.TransportationPreferences))
             .ForMember(dest => dest.InterestTags, opt => opt.MapFrom(src => src.InterestTags));
 
-    }
+		CreateMap<TourCharacteristicDTO, TourCharacteristic>()
+			.ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
+			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => Enum.Parse(typeof(DifficultyLevel), src.TransportType)))
+			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
+
+		CreateMap<TourCharacteristic, TourCharacteristicDTO>()
+			.ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
+			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => src.TransportType.ToString()))
+			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
+	}
 }
