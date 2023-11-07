@@ -7,6 +7,7 @@ using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Mappers;
 using Explorer.Tours.Core.UseCases.Administration;
+using Explorer.Tours.Core.UseCases.Authoring;
 using Explorer.Tours.Core.UseCases.Marketplace;
 using Explorer.Tours.Infrastructure.Database;
 using Explorer.Tours.Infrastructure.Database.Repositories;
