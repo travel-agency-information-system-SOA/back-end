@@ -10,7 +10,7 @@ public class ToursContext : DbContext
     public DbSet<TouristEquipment> TouristEquipment { get; set; }
 
 
-    public DbSet<Problem> Problem { get; set; }
+    public DbSet<Problem> Problems { get; set; }
 
 
 
