@@ -19,17 +19,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
     public class TourService : CrudService<TourDTO, Tour>, ITourService
 	{
 		private readonly IMapper _mapper;
-		public TourService(ICrudRepository<Tour> repository, IMapper mapper) : base(repository, mapper)
+		private readonly ITourRepository _repository;
+		public TourService(ICrudRepository<Tour> repository, ITourRepository tourRepository, IMapper mapper) : base(repository, mapper)
 		{
 			_mapper = mapper;
+			_repository = tourRepository;
 		}
 
 		public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
 		{
-		  var allTours = CrudRepository.GetPaged(page, pageSize);
-			var filteredTours = allTours.Results.Where(tour => tour.GuideId == userId);
-			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
-			return MapToDto(filteredPagedResult);
+		  var tours = _repository.GetByUserId(userId, page, pageSize);
+		  return MapToDto(tours);
 			
 		}
 
