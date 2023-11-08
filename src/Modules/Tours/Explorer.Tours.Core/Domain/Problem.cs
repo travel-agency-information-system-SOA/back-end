@@ -16,12 +16,13 @@ namespace Explorer.Tours.Core.Domain
        public string Priority { get; init; }
        public string Description { get; init; }
        public  DateTime Time {  get; init; }
-
        public int IdTourist { get; init; }
-       public int IdTour { get; init; }
+       public int IdGuide { get; init; }
+       public ICollection<ProblemMessage> Messages { get; } = new List<ProblemMessage>();
+       public bool IsSolved { get; init; }
 
 
-        public Problem(string category, string priority, string description, DateTime time, int idTourist, int idTour)
+        public Problem(string category, string priority, string description, DateTime time, int idTourist, int idGuide)
         {
             if (string.IsNullOrWhiteSpace(category) || string.IsNullOrWhiteSpace(priority) || string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Field empty.");
             Category = category;
@@ -29,7 +30,7 @@ namespace Explorer.Tours.Core.Domain
             Description = description;
             Time = time;
             IdTourist = idTourist;
-            IdTour = idTour;
+            IdGuide = idGuide;
         }
     }
 }

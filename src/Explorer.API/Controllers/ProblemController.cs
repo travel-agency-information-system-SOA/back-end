@@ -6,23 +6,21 @@ using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Tourist
+namespace Explorer.API.Controllers
 {
 
-    [Authorize(Policy = "touristPolicy")]
     [Route("api/tourist/problem")]
-
     public class ProblemController : BaseApiController
     {
         private readonly IProblemService _problemService;
-     
 
-       public ProblemController(IProblemService problemService)
+
+        public ProblemController(IProblemService problemService)
         {
             _problemService = problemService;
         }
 
-
+        [Authorize(Policy = "touristPolicy, administratorPolicy")]
         [HttpGet("byTourist/{userId:int}")]
         public ActionResult<List<ProblemDto>> GetByTouristId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -30,13 +28,16 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpGet("byTour/{tourId:int}")]
-        public ActionResult<List<ProblemDto>> GetByTourtId(int tourId, [FromQuery] int page, [FromQuery] int pageSize)
+        [Authorize(Policy = "guidePolicy, administratorPolicy")]
+        [HttpGet("byTour/{guideId:int}")]
+        public ActionResult<List<ProblemDto>> GetByGuideId(int guideId, [FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _problemService.GetByTourId(tourId, page, pageSize);
+            var result = _problemService.GetByGuideId(guideId, page, pageSize);
             return CreateResponse(result);
         }
-    
+
+
+        [Authorize(Policy = "administratorPolicy")]
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -44,12 +45,15 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
+
+        [Authorize(Policy = "touristPolicy")]
         [HttpPost]
         public ActionResult<ProblemDto> Create([FromBody] ProblemDto problem)
         {
             var result = _problemService.Create(problem);
             return CreateResponse(result);
         }
+
         [HttpPut]
         public ActionResult<ProblemDto> Update([FromBody] ProblemDto problem)
         {

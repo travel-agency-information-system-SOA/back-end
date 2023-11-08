@@ -10,6 +10,7 @@ builder.Services.ConfigureAuth();
 
 builder.Services.RegisterModules();
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -29,6 +30,8 @@ app.UseCors(corsPolicy);
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 

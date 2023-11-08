@@ -30,10 +30,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(filteredPagedResult);
         }
 
-        public Result<PagedResult<ProblemDto>> GetByTourId(int tourId, int page, int pageSize)
+        public Result<PagedResult<ProblemDto>> GetByGuideId(int guideId, int page, int pageSize)
         {
             var allProblems = CrudRepository.GetPaged(page, pageSize);
-            var filteredProblems = allProblems.Results.Where(prob => prob.IdTour == tourId);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IdGuide == guideId);
             var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
             return MapToDto(filteredPagedResult);
         }
