@@ -27,16 +27,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             var allTourEquipment = _tourEquipmentRepository.GetPaged(1, int.MaxValue);
 
-            // Proverimo da li veza već postoji
             bool connectionExists = allTourEquipment.Results.Any(te => te.TourId == tourId && te.EquipmentId == equipmentId);
 
             if (!connectionExists)
             {
-                // Ako ne postoji veza, kreirajte novu vezu između ture i opreme
                 var newTourEquipment = new TourEquipment
                 {
                     TourId = tourId,
-                    EquipmentId = equipmentId
+                    EquipmentId = equipmentId,
+                    IsSelected = true
                 };
                 _tourEquipmentRepository.Create(newTourEquipment);
             }

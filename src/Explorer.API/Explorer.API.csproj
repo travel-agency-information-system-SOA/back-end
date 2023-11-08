@@ -30,9 +30,8 @@
 
   <ItemGroup>
 
-    <Folder Include="Controllers\Tourist\" />
 
-    <Folder Include="Controllers\Author\" />
+    <Folder Include="Controllers\Tourist\" />
   </ItemGroup>
 
 </Project>

@@ -12,6 +12,7 @@ namespace Explorer.Tours.API.Dtos
 	    public int? Id { get; set; }
 		public string Name {  get; set; }
 
+
 		public string? Description { get; set; }
 
 		public string DifficultyLevel { get; set; }
@@ -23,5 +24,9 @@ namespace Explorer.Tours.API.Dtos
 		public string Status { get; set; }
 
 		public int GuideId { get; set; }
+
+		public List<TourPointDto> TourPoints { get; set; }
+
+		public List<TourCharacteristicDTO> TourCharacteristics { get; set; }
 	}
 }
