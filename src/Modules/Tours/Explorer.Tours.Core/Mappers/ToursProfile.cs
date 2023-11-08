@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Mappers;
@@ -89,5 +91,7 @@ public class ToursProfile : Profile
 			.ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
 			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => src.TransportType.ToString()))
 			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
+
+        CreateMap<TourPointExecutionDto, TourPointExecution>().ReverseMap();
 	}
 }

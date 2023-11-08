@@ -1,4 +1,5 @@
 ﻿using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 namespace Explorer.Tours.Infrastructure.Database;
@@ -29,7 +30,7 @@ public class ToursContext : DbContext
     public DbSet<TourEquipment> TourEquipments { get; set; }
 
     public DbSet<Tour> Tours { get; set; }
-
+    public DbSet<TourPointExecution> TourPointExecutions { get; set; }
 
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
