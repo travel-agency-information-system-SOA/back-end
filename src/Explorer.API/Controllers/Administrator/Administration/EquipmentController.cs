@@ -26,10 +26,17 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpGet("{id:int}")]
-        public ActionResult<EquipmentDto> Get(List<int> ids)
+        [HttpGet("getTouristEquipment")]
+        public ActionResult<EquipmentDto> GetTouristEquipment([FromQuery]List<int> ids)
         {
-            var result = _equipmentService.GetById(ids);
+            var result = _equipmentService.GetTouristEquipment(ids);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("getOtherEquipment")]
+        public ActionResult<EquipmentDto> GetOtherEquipment([FromQuery] List<int> ids)
+        {
+            var result = _equipmentService.GetOtherEquipment(ids);
             return CreateResponse(result);
         }
 
