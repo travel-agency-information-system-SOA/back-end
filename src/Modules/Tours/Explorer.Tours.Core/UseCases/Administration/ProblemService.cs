@@ -22,20 +22,20 @@ namespace Explorer.Tours.Core.UseCases.Administration
     {
         public ProblemService(ICrudRepository<Problem> repository, IMapper mapper) : base(repository, mapper) { }
 
-        private readonly ICrudRepository<Problem> _repository;
-        private readonly IMapper _mapper;
-        //public ProblemService(ICrudRepository<Problem> repository, IMapper mapper) : base(repository, mapper)
-        //{
-        //    _repository = repository;
-        //    _mapper = mapper;
-        //}
-    
-        //public Result<PagedResult<ProblemDto>> GetByUserId(int page, int pageSize, int id)
-        //{
-        //    var allProblems= GetPaged(page, pageSize).Value;
-        //    var filteredProblems = allProblems.Results.Where(problem => problem.Id == id).ToList();
-        //    var pagedResult=new PagedResult<ProblemDto>(filteredProblems, filteredProblems.Count);
-        //    return Result.Ok(pagedResult);
-        //}
+        public Result<PagedResult<ProblemDto>> GetByTouristId(int userId, int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IdTourist == userId);
+            var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
+            return MapToDto(filteredPagedResult);
+        }
+
+        public Result<PagedResult<ProblemDto>> GetByTourId(int tourId, int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IdTour == tourId);
+            var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
+            return MapToDto(filteredPagedResult);
+        }
     }
 }

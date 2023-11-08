@@ -15,15 +15,21 @@ namespace Explorer.Tours.Core.Domain
        public string Category {  get; init; }
        public string Priority { get; init; }
        public string Description { get; init; }
-      public  DateTime Time {  get; init; }
+       public  DateTime Time {  get; init; }
 
-        public Problem(string category, string priority, string description, DateTime time)
+       public int IdTourist { get; init; }
+       public int IdTour { get; init; }
+
+
+        public Problem(string category, string priority, string description, DateTime time, int idTourist, int idTour)
         {
             if (string.IsNullOrWhiteSpace(category) || string.IsNullOrWhiteSpace(priority) || string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Field empty.");
             Category = category;
             Priority = priority;
             Description = description;
             Time = time;
+            IdTourist = idTourist;
+            IdTour = idTour;
         }
     }
 }

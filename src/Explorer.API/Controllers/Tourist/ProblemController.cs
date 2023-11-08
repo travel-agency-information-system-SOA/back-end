@@ -22,6 +22,21 @@ namespace Explorer.API.Controllers.Tourist
             _problemService = problemService;
         }
 
+
+        [HttpGet("byTourist/{userId:int}")]
+        public ActionResult<List<ProblemDto>> GetByTouristId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _problemService.GetByTouristId(userId, page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("byTour/{tourId:int}")]
+        public ActionResult<List<ProblemDto>> GetByTourtId(int tourId, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _problemService.GetByTourId(tourId, page, pageSize);
+            return CreateResponse(result);
+        }
+    
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -32,8 +47,6 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<ProblemDto> Create([FromBody] ProblemDto problem)
         {
-
-
             var result = _problemService.Create(problem);
             return CreateResponse(result);
         }

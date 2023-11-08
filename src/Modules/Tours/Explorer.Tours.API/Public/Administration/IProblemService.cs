@@ -15,8 +15,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<ProblemDto> Create(ProblemDto problem);
         Result<ProblemDto> Update(ProblemDto problem);
         Result Delete(int id);
-       // Result<ProblemDto> Report(ProblemDto problemDto);
-        //Result<List<ProblemDto>> GetByUserId(int userId, int page, int pageSize);
-      //  Result<PagedResult<ProblemDto>> Get(int id);
+        Result<PagedResult<ProblemDto>> GetByTouristId(int userId, int page, int pageSize);
+        Result<PagedResult<ProblemDto>> GetByTourId(int tourId, int page, int pageSize);
     }
 }
