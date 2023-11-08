@@ -25,6 +25,7 @@ public class ToursContext : DbContext
 
     public DbSet<ObjInTour> ObjInTours { get; set; }
     public DbSet<TourPoint> TourPoint { get; set; }
+    public DbSet<PublicTourPoint> PublicTourPoint { get; set; }
 
     public DbSet<TourEquipment> TourEquipments { get; set; }
 
