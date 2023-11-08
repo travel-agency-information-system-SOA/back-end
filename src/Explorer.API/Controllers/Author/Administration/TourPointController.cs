@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,12 +25,23 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPost]
-        public ActionResult<TourPointDto> Create([FromBody] TourPointDto tourPoint)
+        [HttpPost]/*
+        public (ActionResult<TourPointDto>, int) Create([FromBody] TourPointDto tourPoint)
         {
             var result = _tourPointService.Create(tourPoint);
+            Console.WriteLine("rezultat id:" + result.Value.Id);
+
+            return (CreateResponse(result), result.Value.Id);
+        }*/
+
+        public ActionResult<PagedResult<TourPointDto>> Create([FromBody] TourPointDto tourPoint)
+        {
+            var result = _tourPointService.Create(tourPoint);
+            Console.WriteLine("rezultat id:" + result.Value.Id);
+            
             return CreateResponse(result);
         }
+
 
         [HttpPut("{id:int}")]
         public ActionResult<TourPointDto> Update([FromBody] TourPointDto tourPoint)
@@ -44,5 +56,14 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourPointService.Delete(id);
             return CreateResponse(result);
         }
-    }
+
+
+		[HttpGet("{tourId:int}")]
+
+		public ActionResult<List<TourPointDto>> GetTourPointsByTourId(int tourId)
+		{
+			var result = _tourPointService.GetTourPointsByTourId(tourId);
+			return CreateResponse(result);
+		}
+	}
 }
