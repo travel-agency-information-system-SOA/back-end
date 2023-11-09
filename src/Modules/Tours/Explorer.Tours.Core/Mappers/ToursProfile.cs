@@ -97,17 +97,13 @@ public class ToursProfile : Profile
         CreateMap<TourExecutionDto, TourExecution>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
-            .ForMember(dest => dest.LastActivity, opt => opt.MapFrom(src => src.LastActivity))
-            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
-            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourExecutionStatus), src.Status)));
 
         CreateMap<TourExecution, TourExecutionDto>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
-            .ForMember(dest => dest.LastActivity, opt => opt.MapFrom(src => src.LastActivity))
-            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
-            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+        CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
     }
 }

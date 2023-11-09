@@ -32,6 +32,7 @@ public class ToursContext : DbContext
     public DbSet<Tour> Tours { get; set; }
     public DbSet<TourPointExecution> TourPointExecutions { get; set; }
     public DbSet<TourExecution> TourExecutions { get; set; }
+    public DbSet<TourExecutionPosition> TourExecutionPositions { get; set; }
 
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}

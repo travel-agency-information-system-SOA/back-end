@@ -11,10 +11,6 @@ namespace Explorer.Tours.API.Dtos.TourExecutionsDTO
         public int Id { get; set; }
         public int UserId { get; set; }
         public int TourId { get; set; }
-
-        public DateTime LastActivity { get; set; }
-        public int Latitude { get; set; }
-        public int Longitude { get; set; }
         public string Status { get; set; }
     }
 }
