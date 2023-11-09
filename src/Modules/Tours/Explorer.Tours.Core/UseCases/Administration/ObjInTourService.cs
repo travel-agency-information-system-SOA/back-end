@@ -14,13 +14,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class ObjInTourService : CrudService<ObjInTourDto, ObjInTour>, IObjInTourService
     {
-		
-        public ObjInTourService(ICrudRepository<ObjInTour> repository, IMapper mapper) : base(repository, mapper)
+
+		private readonly ITourObjectService _tourObjectService;
+
+        public ObjInTourService(ICrudRepository<ObjInTour> repository, IMapper mapper, ITourObjectService tourObjectService) : base(repository, mapper)
 		{
-		   
+			this._tourObjectService = tourObjectService;
 		}
 
-		public Result<List<int>> GetObjectsByTourId(int tourId)
+		public Result<List<TourObjectDto>> GetObjectsByTourId(int tourId)
 		{
 			var allObjects = CrudRepository.GetPaged(1, int.MaxValue).Results;
 
@@ -28,11 +30,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 			var objectIds = tourObjects.Select(te => te.IdObject).ToList();
 
-			return objectIds;
-			
+			var objList = new List<TourObjectDto>();
+			foreach (var objectId in objectIds)
+			{
+				objList.Add(_tourObjectService.Get(objectId).Value);
+			}
 
-			
-
+			return objList;
 
 		}
 
