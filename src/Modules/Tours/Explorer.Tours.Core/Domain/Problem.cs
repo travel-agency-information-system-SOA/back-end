@@ -18,7 +18,7 @@ namespace Explorer.Tours.Core.Domain
        public  DateTime Time {  get; init; }
        public int IdTourist { get; init; }
        public int IdGuide { get; init; }
-       public ICollection<ProblemMessage> Messages { get; } = new List<ProblemMessage>();
+      // public ICollection<ProblemMessage> Messages { get; } = new List<ProblemMessage>();
        public bool IsSolved { get; init; }
 
 

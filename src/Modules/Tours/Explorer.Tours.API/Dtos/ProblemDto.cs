@@ -15,7 +15,7 @@ namespace Explorer.Tours.API.Dtos
         public DateTime Time { get; set; }
         public int IdTourist { get; set; }
         public int IdGuide { get; set; }
-        public ICollection<ProblemMessageDto> Messages { get; set; }
+       // public ICollection<ProblemMessageDto> Messages { get; set; }
         public bool IsSolved { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers
 {
 
-    [Route("api/tourist/problem")]
+    [Route("api/problem")]
     public class ProblemController : BaseApiController
     {
         private readonly IProblemService _problemService;
@@ -20,7 +20,7 @@ namespace Explorer.API.Controllers
             _problemService = problemService;
         }
 
-        [Authorize(Policy = "touristPolicy, administratorPolicy")]
+        //[Authorize(Policy = "touristPolicy, administratorPolicy")]
         [HttpGet("byTourist/{userId:int}")]
         public ActionResult<List<ProblemDto>> GetByTouristId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -28,8 +28,9 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "guidePolicy, administratorPolicy")]
-        [HttpGet("byTour/{guideId:int}")]
+       // [Authorize(Policy = "authorPolicy")]
+       // [Authorize(Policy = "administratorPolicy")]
+        [HttpGet("byGuide/{guideId:int}")]
         public ActionResult<List<ProblemDto>> GetByGuideId(int guideId, [FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _problemService.GetByGuideId(guideId, page, pageSize);

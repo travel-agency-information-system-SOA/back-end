@@ -16,3 +16,4 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public ProblemMessageService(ICrudRepository<ProblemMessage> repository, IMapper mapper) : base(repository, mapper) { }
 
     }
+}
