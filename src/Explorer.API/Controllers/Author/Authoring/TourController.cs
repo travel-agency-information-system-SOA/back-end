@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    [Authorize(Policy = "authorPolicy")]
+   // [Authorize(Policy = "authorPolicy")]
     [Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
@@ -30,8 +30,14 @@ namespace Explorer.API.Controllers.Author.Authoring
 
         }
 
-        [HttpGet("{userId:int}")]
+        [HttpGet("search/{lat:double}/{lon:double}/{ran:int}")]
+        public ActionResult<PagedResult<TourDTO>> GetByRange(double lat, double lon, int ran, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetByRange(lat, lon, ran, page, pageSize);
+            return CreateResponse(result);
+        }
 
+        [HttpGet("{userId:int}")]
         public ActionResult<PagedResult<TourDTO>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _tourService.GetByUserId(userId, page, pageSize);
