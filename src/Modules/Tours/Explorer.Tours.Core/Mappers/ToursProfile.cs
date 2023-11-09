@@ -2,6 +2,9 @@
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -23,7 +26,13 @@ public class ToursProfile : Profile
 
         //CreateMap<TourObjectDto, TourObject>().ReverseMap();
 
-         CreateMap<TourObjectDto, TourObject>()
+
+        CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();   //ShoppingCart
+
+      
+       
+
+        CreateMap<TourObjectDto, TourObject>()
         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
         .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
@@ -89,5 +98,8 @@ public class ToursProfile : Profile
 			.ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
 			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => src.TransportType.ToString()))
 			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
+
+
+        
 	}
 }
