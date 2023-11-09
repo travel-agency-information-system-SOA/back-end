@@ -48,7 +48,7 @@ namespace Explorer.API.Controllers.Author.Administration
 
 		[HttpGet("{tourId:int}")]
 
-		public ActionResult<List<int>> GetObjectsByTourId(int tourId)
+		public ActionResult<List<TourObjectDto>> GetObjectsByTourId(int tourId)
 		{
 			var result = _objectService.GetObjectsByTourId(tourId);
 			return CreateResponse(result);

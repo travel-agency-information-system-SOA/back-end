@@ -16,7 +16,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<ObjInTourDto> Update(ObjInTourDto objInTour);
         Result Delete(int id);
 
-		Result<List<int>> GetObjectsByTourId(int tourId);
+		Result<List<TourObjectDto>> GetObjectsByTourId(int tourId);
 
 	}
 }
