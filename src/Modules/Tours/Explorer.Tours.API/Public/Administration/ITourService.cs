@@ -20,7 +20,6 @@ namespace Explorer.Tours.API.Public.Administration
 		Result<TourDTO> Update(TourDTO tourDto);
 
 		Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transposrtType);
-
-		
-	}
+        Result Publish(int tourId);
+    }
 }

@@ -60,5 +60,12 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
+        [HttpPut("publish/{tourId:int}")]
+        public ActionResult Publish(int tourId)
+        {
+            var result = _tourService.Publish(tourId);
+            return CreateResponse(result);
+        }
+
     }
 }
