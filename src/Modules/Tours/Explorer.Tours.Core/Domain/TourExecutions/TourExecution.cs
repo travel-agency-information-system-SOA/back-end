@@ -13,8 +13,10 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public int UserId { get; init; }
         public int TourId { get; init; }
         public TourExecutionStatus Status { get; init; }
+        public ICollection<TourPointExecution> TourPoints { get; } = new List<TourPointExecution>();
 
-        public TourExecution(int userId, int tourId, DateTime lastActivity, int latitude, int longitude, TourExecutionStatus status)
+
+        public TourExecution(int userId, int tourId, TourExecutionStatus status)
         {
             UserId = userId;
             TourId = tourId;
