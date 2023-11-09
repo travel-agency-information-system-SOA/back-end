@@ -2,13 +2,16 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Marketplace;
+using Explorer.Tours.API.Public.TourExecuting;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Mappers;
 using Explorer.Tours.Core.UseCases.Administration;
 using Explorer.Tours.Core.UseCases.Authoring;
 using Explorer.Tours.Core.UseCases.Marketplace;
+using Explorer.Tours.Core.UseCases.TourExecuting;
 using Explorer.Tours.Infrastructure.Database;
 using Explorer.Tours.Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +51,10 @@ public static class ToursStartup
         services.AddScoped<ITourPointService, TourPointService>();
         services.AddScoped<IGuideReviewService, GuideReviewService>();
         services.AddScoped<IPreferencesService, PreferencesService>();
+        services.AddScoped<ITourExecutionService, TourExecutionService>();
+        services.AddScoped<ITourPointExecutionService, TourPointExecutionService>();
+        services.AddScoped<ITourExecutionPositionService, TourExecutionPositionService>();
+
 
 
     }
@@ -78,9 +85,14 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Preferences>), typeof(CrudDatabaseRepository<Preferences, ToursContext>));
 		services.AddScoped<ITourRepository, TourRepository>();
 
+        services.AddScoped(typeof(ICrudRepository<TourExecution>),typeof(CrudDatabaseRepository<TourExecution,ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<TourPointExecution>), typeof(CrudDatabaseRepository<TourPointExecution, ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<TourExecutionPosition>), typeof(CrudDatabaseRepository<TourExecutionPosition, ToursContext>));
 
 
-		services.AddDbContext<ToursContext>(opt =>
+
+
+        services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "tours")));
     }
