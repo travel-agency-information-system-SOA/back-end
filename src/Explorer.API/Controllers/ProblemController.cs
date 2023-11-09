@@ -20,7 +20,7 @@ namespace Explorer.API.Controllers
             _problemService = problemService;
         }
 
-        //[Authorize(Policy = "touristPolicy, administratorPolicy")]
+        [Authorize(Policy = "touristPolicy")]
         [HttpGet("byTourist/{userId:int}")]
         public ActionResult<List<ProblemDto>> GetByTouristId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -28,8 +28,7 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-       // [Authorize(Policy = "authorPolicy")]
-       // [Authorize(Policy = "administratorPolicy")]
+        [Authorize(Policy = "authorPolicy")]
         [HttpGet("byGuide/{guideId:int}")]
         public ActionResult<List<ProblemDto>> GetByGuideId(int guideId, [FromQuery] int page, [FromQuery] int pageSize)
         {
