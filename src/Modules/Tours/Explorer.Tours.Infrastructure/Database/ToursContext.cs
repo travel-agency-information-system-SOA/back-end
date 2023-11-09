@@ -37,7 +37,7 @@ public class ToursContext : DbContext
 
     //ShoppingCart
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }  
-    public DbSet<OrderItem> OrderItems { get; set; }
+    //public DbSet<OrderItem> OrderItems { get; set; }
 
 
 
