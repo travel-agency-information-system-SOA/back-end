@@ -13,5 +13,6 @@ namespace Explorer.Tours.API.Dtos.TourExecutionsDTO
         public DateTime LastActivity { get; set; }
         public int Latitude { get; set; }
         public int Longitude { get; set; }
+        public TourExecutionDto? TourExecutionDto { get; set; }
     }
 }

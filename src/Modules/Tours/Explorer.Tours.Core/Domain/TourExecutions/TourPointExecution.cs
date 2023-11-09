@@ -16,6 +16,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public int TourPointId { get; init; }
         public DateTime? CompletionTime { get; init; }
         public bool Completed { get; init; }
+        public TourExecution? ТоurExecution {get; init; }
         public TourPointExecution(int tourExecutionId, int tourPointId, DateTime? completionTime)
         {
             TourExecutionId = tourExecutionId;
