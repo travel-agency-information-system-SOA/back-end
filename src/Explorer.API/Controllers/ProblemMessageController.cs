@@ -8,7 +8,7 @@ namespace Explorer.API.Controllers
 {
 
     //[Authorize(Policy = "authorPolicy")]
-    [Route("api/administration/messgae")]
+    [Route("api/administration/message")]
     public class ProblemMessageController : BaseApiController
     {
             private readonly IProblemMessageService _problemService;
@@ -48,9 +48,9 @@ namespace Explorer.API.Controllers
             
             [HttpGet("{id:int}")]
 
-            public ActionResult<ProblemMessageDto> GetById(int id)
+            public ActionResult<PagedResult<ProblemMessageDto>> GetAllByProblemId(int id, [FromQuery] int page, [FromQuery] int pageSize)
             {
-                var result = _problemService.Get(id);
+                var result = _problemService.GetAllByProblemId(id, page, pageSize);
                 return CreateResponse(result);
             }
         

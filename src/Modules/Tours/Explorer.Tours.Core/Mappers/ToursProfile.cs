@@ -17,11 +17,8 @@ public class ToursProfile : Profile
 
         CreateMap<ProblemDto, Problem>().ReverseMap();
 
-
-
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
-        //CreateMap<TourObjectDto, TourObject>().ReverseMap();
 
          CreateMap<TourObjectDto, TourObject>()
         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -89,5 +86,8 @@ public class ToursProfile : Profile
 			.ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
 			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => src.TransportType.ToString()))
 			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
-	}
+
+
+        CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
+    }
 }
