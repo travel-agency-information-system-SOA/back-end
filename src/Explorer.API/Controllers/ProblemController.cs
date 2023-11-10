@@ -38,6 +38,14 @@ namespace Explorer.API.Controllers
 
 
         [Authorize(Policy = "administratorPolicy")]
+        [HttpGet("unsolved")]
+        public ActionResult<PagedResult<ProblemDto>> GetUnsolvedProblems([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _problemService.GetUnsolvedProblems(page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [Authorize(Policy = "administratorPolicy")]
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -54,7 +62,7 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         public ActionResult<ProblemDto> Update([FromBody] ProblemDto problem)
         {
             var result = _problemService.Update(problem);
