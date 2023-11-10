@@ -1,4 +1,6 @@
 ﻿using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -13,7 +15,7 @@ public class ToursContext : DbContext
     public DbSet<TouristEquipment> TouristEquipment { get; set; }
 
 
-    public DbSet<Problem> Problem { get; set; }
+    public DbSet<Problem> Problems { get; set; }
 
 
 
@@ -31,6 +33,13 @@ public class ToursContext : DbContext
     public DbSet<TourEquipment> TourEquipments { get; set; }
 
     public DbSet<Tour> Tours { get; set; }
+    public DbSet<TourPointExecution> TourPointExecutions { get; set; }
+    public DbSet<TourExecution> TourExecutions { get; set; }
+    public DbSet<TourExecutionPosition> TourExecutionPositions { get; set; }
+
+    //ShoppingCart
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }  
+    //public DbSet<OrderItem> OrderItems { get; set; }
 
 
 
@@ -40,9 +49,11 @@ public class ToursContext : DbContext
     {
         modelBuilder.HasDefaultSchema("tours");
         modelBuilder.Entity<Tour>().Property(item => item.TourCharacteristics).HasColumnType("jsonb");
-     
 
-	}
+
+        //ShoppingCart
+        modelBuilder.Entity<ShoppingCart>().Property(item => item.OrderItems).HasColumnType("jsonb");
+    }
 
    
 

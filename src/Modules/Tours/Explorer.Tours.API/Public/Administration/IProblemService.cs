@@ -11,7 +11,12 @@ namespace Explorer.Tours.API.Public.Administration
 {
     public interface IProblemService
     {
-        Result<ProblemDto> Report(ProblemDto problemDto);
-        Result<List<ProblemDto>> GetByUserId(int userId, int page, int pageSize);
+        Result<PagedResult<ProblemDto>> GetPaged(int page, int pageSize);
+        Result<ProblemDto> Create(ProblemDto problem);
+        Result<ProblemDto> Update(ProblemDto problem);
+        Result Delete(int id);
+       // Result<ProblemDto> Report(ProblemDto problemDto);
+        //Result<List<ProblemDto>> GetByUserId(int userId, int page, int pageSize);
+      //  Result<PagedResult<ProblemDto>> Get(int id);
     }
 }
