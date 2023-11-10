@@ -2,7 +2,7 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 		{
 			var allTourPoints = CrudRepository.GetPaged(1, int.MaxValue);
 
-			var filteredTourPoints = allTourPoints.Results.Where(tourPoint => tourPoint.IdTour == tourId);
+			var filteredTourPoints = allTourPoints.Results.Where(tourPoint => tourPoint.TourId == tourId);
 
 			var filteredPagedResult = new PagedResult<TourPoint>(filteredTourPoints.ToList(), filteredTourPoints.Count());
 			return MapToDto(filteredPagedResult);

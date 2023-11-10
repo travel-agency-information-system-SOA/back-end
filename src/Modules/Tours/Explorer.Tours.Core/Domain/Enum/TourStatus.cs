@@ -1,5 +1,6 @@
 ﻿public enum TourStatus
 {
 	Draft,
-	InProgress
+	Published,
+	Archived
 }

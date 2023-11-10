@@ -32,7 +32,6 @@
 
 
     <Folder Include="Controllers\Tourist\" />
-    <Folder Include="Controllers\Author\" />
   </ItemGroup>
 
 </Project>

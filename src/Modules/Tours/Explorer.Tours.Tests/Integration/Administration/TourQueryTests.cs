@@ -1,5 +1,5 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.API.Controllers.Author;
+using Explorer.API.Controllers.Author.Authoring;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {
-	[Collection("Sequential")]
+    [Collection("Sequential")]
 	public class TourQueryTests : BaseToursIntegrationTest
 	{
 		public TourQueryTests(ToursTestFactory factory) : base(factory)
