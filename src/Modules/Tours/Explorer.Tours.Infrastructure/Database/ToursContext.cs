@@ -1,6 +1,8 @@
 ﻿using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+
 namespace Explorer.Tours.Infrastructure.Database;
 
 public class ToursContext : DbContext
@@ -38,7 +40,9 @@ public class ToursContext : DbContext
     {
         modelBuilder.HasDefaultSchema("tours");
         modelBuilder.Entity<Tour>().Property(item => item.TourCharacteristics).HasColumnType("jsonb");
-    }
+     
+
+	}
 
    
 
