@@ -3,6 +3,8 @@ using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+
 namespace Explorer.Tours.Infrastructure.Database;
 
 public class ToursContext : DbContext
@@ -47,6 +49,7 @@ public class ToursContext : DbContext
     {
         modelBuilder.HasDefaultSchema("tours");
         modelBuilder.Entity<Tour>().Property(item => item.TourCharacteristics).HasColumnType("jsonb");
+
 
         //ShoppingCart
         modelBuilder.Entity<ShoppingCart>().Property(item => item.OrderItems).HasColumnType("jsonb");

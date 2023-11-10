@@ -10,7 +10,7 @@ namespace Explorer.Tours.API.Dtos
 	{
 		public int Distance {  get; set; }
 
-		public TimeSpan Duration { get; set; }
+		public double Duration { get; set; }
 
 		public string TransportType { get; set; }
 	}
