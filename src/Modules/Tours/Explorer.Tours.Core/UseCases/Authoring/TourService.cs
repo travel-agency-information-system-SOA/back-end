@@ -33,7 +33,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
-        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transportType)
+        public Result SetTourCharacteristic(int tourId, double distance, double duration, string transportType)
         {
             try
             {
