@@ -27,9 +27,9 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         }
         private void Validate()
         {
-            if (TourExecutionId <= 0)
+            if (TourExecutionId < 0)
                 throw new ArgumentException("TourExecutionId must be a positive integer.");
-            if (TourPointId <= 0)
+            if (TourPointId < 0)
                 throw new ArgumentException("TourPointId must be a positive integer.");
         }
 
