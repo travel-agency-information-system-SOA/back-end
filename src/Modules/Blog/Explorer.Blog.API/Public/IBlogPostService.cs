@@ -15,5 +15,10 @@ namespace Explorer.Blog.API.Public
         Result<BlogPostDto> Create(BlogPostDto blogPost);
         Result<BlogPostDto> Update(BlogPostDto blogPost);
         Result Delete(int id);
+
+        Result<BlogPostDto> AddComment(int blogPostId, BlogPostCommentDto comment);
+        Result<BlogPostDto> RemoveComment(int blogPostId, int userId, DateTime creationTime);
+        Result<BlogPostDto> UpdateComment(int blogPostId, BlogPostCommentDto editedComment);
     }
 }
+

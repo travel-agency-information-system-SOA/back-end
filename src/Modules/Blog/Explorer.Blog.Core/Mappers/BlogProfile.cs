@@ -14,7 +14,9 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
-            .ForMember(dest => dest.ImageIDs, opt => opt.MapFrom(src => src.ImageIDs))
+            .ForMember(dest => dest.ImageURLs, opt => opt.MapFrom(src => src.ImageURLs))
+            .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments.Select(commentDto => 
+                new BlogPostComment(commentDto.Text, commentDto.UserId, commentDto.CreationTime, commentDto.LastUpdatedTime))))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(BlogPostStatus), src.Status)));
 
         CreateMap<BlogPost, BlogPostDto>()
@@ -22,7 +24,9 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
-            .ForMember(dest => dest.ImageIDs, opt => opt.MapFrom(src => src.ImageIDs))
+            .ForMember(dest => dest.ImageURLs, opt => opt.MapFrom(src => src.ImageURLs))
+            .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
     }
 }

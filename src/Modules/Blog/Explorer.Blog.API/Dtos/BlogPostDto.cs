@@ -14,7 +14,8 @@ namespace Explorer.Blog.API.Dtos
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
-        public List<int>? ImageIDs { get; set; }
+        public List<string>? ImageURLs { get; set; }
+        public List<BlogPostCommentDto>? Comments {  get; set; }
         public string Status { get; set; }
     }
 }

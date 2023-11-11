@@ -10,10 +10,14 @@ public class BlogContext : DbContext
     public DbSet<BlogPost> BlogPosts { get; set; }
     public BlogContext(DbContextOptions<BlogContext> options) : base(options) {}
 
-    public DbSet<BlogPostComment> BlogPostComments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("blog");
+
+        // Configure JSONB for value objects
+        modelBuilder.Entity<BlogPost>()
+            .Property(b => b.Comments)  // Replace with the actual property for your first value object
+            .HasColumnType("jsonb");
     }
 }

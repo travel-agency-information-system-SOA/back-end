@@ -1,5 +1,6 @@
 ﻿using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
+using Explorer.Blog.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,13 @@ namespace Explorer.API.Controllers.Tourist.Blog
             return CreateResponse(result);
         }
 
+        [HttpPost("{blogPostid:int}/comments")]
+        public ActionResult<BlogPostDto> AddComment(int id, [FromBody] BlogPostCommentDto blogPostComment)
+        {
+            var result = _blogPostService.AddComment(id, blogPostComment);
+            return CreateResponse(result);
+        }
+
         [HttpPost]
         public ActionResult<BlogPostDto> Create([FromBody] BlogPostDto blogPost)
         {
@@ -31,10 +39,25 @@ namespace Explorer.API.Controllers.Tourist.Blog
             return CreateResponse(result);
         }
 
+        [HttpPut("{blogPostId:int}/comments")]
+        public ActionResult<BlogPostDto> UpdateComment(int blogPostId, [FromBody] BlogPostCommentDto editedComment)
+        {
+            var result = _blogPostService.UpdateComment(blogPostId, editedComment);
+            return CreateResponse(result);
+        }
+
+
         [HttpPut("{id:int}")]
         public ActionResult<BlogPostDto> Update([FromBody] BlogPostDto blogPost)
         {
             var result = _blogPostService.Update(blogPost);
+            return CreateResponse(result);
+        }
+
+        [HttpDelete("{blogPostId:int}/comments/{userId:int}/{creationTime:datetime}")]
+        public ActionResult<BlogPostDto> DeleteComment(int blogPostId, int userId, DateTime creationTime)
+        {
+            var result = _blogPostService.RemoveComment(blogPostId, userId, creationTime);
             return CreateResponse(result);
         }
 
