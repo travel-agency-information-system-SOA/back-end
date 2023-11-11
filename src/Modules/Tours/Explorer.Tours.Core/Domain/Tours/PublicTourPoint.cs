@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorer.BuildingBlocks.Core.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.Domain.Tours
 {
-    public class PublicTourPoint
+    public class PublicTourPoint : Entity
     {
         public int IdTour { get; init; }
 
@@ -17,6 +18,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public double Longitude { get; init; }
         public string ImageUrl { get; init; }
 
+       
         public PublicTourPoint(int idTour, string name, string? description, double latitude, double longitude, string imageUrl)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");

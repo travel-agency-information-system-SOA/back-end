@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
+using FluentResults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +11,10 @@ namespace Explorer.Tours.API.Public.Administration
 {
     public interface IPublicTourPointService
     {
+        Result<PagedResult<PublicTourPointDto>> GetPaged(int page, int pageSize);
+        Result<PublicTourPointDto> Create(PublicTourPointDto publicTourPoint);
+        Result<PublicTourPointDto> Update(PublicTourPointDto publicTourPoint);
+        Result Delete(int id);
+        Result<PagedResult<PublicTourPointDto>> GetTourPointsByTourId(int tourId);
     }
 }
