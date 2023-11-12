@@ -21,6 +21,10 @@ namespace Explorer.Tours.API.Public.Administration
 
 		Result SetTourCharacteristic(int tourId, double distance, double duration, string transposrtType);
 
+		Result ArchiveTour(int tourId);
+
+		Result DeleteAggregate(int id);
+
 		
 	}
 }

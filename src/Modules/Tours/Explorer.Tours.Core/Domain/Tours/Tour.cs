@@ -17,7 +17,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public List<string> Tags { get; private set; }
 
-        public TourStatus Status { get; private set; }
+        public TourStatus Status { get;  set; }
 
         public int Price { get; private set; }
 
