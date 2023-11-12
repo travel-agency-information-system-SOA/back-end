@@ -13,6 +13,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 		
 
 		PagedResult<Tour> GetByUserId(int userId, int page, int pageSize);
+        Tour GetById(int tourId);
 
-	}
+    }
 }

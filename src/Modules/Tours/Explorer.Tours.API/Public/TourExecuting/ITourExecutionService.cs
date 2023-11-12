@@ -11,7 +11,8 @@ namespace Explorer.Tours.API.Public.TourExecuting
 {
     public interface ITourExecutionService
     {
-        public Result<PagedResult<TourExecutionDto>> GetById(int tourExecutionId, int page, int pageSize);
+        public Result<TourExecutionDto> GetById(int tourExecutionId);
         public void UpdatePosition(int tourExecutionId, int longitude, int latitude);
+        public void CompleteTourPoint(int tourExecutionId, int tourPointId);
     }
 }

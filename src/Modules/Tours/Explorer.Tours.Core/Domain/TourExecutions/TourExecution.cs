@@ -13,7 +13,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public int UserId { get; private set; }
         public int TourId { get; private set; }
         public TourExecutionStatus Status { get; private set; }
-        public ICollection<TourPointExecution> TourPoints { get; } = new List<TourPointExecution>();
+        public List<TourPointExecution> TourPoints { get; } = new List<TourPointExecution>();
         public TourExecutionPosition? Position { get; private set; }
 
 
@@ -35,17 +35,16 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
 
         public void UpdateFrom(TourExecution updatedTourExecution)
         {
-            // Update properties as needed
             UserId = updatedTourExecution.UserId;
-            this.TourId = updatedTourExecution.TourId;
-            this.Status = updatedTourExecution.Status;
+            TourId = updatedTourExecution.TourId;
+            Status = updatedTourExecution.Status;
 
-            // Update navigation properties (TourPoints)
-            this.TourPoints.Clear();
-            //this.TourPoints.AddRange(updatedTourExecution.TourPoints);
+            TourPoints.Clear();
+            
+            TourPoints.AddRange(updatedTourExecution.TourPoints);
 
-            // Update navigation property (Position)
-            this.Position.UpdateFrom(updatedTourExecution.Position);
+            Position.UpdateFrom(updatedTourExecution.Position);
         }
+
     }
 }

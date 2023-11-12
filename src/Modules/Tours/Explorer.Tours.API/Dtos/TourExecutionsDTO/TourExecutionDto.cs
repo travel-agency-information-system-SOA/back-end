@@ -14,6 +14,7 @@ namespace Explorer.Tours.API.Dtos.TourExecutionsDTO
         public string Status { get; set; }
         public List<TourPointExecutionDto> TourPoints { get; set; } 
         public TourExecutionPositionDto Position { get; set; }
+        public TourDTO Tour { get; set; }
 
     }
 }

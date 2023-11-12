@@ -59,10 +59,16 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                     return Result.Fail("TourExecution not found");
                 }
 
+                foreach (var tourPoint in existingTourExecution.TourPoints)
+                {
+                    _context.Entry(tourPoint).State = EntityState.Detached;
+                }
+
                 existingTourExecution.UpdateFrom(updatedTourExecution);
 
                 _context.SaveChanges();
-
+                //_context.Update(existingTourExecution);
+                
                 return Result.Ok();
             }
             catch (Exception ex)

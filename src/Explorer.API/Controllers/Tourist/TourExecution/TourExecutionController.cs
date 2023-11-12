@@ -19,9 +19,9 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
         }
 
         [HttpGet("{tourExecutionId:int}")]
-        public ActionResult<PagedResult<TourExecutionDto>> GetById(int tourExecutionId, [FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<TourExecutionDto>> GetById(int tourExecutionId)
         {
-            var result = _tourExecutionService.GetById(tourExecutionId, page, pageSize);
+            var result = _tourExecutionService.GetById(tourExecutionId);
             return CreateResponse(result);
         }
 
@@ -36,6 +36,24 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             catch (Exception ex)
             {
                 return BadRequest($"Error updating position: {ex.Message}");
+            }
+        }
+
+        [HttpPost("{tourExecutionId}/complete/{tourPointId}")]
+        public IActionResult CompleteTourPoint(int tourExecutionId, int tourPointId)
+        {
+            try
+            {
+                // Call the service method to complete the tour point
+                _tourExecutionService.CompleteTourPoint(tourExecutionId, tourPointId);
+
+                // Return a successful response
+                return Ok("Tour point completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex);
+                return StatusCode(500, "An error occurred while completing the tour point.");
             }
         }
 
