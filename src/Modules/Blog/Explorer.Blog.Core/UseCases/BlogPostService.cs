@@ -50,6 +50,26 @@ namespace Explorer.Blog.Core.UseCases
             }
             
         }
+        public Result<BlogPostDto> AddRating(int blogPostId, BlogPostRatingDto rating)
+        {
+            try
+            {
+                var blogPost = GetById(blogPostId);
+
+                blogPost.AddRating(rating);
+
+                CrudRepository.Update(blogPost);
+
+                var updatedBlogPostDto = MapToDto(blogPost);
+                return updatedBlogPostDto;
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+
+        }
+
 
         public Result<BlogPostDto> RemoveComment(int blogPostId, int userId, DateTime creationTime)
         {
@@ -60,6 +80,28 @@ namespace Explorer.Blog.Core.UseCases
 
                 // Assuming that RemoveComment method in BlogPost entity handles the removal logic
                 blogPost.RemoveComment(userId, creationTime);
+
+                // Update the blog post in the repository
+                CrudRepository.Update(blogPost);
+
+                // Map the updated blog post back to DTO
+                var updatedBlogPostDto = MapToDto(blogPost);
+                return updatedBlogPostDto;
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+        public Result<BlogPostDto> RemoveRating(int blogPostId, int userId)
+        {
+            try
+            {
+                // Retrieve the blog post from the repository
+                var blogPost = GetById(blogPostId);
+
+                // Assuming that RemoveComment method in BlogPost entity handles the removal logic
+                blogPost.RemoveRating(userId);
 
                 // Update the blog post in the repository
                 CrudRepository.Update(blogPost);

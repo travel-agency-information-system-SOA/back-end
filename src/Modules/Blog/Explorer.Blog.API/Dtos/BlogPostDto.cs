@@ -16,6 +16,7 @@ namespace Explorer.Blog.API.Dtos
         public DateTime CreationDate { get; set; }
         public List<string>? ImageURLs { get; set; }
         public List<BlogPostCommentDto>? Comments {  get; set; }
+        public List<BlogPostRatingDto>? Ratings { get; set; }
         public string Status { get; set; }
     }
 }

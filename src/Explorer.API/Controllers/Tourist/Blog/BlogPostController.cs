@@ -31,6 +31,12 @@ namespace Explorer.API.Controllers.Tourist.Blog
             var result = _blogPostService.AddComment(id, blogPostComment);
             return CreateResponse(result);
         }
+        [HttpPost("{blogPostid:int}/ratings")]
+        public ActionResult<BlogPostDto> AddRating(int id, [FromBody] BlogPostRatingDto blogPostRating)
+        {
+            var result = _blogPostService.AddRating(id, blogPostRating);
+            return CreateResponse(result);
+        }
 
         [HttpPost]
         public ActionResult<BlogPostDto> Create([FromBody] BlogPostDto blogPost)
@@ -46,7 +52,6 @@ namespace Explorer.API.Controllers.Tourist.Blog
             return CreateResponse(result);
         }
 
-
         [HttpPut("{id:int}")]
         public ActionResult<BlogPostDto> Update([FromBody] BlogPostDto blogPost)
         {
@@ -58,6 +63,12 @@ namespace Explorer.API.Controllers.Tourist.Blog
         public ActionResult<BlogPostDto> DeleteComment(int blogPostId, int userId, DateTime creationTime)
         {
             var result = _blogPostService.RemoveComment(blogPostId, userId, creationTime);
+            return CreateResponse(result);
+        }
+        [HttpDelete("{blogPostId:int}/ratings/{userId:int}")]
+        public ActionResult<BlogPostDto> DeleteRating(int blogPostId, int userId)
+        {
+            var result = _blogPostService.RemoveRating(blogPostId, userId);
             return CreateResponse(result);
         }
 

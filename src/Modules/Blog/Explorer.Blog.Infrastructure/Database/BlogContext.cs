@@ -19,5 +19,9 @@ public class BlogContext : DbContext
         modelBuilder.Entity<BlogPost>()
             .Property(b => b.Comments)  // Replace with the actual property for your first value object
             .HasColumnType("jsonb");
+
+        modelBuilder.Entity<BlogPost>()
+            .Property(b => b.Ratings)  // Replace with the actual property for your first value object
+            .HasColumnType("jsonb");
     }
 }

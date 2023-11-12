@@ -9,6 +9,7 @@ public class BlogProfile : Profile
     public BlogProfile()
     {
         CreateMap<BlogPostCommentDto, BlogPostComment>().ReverseMap();
+        CreateMap<BlogPostRatingDto, BlogPostRating>().ReverseMap();
         CreateMap<BlogPostDto, BlogPost>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
@@ -17,6 +18,8 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.ImageURLs, opt => opt.MapFrom(src => src.ImageURLs))
             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments.Select(commentDto => 
                 new BlogPostComment(commentDto.Text, commentDto.UserId, commentDto.CreationTime, commentDto.LastUpdatedTime))))
+            .ForMember(dest => dest.Ratings, opt=> opt.MapFrom(src => src.Ratings.Select(ratingDto =>
+            new BlogPostRating(ratingDto.UserId, ratingDto.CreationTime, ratingDto.IsPositive))))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(BlogPostStatus), src.Status)));
 
         CreateMap<BlogPost, BlogPostDto>()
@@ -26,6 +29,7 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
             .ForMember(dest => dest.ImageURLs, opt => opt.MapFrom(src => src.ImageURLs))
             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+            .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 
     }
