@@ -56,5 +56,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
             return MapToDto(filteredPagedResult);
         }
+
+        public Result<PagedResult<ProblemDto>> GetUnsolvedProblems(int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IsSolved == false);
+            var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
+            return MapToDto(filteredPagedResult);
+        }
     }
 }
