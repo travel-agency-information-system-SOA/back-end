@@ -24,5 +24,19 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(filteredPagedResult);
         }
 
+        public bool IsThereNewMessages(int loggedUserId, int problemId, int page, int pageSize)
+        {
+            var allMessages = CrudRepository.GetPaged(page, pageSize);
+            var filteredMessages = allMessages.Results.Where(mess => mess.IdProblem == problemId);
+            foreach(ProblemMessage message in filteredMessages)
+            {
+                if(message.IsRead == false && message.IdSender != loggedUserId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }

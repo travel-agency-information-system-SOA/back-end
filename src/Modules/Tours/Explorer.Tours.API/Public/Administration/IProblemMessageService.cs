@@ -16,5 +16,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<ProblemMessageDto> Update(ProblemMessageDto problem);
         Result Delete(int id);
         Result<PagedResult<ProblemMessageDto>> GetAllByProblemId(int id, int page, int pageSize);
+        bool IsThereNewMessages(int loggedUserId, int problemId, int page, int pageSize);
     }
 }

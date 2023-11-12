@@ -12,5 +12,6 @@ namespace Explorer.Tours.API.Dtos
         public string Content { get; set; }
         public bool IsRead { get; set; }
         public int IdProblem { get; set; }
+        public int IdSender { get; set; }
     }
 }

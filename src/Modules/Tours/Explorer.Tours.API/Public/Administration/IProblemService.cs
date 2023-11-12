@@ -17,6 +17,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result Delete(int id);
         Result<PagedResult<ProblemDto>> GetByTouristId(int userId, int page, int pageSize);
         Result<PagedResult<ProblemDto>> GetByGuideId(int tourId, int page, int pageSize);
+        int IsThereUnreadMessages(int userId, int page, int pageSize);
 
     }
 }

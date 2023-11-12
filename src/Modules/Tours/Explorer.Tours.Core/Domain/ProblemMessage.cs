@@ -13,11 +13,14 @@ namespace Explorer.Tours.Core.Domain
         public bool IsRead { get; init; }
         public int IdProblem { get; init; }
 
-        public ProblemMessage(string content, bool isRead, int idProblem)
+        public int IdSender { get; init; }
+
+        public ProblemMessage(string content, bool isRead, int idProblem, int idSender)
         {
             Content = content;
             IsRead = isRead;
             IdProblem = idProblem;
+            IdSender = idSender;
         }
     }
 }

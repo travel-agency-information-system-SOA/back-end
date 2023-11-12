@@ -3,6 +3,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,14 @@ namespace Explorer.API.Controllers
             var result = _problemService.GetByGuideId(guideId, page, pageSize);
             return CreateResponse(result);
         }
+
+        [HttpGet("byUnreadMessages/{idUser:int}")]
+        public int IsThereUnreadMessages(int idUser, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            int id = _problemService.IsThereUnreadMessages(idUser, page, pageSize);
+            return id;
+        }
+
 
 
         [Authorize(Policy = "administratorPolicy")]

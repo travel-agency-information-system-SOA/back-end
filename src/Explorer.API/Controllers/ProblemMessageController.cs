@@ -53,6 +53,6 @@ namespace Explorer.API.Controllers
                 var result = _problemService.GetAllByProblemId(id, page, pageSize);
                 return CreateResponse(result);
             }
-        
+
     }
 }
