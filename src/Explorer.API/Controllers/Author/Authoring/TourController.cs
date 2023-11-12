@@ -1,13 +1,12 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-   // [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "authorPolicy")]
     [Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
@@ -31,6 +30,7 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
         [HttpGet("search/{lat:double}/{lon:double}/{ran:int}")]
+        [AllowAnonymous]
         public ActionResult<PagedResult<TourDTO>> GetByRange(double lat, double lon, int ran, [FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _tourService.GetByRange(lat, lon, ran, page, pageSize);
