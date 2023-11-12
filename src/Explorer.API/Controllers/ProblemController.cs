@@ -69,7 +69,7 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
             var result = _problemService.Delete(id);
