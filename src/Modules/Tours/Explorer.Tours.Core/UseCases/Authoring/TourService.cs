@@ -33,6 +33,14 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
+        public Result<PagedResult<TourDTO>> GetPublished()
+        {
+            var tours = GetPaged(1, int.MaxValue).Value;
+            var publishedTours = tours.Results.Where(tour => tour.Status == TourStatus.Published.ToString()).ToList();
+            var filteredPagedResult = new PagedResult<TourDTO>(publishedTours, publishedTours.Count());
+            return Result.Ok(filteredPagedResult);
+        }
+
         public Result SetTourCharacteristic(int tourId, double distance, double duration, string transportType)
         {
             try
