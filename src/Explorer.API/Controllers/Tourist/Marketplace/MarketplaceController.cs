@@ -13,16 +13,23 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
     public class MarketplaceController : BaseApiController
     {
         private readonly ITourService _tourService;
+        private readonly ITourPointService _tourPointService;
 
-        public MarketplaceController(ITourService tourService)
+        public MarketplaceController(ITourService tourService, ITourPointService tourPointService)
         {
             _tourService = tourService;
+            _tourPointService = tourPointService;
         }
 
         [HttpGet]
         public ActionResult<PagedResult<TourDTO>> GetAll()
         {
             var result = _tourService.GetPublished();
+            foreach(var tour in result.Value.Results)
+            {
+                var tourPoints = _tourPointService.GetTourPointsByTourId(tour.Id);
+                tour.TourPoints = tourPoints.Value.Results;
+            }
             return CreateResponse(result);
         }
     }
