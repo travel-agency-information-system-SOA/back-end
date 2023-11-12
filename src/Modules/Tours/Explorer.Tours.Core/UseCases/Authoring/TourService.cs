@@ -33,6 +33,14 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
+        public Result<PagedResult<TourDTO>> GetPublished()
+        {
+            var tours = GetPaged(1, int.MaxValue).Value;
+            var publishedTours = tours.Results.Where(tour => tour.Status == TourStatus.Published.ToString()).ToList();
+            var filteredPagedResult = new PagedResult<TourDTO>(publishedTours, publishedTours.Count());
+            return Result.Ok(filteredPagedResult);
+        }
+
         public Result SetTourCharacteristic(int tourId, double distance, double duration, string transportType)
         {
             try
@@ -49,7 +57,38 @@ namespace Explorer.Tours.Core.UseCases.Authoring
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
-    }
+
+        public Result ArchiveTour(int tourId)
+        {
+            try
+            {
+                Tour tour = CrudRepository.Get(tourId);
+                tour.Status = TourStatus.Archived;
+                CrudRepository.Update(tour);
+                return Result.Ok();
+            }
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+        public Result DeleteAggregate(int id)
+        {
+            try
+            {
+
+                _repository.DeleteAgreggate(id);
+                 return Result.Ok();
+            }
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+		
+	}
 
 
 
