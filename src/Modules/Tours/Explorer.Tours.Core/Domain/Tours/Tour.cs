@@ -26,6 +26,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public ICollection<TourPoint> TourPoints { get; } = new List<TourPoint>();
 
         public ICollection<TourCharacteristic> TourCharacteristics { get; } = new List<TourCharacteristic>();
+        public ICollection<TourReview> TourReviews { get; }= new List<TourReview>();
 
         public Tour(string name, DifficultyLevel difficultyLevel, string? description, int guideId)
         {
