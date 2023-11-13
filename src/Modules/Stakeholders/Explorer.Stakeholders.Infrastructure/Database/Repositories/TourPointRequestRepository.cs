@@ -1,4 +1,5 @@
-﻿using Explorer.Stakeholders.Core.Domain;
+﻿using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,22 +13,25 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
     public class TourPointRequestRepository : ITourPointRequestRepository
     {
         private readonly DbSet<TourPointRequest> _requests;
+        private readonly StakeholdersContext _context;
         public TourPointRequestRepository(StakeholdersContext context)
         {
-            _requests = context.TourPointRequests;
+            _context = context;
+            _requests = _context.Set<TourPointRequest>();
         }
         public TourPointRequest AcceptRequest(int id)
         {
-            TourPointRequest result = new TourPointRequest();
-            foreach (var request in _requests)
+            TourPointRequest request = new TourPointRequest();
+            foreach (var r in _requests)
             {
-                if (request.Id == id)
+                if (id == r.Id)
                 {
-                    request.AcceptRequest();
-                    result = request;
+                    r.AcceptRequest();
+                    request = r;
                 }
             }
-            return result;
+            _context.SaveChanges();
+            return request;
         }
 
         public TourPointRequest RejectRequest(int id)
@@ -41,7 +45,10 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
                     result = request;
                 }
             }
+            _context.SaveChanges();
             return result;
         }
+
+      
     }
 }

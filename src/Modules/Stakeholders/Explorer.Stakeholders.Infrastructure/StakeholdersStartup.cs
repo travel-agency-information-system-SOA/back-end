@@ -1,5 +1,6 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
@@ -32,6 +33,7 @@ public static class StakeholdersStartup
         services.AddScoped<IAppRatingService, AppRatingService>();  
         services.AddScoped<IClubService, ClubService>();
         services.AddScoped<ITourPointRequestService, TourPointRequestService>();
+        services.AddScoped<IInternalTourPointRequestService,TourPointRequestService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -39,6 +41,7 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Person>), typeof(CrudDatabaseRepository<Person, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
+        services.AddScoped<ITourPointRequestRepository, TourPointRequestRepository>();
         services.AddScoped(typeof(ICrudRepository<AppRating>), typeof(CrudDatabaseRepository<AppRating,StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<TourPointRequest>), typeof(CrudDatabaseRepository<TourPointRequest, StakeholdersContext>));
 

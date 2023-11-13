@@ -17,15 +17,24 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class TourPointRequestService : CrudService<TourPointRequestDto, TourPointRequest>, ITourPointRequestService, IInternalTourPointRequestService
     {
         private readonly ITourPointRequestRepository _tourPointRequestRepository;
-        public TourPointRequestService(ICrudRepository<TourPointRequest> repository, ITourPointRequestRepository tourPointRequestRepository, IMapper mapper) : base(repository, mapper) {
-            _tourPointRequestRepository = tourPointRequestRepository;
+
+        public TourPointRequestService(ICrudRepository<TourPointRequest> repository, IMapper mapper, ITourPointRequestRepository requestRepository) : base(repository, mapper)
+        {
+            _tourPointRequestRepository = requestRepository;
         }
 
+        public Result<TourPointRequestDto> Create(int tourPointId, int authorId)
+        {
+            TourPointRequest request = new TourPointRequest(authorId,tourPointId);
+            var result = CrudRepository.Create(request); 
+            return MapToDto(result);
+        }
         public Result<TourPointRequestDto> AcceptRequest(int id)
         {
-            //kreiraj notifikaciju ovdjeee
             var result = _tourPointRequestRepository.AcceptRequest(id);
             return MapToDto(result);
         }
+
     }
+
 }

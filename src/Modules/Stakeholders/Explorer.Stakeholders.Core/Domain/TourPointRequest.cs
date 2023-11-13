@@ -9,7 +9,6 @@ namespace Explorer.Stakeholders.Core.Domain
 {
     public class TourPointRequest : Entity
     {
-        public int Id {  get; init; }
         public int AuthorId {  get; init; }
         public int TourPointId {  get; init; }  
         public Status Status { get; private set; }

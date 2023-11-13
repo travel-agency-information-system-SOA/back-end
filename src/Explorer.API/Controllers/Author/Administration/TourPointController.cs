@@ -65,5 +65,6 @@ namespace Explorer.API.Controllers.Author.Administration
 			var result = _tourPointService.GetTourPointsByTourId(tourId);
 			return CreateResponse(result);
 		}
-	}
+
+    }
 }

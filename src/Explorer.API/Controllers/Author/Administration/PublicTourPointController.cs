@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Author.Administration
 {
    
-        [Authorize(Policy = "authorPolicy")]
-        [Route("api/administration/tourPoint")]
+        [Route("api/administration/publicTourPoint")]
         public class PublicTourPointController : BaseApiController
         {
             private readonly IPublicTourPointService _tourPointService;
@@ -17,55 +16,28 @@ namespace Explorer.API.Controllers.Author.Administration
             {
                 _tourPointService = tourPointService;
             }
-
-            [HttpGet]
+        [HttpGet]
             public ActionResult<PagedResult<TourPointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
             {
                 var result = _tourPointService.GetPaged(page, pageSize);
                 return CreateResponse(result);
             }
 
-            [HttpPost]/*
-        public (ActionResult<TourPointDto>, int) Create([FromBody] TourPointDto tourPoint)
+        [HttpPost("createPublicTourPoint/{requestId:int}/{tourPointId:int}")]
+        public ActionResult<TourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId)
         {
-            var result = _tourPointService.Create(tourPoint);
-            Console.WriteLine("rezultat id:" + result.Value.Id);
-
-            return (CreateResponse(result), result.Value.Id);
-        }*/
-
-            public ActionResult<PagedResult<PublicTourPointDto>> Create([FromBody] TourPointDto tourPoint)
-            {
-                var result = _tourPointService.Create(tourPoint);
-                Console.WriteLine("rezultat id:" + result.Value.Id);
-
-                return CreateResponse(result);
-            }
-
-
-            [HttpPut("{id:int}")]
-            public ActionResult<TourPointDto> Update([FromBody] TourPointDto tourPoint)
-            {
-                var result = _tourPointService.Update(tourPoint);
-                return CreateResponse(result);
-            }
-
-            [HttpDelete("{id:int}")]
-            public ActionResult Delete(int id)
-            {
-                var result = _tourPointService.Delete(id);
-                return CreateResponse(result);
-            }
-
-
-            [HttpGet("{tourId:int}")]
-
-            public ActionResult<List<TourPointDto>> GetTourPointsByTourId(int tourId)
-            {
-                var result = _tourPointService.GetTourPointsByTourId(tourId);
-                return CreateResponse(result);
-            }
+            var result = _tourPointService.CreatePublicTourPointAndAcceptRequest(requestId, tourPointId);
+            return CreateResponse(result);
         }
+
+
+
+
+
+
+
+
+    }
 
     }
 

@@ -12,9 +12,10 @@ namespace Explorer.Tours.API.Public.Administration
     public interface IPublicTourPointService
     {
         Result<PagedResult<PublicTourPointDto>> GetPaged(int page, int pageSize);
-        Result<PublicTourPointDto> Create(PublicTourPointDto publicTourPoint);
+        Result<PublicTourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId);
         Result<PublicTourPointDto> Update(PublicTourPointDto publicTourPoint);
         Result Delete(int id);
         Result<PagedResult<PublicTourPointDto>> GetTourPointsByTourId(int tourId);
+        Result<PublicTourPointDto> Get(int id); 
     }
 }

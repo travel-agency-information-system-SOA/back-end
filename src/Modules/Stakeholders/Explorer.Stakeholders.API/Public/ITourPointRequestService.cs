@@ -12,8 +12,7 @@ namespace Explorer.Stakeholders.API.Public
     public interface ITourPointRequestService
     {
         Result<PagedResult<TourPointRequestDto>> GetPaged(int page, int pageSize);
-        Result<TourPointRequestDto> Create(TourPointRequestDto club);
-        Result<TourPointRequestDto> Update(TourPointRequestDto club);
+        Result<TourPointRequestDto> Create(int tourPointId, int authorId);
         Result Delete(int id);
     }
 }

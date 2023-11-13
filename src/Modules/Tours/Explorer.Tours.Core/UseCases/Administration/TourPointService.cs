@@ -27,5 +27,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 
 		}
-	}
+        TourPointDto ITourPointService.Get(int id)
+        {
+            var result = CrudRepository.Get(id);
+            return MapToDto(result);
+        }
+    }
 }

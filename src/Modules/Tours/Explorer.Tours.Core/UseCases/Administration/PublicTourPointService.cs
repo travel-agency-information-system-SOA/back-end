@@ -10,14 +10,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class PublicTourPointService: CrudService<PublicTourPointDto, PublicTourPoint>, IPublicTourPointService
     {
         private readonly IInternalTourPointRequestService _internalTourPointRequestInterface;
-        public PublicTourPointService(ICrudRepository<PublicTourPoint> repository, IMapper mapper, IInternalTourPointRequestService internalService) : base(repository, mapper) {
-            _internalTourPointRequestInterface = internalService;   
+        private readonly ITourPointService _tourPointService;
+        public PublicTourPointService(ICrudRepository<PublicTourPoint> repository, IMapper mapper, IInternalTourPointRequestService internalService,ITourPointService tourPointService) : base(repository, mapper) {
+            _internalTourPointRequestInterface = internalService;
+            _tourPointService = tourPointService;   
         }
 
         public Result<PagedResult<PublicTourPointDto>> GetTourPointsByTourId(int tourId)
@@ -31,12 +34,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
-        public Result<PublicTourPointDto> Create(PublicTourPointDto publicTourPoint)
-        {
+        
 
-            var result = CrudRepository.Create(MapToDomain(publicTourPoint));
-            //_internalTourPointRequestInterface.Create();  ovdje cu samo da ga kreiram
-            //na lijevom mjestu cemo pozivati accept
+        public Result<PublicTourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId)
+        {
+            TourPointDto tourPoint = new TourPointDto();
+            tourPoint =_tourPointService.Get(tourPointId);
+            PublicTourPoint publicTourPoint = new PublicTourPoint(tourPoint.TourId, tourPoint.Name, tourPoint.Description, tourPoint.Latitude, tourPoint.Longitude, tourPoint.ImageUrl);
+            var result = CrudRepository.Create(publicTourPoint);
+            _internalTourPointRequestInterface.AcceptRequest(requestId);
             return MapToDto(result);
         }
     }
