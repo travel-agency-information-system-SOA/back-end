@@ -60,5 +60,19 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
+        [HttpPut("archive/{id:int}")]
+        public ActionResult ArchiveTour(int id)
+        {
+            var result = _tourService.ArchiveTour(id);
+            return CreateResponse(result);
+        }
+
+        [HttpDelete("deleteAggregate/{id:int}")]
+        public ActionResult DeleteAggregate(int id)
+        {
+            var result = _tourService.DeleteAggregate(id);
+            return CreateResponse(result);
+        }
+
     }
 }

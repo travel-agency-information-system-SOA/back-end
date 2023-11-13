@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -20,7 +25,13 @@ public class ToursProfile : Profile
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
 
-         CreateMap<TourObjectDto, TourObject>()
+
+        CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();   //ShoppingCart
+
+      
+       
+
+        CreateMap<TourObjectDto, TourObject>()
         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
         .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
@@ -87,6 +98,19 @@ public class ToursProfile : Profile
 			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => src.TransportType.ToString()))
 			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
 
+        CreateMap<TourPointExecutionDto, TourPointExecution>().ReverseMap();
+
+        CreateMap<TourExecutionDto, TourExecution>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourExecutionStatus), src.Status)));
+
+        CreateMap<TourExecution, TourExecutionDto>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+        CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
 
         CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
     }
