@@ -22,7 +22,14 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			 _context = context;
 			 _tours = _context.Set<Tour>();
 		}
-		
+
+		//za dobavljanje recenzija
+		public PagedResult<Tour> GetAll(int page, int pageSize)
+		{
+			var tours = _tours.Include(t => t.TourReviews).Include(t=>t.TourPoints).GetPaged(page, pageSize);
+			return tours.Result;
+		}
+
 
 		public PagedResult<Tour> GetByUserId(int userId, int page, int pageSize)
 		{
@@ -39,10 +46,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
 		public Result DeleteAgreggate(int tourId)
 		{
-			var tourToDelete = _tours.Where(t => t.Id == tourId).Include(t => t.TourPoints).FirstOrDefault();
+			var tourToDelete = _tours.Where(t => t.Id == tourId).Include(t => t.TourPoints).Include(t => t.TourReviews.Where(tr => tr.TourId == tourId)).FirstOrDefault();
 			if(tourToDelete != null)
 			{
 				_context.RemoveRange(tourToDelete.TourPoints);
+				_context.RemoveRange(tourToDelete.TourReviews);
 				_context.Remove(tourToDelete);
 
 				_context.SaveChanges();
