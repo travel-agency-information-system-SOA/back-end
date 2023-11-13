@@ -107,11 +107,13 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourExecutionStatus), src.Status)));
+            
 
         CreateMap<TourExecution, TourExecutionDto>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            
 
         CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
     }
