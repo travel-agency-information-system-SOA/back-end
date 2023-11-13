@@ -10,8 +10,8 @@ namespace Explorer.Stakeholders.Core.Domain
     public class UserPosition : Entity
     {
         public long UserId { get; private set; }
-        public int Latitude { get; private set; }
-        public int Longitude { get; private set; }
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
         
 
 
