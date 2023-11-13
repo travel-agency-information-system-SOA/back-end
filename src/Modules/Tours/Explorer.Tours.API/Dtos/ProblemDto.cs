@@ -18,5 +18,6 @@ namespace Explorer.Tours.API.Dtos
        // public ICollection<ProblemMessageDto> Messages { get; set; }
         public bool IsSolved { get; set; }
         public DateTime Deadline { get; set; }
+        public int IdTour { get; set; }
     }
 }

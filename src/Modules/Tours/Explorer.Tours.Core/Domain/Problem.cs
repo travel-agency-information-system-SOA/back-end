@@ -21,6 +21,7 @@ namespace Explorer.Tours.Core.Domain
       // public ICollection<ProblemMessage> Messages { get; } = new List<ProblemMessage>();
        public bool IsSolved { get; init; }
        public DateTime Deadline { get; init; }
+       public int IdTour { get; init; }
 
 
         public Problem(string category, string priority, string description, DateTime time, int idTourist, int idGuide)
