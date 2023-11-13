@@ -2,6 +2,7 @@
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,13 @@ namespace Explorer.API.Controllers.Administrator.Administration
         public ActionResult Delete(int id)
         {
             var result = _userPositionService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{userId:int}")]
+        public ActionResult<PagedResult<UserPositionDto>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _userPositionService.GetByUserId(userId, page, pageSize);
             return CreateResponse(result);
         }
     }
