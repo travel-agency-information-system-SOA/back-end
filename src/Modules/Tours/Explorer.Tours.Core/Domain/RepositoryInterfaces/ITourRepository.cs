@@ -14,8 +14,9 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 		
 
 		PagedResult<Tour> GetByUserId(int userId, int page, int pageSize);
+        PagedResult<Tour> GetAll( int page, int pageSize);
 
-		Tour GetById(int id);
+        Tour GetById(int id);
 
 		Result DeleteAgreggate(int id);
 

@@ -26,6 +26,13 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             _repository = tourRepository;
         }
 
+        //metoda za dobavljanje tura i recenzija
+        public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
+        {
+            var tours = _repository.GetAll( page, pageSize);
+            return MapToDto(tours);
+
+        }
         public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
         {
             var tours = _repository.GetByUserId(userId, page, pageSize);

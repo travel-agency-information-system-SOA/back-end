@@ -28,5 +28,7 @@ namespace Explorer.Tours.API.Dtos
 		public List<TourPointDto> TourPoints { get; set; }
 
 		public List<TourCharacteristicDTO> TourCharacteristics { get; set; }
+
+		public List<TourReviewDto> TourReviews { get; set; }
 	}
 }
