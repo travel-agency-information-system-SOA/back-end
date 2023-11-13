@@ -33,6 +33,13 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
+        public Result<TourDTO> getTourByTourId(int id)
+        {
+            var tours = _repository.GetById(id);
+            return MapToDto(tours);
+
+        }
+
         public Result SetTourCharacteristic(int tourId, double distance, double duration, string transportType)
         {
             try

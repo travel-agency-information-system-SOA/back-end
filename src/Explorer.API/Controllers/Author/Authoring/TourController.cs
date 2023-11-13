@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    [Authorize(Policy = "authorPolicy")]
+    //[Authorize(Policy = "authorPolicy")]
     [Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
@@ -71,6 +71,14 @@ namespace Explorer.API.Controllers.Author.Authoring
         public ActionResult DeleteAggregate(int id)
         {
             var result = _tourService.DeleteAggregate(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("onetour/{id:int}")]
+
+        public ActionResult<TourDTO> getTourByTourId(int id)
+        {
+            var result = _tourService.getTourByTourId(id);
             return CreateResponse(result);
         }
 

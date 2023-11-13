@@ -16,8 +16,9 @@ namespace Explorer.Tours.API.Public.Administration
 		Result Delete(int id);
 
 		Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize);
+        Result<TourDTO> getTourByTourId(int id);
 
-		Result<TourDTO> Update(TourDTO tourDto);
+        Result<TourDTO> Update(TourDTO tourDto);
 
 		Result SetTourCharacteristic(int tourId, double distance, double duration, string transposrtType);
 

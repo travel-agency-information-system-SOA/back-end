@@ -30,10 +30,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return tours.Result;
 		}
 
-		public Tour GetById(int tourId)
+
+        public Tour GetById(int tourId)
 		{
-			Tour tour = (Tour)_tours.Include(t => t.TourPoints).Where(t => t.Id == tourId);
-			if (tour == null) throw new KeyNotFoundException("Not found");
+            Tour tour = _tours.Include(t => t.TourPoints).FirstOrDefault(t => t.Id == tourId);
+            if (tour == null) throw new KeyNotFoundException("Not found");
 			return tour;
 		}
 
