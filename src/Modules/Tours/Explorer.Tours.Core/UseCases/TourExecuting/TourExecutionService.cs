@@ -30,13 +30,15 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
         public Result<TourExecutionDto> GetById(int tourExecutionId)
         {
-            var execution = MapToDto(_repository.GetById(tourExecutionId));
+            var execution = _repository.GetById(tourExecutionId);
             
-            //LoadTour(execution);
-            return execution;
+
+            var executionDto = MapToDto(execution);
+            LoadTour(executionDto);
+            return executionDto;
         }
 
-
+        // TODO: lastActivity
         public void UpdatePosition(int tourExecutionId, int longitude, int latitude)
         {
             var execution = _repository.GetById(tourExecutionId);
@@ -45,7 +47,6 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
             executionDto.Position.Longitude = longitude;
             executionDto.Position.Latitude = latitude;
-            // lastActivity
 
             _repository.Update(MapToDomain(executionDto));
         }
@@ -57,7 +58,6 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             TourExecutionDto executionDto = MapToDto(execution);
 
             executionDto.TourPoints.FirstOrDefault(tp => tp.Id == tourPointId).Completed = true;
-            executionDto.TourId = 1000;
             //executionDto.TourPoints.FirstOrDefault(tp => tp.TourPointId == tourPointId).CompletionTime = DateTime.Now;
 
             _repository.Update(MapToDomain(executionDto));
@@ -69,7 +69,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             execution.Tour = _mapper.Map<TourDTO>(tour);
         }
 
-
+        
     }
 }
 

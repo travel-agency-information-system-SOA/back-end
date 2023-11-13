@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
@@ -30,14 +31,14 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return tours.Result;
 		}
 
-		public Tour GetById(int tourId)
+        public Tour GetById(int tourId)
 		{
-			Tour tour = (Tour)_tours.Include(t => t.TourPoints).Where(t => t.Id == tourId);
-			if (tour == null) throw new KeyNotFoundException("Not found");
-			return tour;
-		}
+            var tour = _tours.Include(t => t.TourPoints).Where(t => t.Id == tourId).FirstOrDefault();
 
-		public Result DeleteAgreggate(int tourId)
+            return tour;
+        }
+
+        public Result DeleteAgreggate(int tourId)
 		{
 			var tourToDelete = _tours.Where(t => t.Id == tourId).Include(t => t.TourPoints).FirstOrDefault();
 			if(tourToDelete != null)
