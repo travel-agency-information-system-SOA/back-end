@@ -23,7 +23,6 @@ public static class ToursStartup
 {
     public static IServiceCollection ConfigureToursModule(this IServiceCollection services)
     {
-        // Registers all profiles since it works on the assembly
         services.AddAutoMapper(typeof(ToursProfile).Assembly);
         SetupCore(services);
         SetupInfrastructure(services);
@@ -88,6 +87,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<TourExecution>),typeof(CrudDatabaseRepository<TourExecution,ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourPointExecution>), typeof(CrudDatabaseRepository<TourPointExecution, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourExecutionPosition>), typeof(CrudDatabaseRepository<TourExecutionPosition, ToursContext>));
+        services.AddScoped<ITourExecutionRepository, TourExecutionRepository>();
 
 
 

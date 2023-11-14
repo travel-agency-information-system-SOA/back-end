@@ -22,11 +22,14 @@ namespace Explorer.Tours.API.Public.Administration
 		Result<TourDTO> Update(TourDTO tourDto);
 
 		Result SetTourCharacteristic(int tourId, double distance, double duration, string transposrtType);
+        Result Publish(int tourId);
+    
 
 		Result ArchiveTour(int tourId);
 
 		Result DeleteAggregate(int id);
 
+		Result<PagedResult<TourDTO>> GetAll(int page, int pageSize);
 		
 	}
 }

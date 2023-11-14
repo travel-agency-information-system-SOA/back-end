@@ -10,10 +10,11 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
 {
     public class TourExecution:Entity
     {
-        public int UserId { get; init; }
-        public int TourId { get; init; }
-        public TourExecutionStatus Status { get; init; }
-        public ICollection<TourPointExecution> TourPoints { get; } = new List<TourPointExecution>();
+        public int UserId { get; private set; }
+        public int TourId { get; private set; }
+        public TourExecutionStatus Status { get; private set; }
+        public List<TourPointExecution> TourPoints { get; } = new List<TourPointExecution>();
+        public TourExecutionPosition? Position { get; private set; }
 
 
         public TourExecution(int userId, int tourId, TourExecutionStatus status)
@@ -26,10 +27,24 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
 
         private void Validate()
         {
-            if (TourId <= 0)
+            if (TourId < 0)
                 throw new ArgumentException("TourId must be a positive integer.");
-            if (UserId <= 0)
+            if (UserId < 0)
                 throw new ArgumentException("TourPointId must be a positive integer.");
         }
+
+        public void UpdateFrom(TourExecution updatedTourExecution)
+        {
+            UserId = updatedTourExecution.UserId;
+            TourId = updatedTourExecution.TourId;
+            Status = updatedTourExecution.Status;
+
+            TourPoints.Clear();
+            
+            TourPoints.AddRange(updatedTourExecution.TourPoints);
+
+            Position.UpdateFrom(updatedTourExecution.Position);
+        }
+
     }
 }

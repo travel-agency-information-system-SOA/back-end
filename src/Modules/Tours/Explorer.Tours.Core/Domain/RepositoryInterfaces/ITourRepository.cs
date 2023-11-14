@@ -14,10 +14,13 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 		
 
 		PagedResult<Tour> GetByUserId(int userId, int page, int pageSize);
+        public Tour GetByTourId(int tourId);
 
-		Tour GetById(int id);
+        PagedResult<Tour> GetAll( int page, int pageSize);
 
-		Result DeleteAgreggate(int id);
+		Tour GetById(int tourId);
+        Result DeleteAgreggate(int id);
 
-	}
+
+    }
 }

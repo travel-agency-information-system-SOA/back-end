@@ -12,7 +12,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
 {
     public class TourPointExecution : Entity
     {
-        public int TourExecutionId { get; init; }
+        public int TourExecutionId { get; private set; }
         public int TourPointId { get; init; }
         public DateTime? CompletionTime { get; init; }
         public bool Completed { get; init; }
@@ -27,11 +27,17 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         }
         private void Validate()
         {
-            if (TourExecutionId <= 0)
+            if (TourExecutionId < 0)
                 throw new ArgumentException("TourExecutionId must be a positive integer.");
-            if (TourPointId <= 0)
+            if (TourPointId < 0)
                 throw new ArgumentException("TourPointId must be a positive integer.");
         }
+
+        public void UpdateFrom(TourPointExecution updatedPoint)
+        {
+
+        }
+        
 
     }
 }
