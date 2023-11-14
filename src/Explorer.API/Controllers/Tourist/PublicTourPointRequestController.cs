@@ -32,7 +32,14 @@ namespace Explorer.API.Controllers.Tourist
             var result = _requestService.Create(tourPointId,authorId);
             return CreateResponse(result);
         }
-       
+
+        [HttpPut("rejectRequest/{id:int}")] 
+        public ActionResult<TourPointRequestDto> RejectRequest(int id)
+        {
+            var result = _requestService.RejectRequest(id);
+            return CreateResponse(result);
+        }
+
 
 
     }

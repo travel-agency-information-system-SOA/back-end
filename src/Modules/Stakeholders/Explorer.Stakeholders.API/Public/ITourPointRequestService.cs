@@ -14,5 +14,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<PagedResult<TourPointRequestDto>> GetPaged(int page, int pageSize);
         Result<TourPointRequestDto> Create(int tourPointId, int authorId);
         Result Delete(int id);
+        public Result<TourPointRequestDto> RejectRequest(int id);
     }
 }
