@@ -19,34 +19,34 @@ namespace Explorer.API.Controllers.Tourist
             _equipmentService = service;
         }
 
-        [HttpGet]
-        public ActionResult<PagedResult<TouristEquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+         
+        [HttpGet("getTouristEquipment/{touristId:int}")]
+        public ActionResult<TouristEquipmentDto> GetTouristEquipment(int touristId)
         {
-            var result = _touristEquipmentService.GetPaged(page, pageSize);
+            var result =  _touristEquipmentService.GetTouristEquipment(touristId); 
+            return CreateResponse(result);
+        }
+
+        [HttpPost("createTouristEquipment/{id:int}")]
+        public ActionResult<TouristEquipmentDto> CreteTouristEquipment(int id)
+        {
+            var result = _touristEquipmentService.Create(id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("addToMyEquipment/{touristId:int}/{equipmentId:int}")]
+        public ActionResult<TouristEquipmentDto> AddToMyEquipment(int touristId, int equipmentId)
+        {
+            var result = _touristEquipmentService.AddToMyEquipment(touristId, equipmentId);
             return CreateResponse(result);
         }
 
 
-        [HttpPost]
-        public ActionResult<TouristEquipmentDto> Create([FromBody] TouristEquipmentDto equipment)
+        [HttpPut("deleteFromMyEquipment/{touristId:int}/{equipmentId:int}")]
+        public ActionResult<TouristEquipmentDto> DeleteFromMyEquipment(int touristId, int equipmentId)
         {
-            var result = _touristEquipmentService.Create(equipment);
+            var result = _touristEquipmentService.DeleteFromMyEquipment(touristId, equipmentId);
             return CreateResponse(result);
         }
-
-        [HttpPut]
-        public ActionResult<TouristEquipmentDto> Update([FromBody] TouristEquipmentDto equipment)
-        {
-            var result = _touristEquipmentService.Update(equipment);
-            return CreateResponse(result);
-        }
-
-        [HttpDelete]
-        public ActionResult Delete(int id)
-        {
-            var result = _touristEquipmentService.Delete(id);
-            return CreateResponse(result);
-        }
-    
     }
 }
