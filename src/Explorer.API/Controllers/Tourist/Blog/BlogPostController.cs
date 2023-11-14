@@ -21,7 +21,7 @@ namespace Explorer.API.Controllers.Tourist.Blog
         [HttpGet]
         public ActionResult<PagedResult<BlogPostDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _blogPostService.GetPaged(page, pageSize);
+            var result = _blogPostService.GetAll(page, pageSize);
             return CreateResponse(result);
         }
 

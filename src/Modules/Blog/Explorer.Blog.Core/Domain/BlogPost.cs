@@ -1,5 +1,6 @@
 ﻿using Explorer.Blog.API.Dtos;
 using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace Explorer.Blog.Core.Domain
     public enum BlogPostStatus { DRAFT, PUBLISHED, CLOSED, ACTIVE, FAMOUS };
     public class BlogPost : Entity
     {
+        public int AuthorId { get; init; }
         public string Title { get; init; }
         public string Description { get; init; }
         public DateTime CreationDate { get; init; }
@@ -23,14 +25,16 @@ namespace Explorer.Blog.Core.Domain
         public List<BlogPostRating>? Ratings { get; init; }
         public BlogPostStatus Status { get; set; }
 
-        public BlogPost(string title, string description, DateTime creationDate, List<string>? imageURLs, List<BlogPostComment>? comments, BlogPostStatus status, List<BlogPostRating>? ratings)
+        public BlogPost(int authorId, string title, string description, DateTime creationDate, List<string>? imageURLs, List<BlogPostComment>? comments, BlogPostStatus status, List<BlogPostRating>? ratings)
         {
+            if (authorId == 0) throw new ArgumentException("Field required");
             if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Invalid Title.");
             if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid Description.");
             if (creationDate == default) throw new ArgumentException("Invalid Creation Date.");
             if (status != BlogPostStatus.DRAFT && status != BlogPostStatus.PUBLISHED && status != BlogPostStatus.CLOSED && status != BlogPostStatus.ACTIVE && status != BlogPostStatus.FAMOUS)
                 throw new ArgumentException("Invalid Post Status");
 
+            AuthorId = authorId;
             Title = title;
             Description = description;
             CreationDate = creationDate;
@@ -132,6 +136,8 @@ namespace Explorer.Blog.Core.Domain
                 Status = BlogPostStatus.ACTIVE;
                 return;
             }
+
+            Status = BlogPostStatus.PUBLISHED;
 
             
         }
