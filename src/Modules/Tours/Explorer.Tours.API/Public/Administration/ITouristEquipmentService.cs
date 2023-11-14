@@ -16,5 +16,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TouristEquipmentDto> GetTouristEquipment(int touristId);
         Result<TouristEquipmentDto> AddToMyEquipment(int touristId, int equipmentId);
         Result<TouristEquipmentDto> DeleteFromMyEquipment(int touristId, int equipmentId);
+
+        Result<TouristEquipmentDto> Create(int touristId);
     }
 }

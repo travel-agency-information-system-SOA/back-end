@@ -27,6 +27,13 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
+        [HttpPost("createTouristEquipment/{id:int}")]
+        public ActionResult<TouristEquipmentDto> CreteTouristEquipment(int id)
+        {
+            var result = _touristEquipmentService.Create(id);
+            return CreateResponse(result);
+        }
+
         [HttpPut("addToMyEquipment/{touristId:int}/{equipmentId:int}")]
         public ActionResult<TouristEquipmentDto> AddToMyEquipment(int touristId, int equipmentId)
         {

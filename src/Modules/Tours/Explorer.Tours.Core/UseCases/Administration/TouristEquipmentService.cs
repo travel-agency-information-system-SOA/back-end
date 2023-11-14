@@ -75,6 +75,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return result;
         }
 
+        public Result<TouristEquipmentDto> Create(int touristId)
+        {
+            List<int> lista = new List<int>();
+            TouristEquipment te = new TouristEquipment(touristId,lista);
+            var result = CrudRepository.Create(te);
+            return MapToDto(result);
+        }
         /*
         private List<Equipment> GetByIds(List<int> ids)
         {
