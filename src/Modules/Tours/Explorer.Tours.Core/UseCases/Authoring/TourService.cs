@@ -41,6 +41,11 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
+        public Result<TourDTO> getTourByTourId(int id)
+        {
+            var tours = _repository.GetById(id);
+            return MapToDto(tours);
+        }
 
         public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int page, int pageSize)
         {
@@ -95,7 +100,6 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         {
             try
             {
-
                 var Tour = CrudRepository.Get(tourId);
                 Tour.setCharacteristic(distance, duration, (TransportType)Enum.Parse(typeof(TransportType), transportType));
                 CrudRepository.Update(Tour);
@@ -169,7 +173,6 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         {
             try
             {
-
                 _repository.DeleteAgreggate(id);
                  return Result.Ok();
             }

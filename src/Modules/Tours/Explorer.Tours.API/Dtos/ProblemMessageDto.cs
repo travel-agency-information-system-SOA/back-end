@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Tours.API.Dtos
+namespace Explorer.Tours.API.Dtos;
+
+public class ProblemMessageDto
 {
-    public class ProblemMessageDto
-    {
-        public int Id { get; set; }
-        public string Content { get; set; }
-        public bool IsRead { get; set; }
-        public int IdProblem { get; set; }
-        public int IdSender { get; set; }
-    }
+    public int Id { get; set; }
+    public string Content { get; set; }
+    public bool IsRead { get; set; }
+    public long ProblemId { get; set; }
+    public int IdSender { get; set; }
 }
