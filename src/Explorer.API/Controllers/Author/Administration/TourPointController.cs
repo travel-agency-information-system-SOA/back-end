@@ -2,12 +2,13 @@
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "authorAndAdminPolicy")]
     [Route("api/administration/tourPoint")] 
     public class TourPointController : BaseApiController
     {
@@ -65,6 +66,13 @@ namespace Explorer.API.Controllers.Author.Administration
 			var result = _tourPointService.GetTourPointsByTourId(tourId);
 			return CreateResponse(result);
 		}
+
+        [HttpGet("getById/{id:int}")]
+        public ActionResult<TourPointDto> GetTourPointById(int id)
+        {
+            var result = _tourPointService.Get(id);
+            return CreateResponse(Result.Ok(result));
+        }
 
     }
 }
