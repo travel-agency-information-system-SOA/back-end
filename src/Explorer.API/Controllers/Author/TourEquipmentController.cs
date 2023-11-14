@@ -21,7 +21,7 @@ namespace Explorer.API.Controllers.Author
         {
             var result = _tourEquipmentService.AddEquipmentToTourAsync(tourEquipment.TourId, tourEquipment.EquipmentId);
 
-         
+            
 
            return CreateResponse(result.Result);
         }
