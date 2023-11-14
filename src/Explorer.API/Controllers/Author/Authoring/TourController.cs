@@ -56,7 +56,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
        
-        //[Authorize(Policy = "authorPolicy")]
+        //[Authorize(Policy = "authorPolicy")] ostaviti ovako, jer i administrator updatuje turu
         [HttpPut("{id:int}")]
         public ActionResult<TourDTO> Update([FromBody] TourDTO tourDto)
         {
