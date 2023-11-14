@@ -27,6 +27,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             tour.Price = 0;
 
             var result = _tourService.Create(tour);
+
             return CreateResponse(result);
 
         }
@@ -62,6 +63,14 @@ namespace Explorer.API.Controllers.Author.Authoring
             var result = _tourService.SetTourCharacteristic(id, tourCharacteristic.Distance, tourCharacteristic.Duration, tourCharacteristic.TransportType);
             return CreateResponse(result);
         }
+
+        [HttpPut("publish/{tourId:int}")]
+        public ActionResult Publish(int tourId)
+        {
+            var result = _tourService.Publish(tourId);
+            return CreateResponse(result);
+        }
+
        
         [Authorize(Policy = "authorPolicy")]
         [HttpPut("archive/{id:int}")]

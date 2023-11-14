@@ -38,6 +38,13 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return tours.Result;
 		}
 
+        public Tour GetByTourId(int tourId)
+        {
+            var tour = _tours.Include(t => t.TourPoints).SingleOrDefault(t => t.Id == tourId);
+            return tour;
+        }
+
+    }
         public Tour GetById(int tourId)
 		{
             var tour = _tours.Include(t => t.TourPoints).Where(t => t.Id == tourId).FirstOrDefault();
