@@ -18,9 +18,11 @@ namespace Explorer.Tours.Core.Domain.Tours
         public DateTime ReviewDate { get; init; }
         public List<string> Images { get; init; }
 
-        public int TourId { get; init; }
+        public long TourId { get; init; }
 
-        public TourReview(int grade, string comment, int touristId, DateTime attendanceDate, DateTime reviewDate, List<string> images, int tourId)
+        public Tour? Tour { get; init; }
+
+        public TourReview(int grade, string comment, int touristId, DateTime attendanceDate, DateTime reviewDate, List<string> images, long tourId)
         {
             Grade = grade;
             Comment = comment;
@@ -38,5 +40,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
             if (Grade < 1 | Grade > 5) throw new ArgumentException("Invalid Grade");
         }
+
+        public TourReview(){ }
     }
 }

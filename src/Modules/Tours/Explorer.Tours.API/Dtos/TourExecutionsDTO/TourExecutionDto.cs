@@ -12,7 +12,9 @@ namespace Explorer.Tours.API.Dtos.TourExecutionsDTO
         public int UserId { get; set; }
         public int TourId { get; set; }
         public string Status { get; set; }
-        public List<TourExecutionDto> TourPoints { get; set; }
+        public List<TourPointExecutionDto> TourPoints { get; set; } 
+        public TourExecutionPositionDto Position { get; set; }
+        public TourDTO Tour { get; set; }
 
     }
 }
