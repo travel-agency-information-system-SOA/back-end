@@ -45,6 +45,14 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .SingleOrDefault(te => te.Id == id);
         }
 
+        public TourExecution GetByUser(int userId)
+        {
+            return _tourExecutions
+                .Include(te => te.TourPoints)
+                .Include(te => te.Position)
+                .SingleOrDefault(te => te.UserId == userId);
+        }
+
         public Result Update(TourExecution updatedTourExecution)
         {
             try

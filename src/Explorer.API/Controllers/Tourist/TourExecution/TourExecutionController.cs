@@ -2,6 +2,7 @@
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.API.Public.TourExecuting;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,12 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
         public ActionResult<PagedResult<TourExecutionDto>> GetById(int tourExecutionId)
         {
             var result = _tourExecutionService.GetById(tourExecutionId);
+            return CreateResponse(result);
+        }
+        [HttpGet("user/{userId:int}")]
+        public ActionResult<PagedResult<TourExecutionDto>> GetByUser(int userId)
+        {
+            var result = _tourExecutionService.GetByUser(userId);
             return CreateResponse(result);
         }
 

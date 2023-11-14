@@ -14,5 +14,6 @@ namespace Explorer.Tours.API.Public.TourExecuting
         public Result<TourExecutionDto> GetById(int tourExecutionId);
         public void UpdatePosition(int tourExecutionId, int longitude, int latitude);
         public void CompleteTourPoint(int tourExecutionId, int tourPointId);
+        public Result<TourExecutionDto> GetByUser(int userId);
     }
 }

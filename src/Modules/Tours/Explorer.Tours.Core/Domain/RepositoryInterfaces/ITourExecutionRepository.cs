@@ -14,5 +14,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public PagedResult<TourExecution> GetById(int id, int page, int pageSize);
         public TourExecution GetById(int id);
         public Result Update(TourExecution updatedTourExecution);
+        public TourExecution GetByUser(int userId);
     }
 }
