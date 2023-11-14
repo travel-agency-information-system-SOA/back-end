@@ -1,7 +1,9 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,14 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			 _context = context;
 			 _tours = _context.Set<Tour>();
 		}
-		
+
+		//za dobavljanje recenzija
+		public PagedResult<Tour> GetAll(int page, int pageSize)
+		{
+			var tours = _tours.Include(t => t.TourReviews).Include(t=>t.TourPoints).GetPaged(page, pageSize);
+			return tours.Result;
+		}
+
 
 		public PagedResult<Tour> GetByUserId(int userId, int page, int pageSize)
 		{
@@ -36,4 +45,27 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         }
 
     }
+        public Tour GetById(int tourId)
+		{
+            var tour = _tours.Include(t => t.TourPoints).Where(t => t.Id == tourId).FirstOrDefault();
+
+            return tour;
+        }
+
+        public Result DeleteAgreggate(int tourId)
+		{
+			var tourToDelete = _tours.Where(t => t.Id == tourId).Include(t => t.TourPoints).Include(t => t.TourReviews.Where(tr => tr.TourId == tourId)).FirstOrDefault();
+			if(tourToDelete != null)
+			{
+				_context.RemoveRange(tourToDelete.TourPoints);
+				_context.RemoveRange(tourToDelete.TourReviews);
+				_context.Remove(tourToDelete);
+
+				_context.SaveChanges();
+				return Result.Ok();
+			}
+
+			return Result.Fail("Tour not found");
+		}
+	}
 }

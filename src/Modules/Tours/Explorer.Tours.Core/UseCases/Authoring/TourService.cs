@@ -26,6 +26,13 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             _repository = tourRepository;
         }
 
+        //metoda za dobavljanje tura i recenzija
+        public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
+        {
+            var tours = _repository.GetAll( page, pageSize);
+            return MapToDto(tours);
+
+        }
         public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
         {
             var tours = _repository.GetByUserId(userId, page, pageSize);
@@ -33,7 +40,15 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
-        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transportType)
+        public Result<PagedResult<TourDTO>> GetPublished()
+        {
+            var tours = GetPaged(1, int.MaxValue).Value;
+            var publishedTours = tours.Results.Where(tour => tour.Status == TourStatus.Published.ToString()).ToList();
+            var filteredPagedResult = new PagedResult<TourDTO>(publishedTours, publishedTours.Count());
+            return Result.Ok(filteredPagedResult);
+        }
+
+        public Result SetTourCharacteristic(int tourId, double distance, double duration, string transportType)
         {
             try
             {
@@ -88,6 +103,38 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
 
     }
+
+        public Result ArchiveTour(int tourId)
+        {
+            try
+            {
+                Tour tour = CrudRepository.Get(tourId);
+                tour.Status = TourStatus.Archived;
+                CrudRepository.Update(tour);
+                return Result.Ok();
+            }
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+        public Result DeleteAggregate(int id)
+        {
+            try
+            {
+
+                _repository.DeleteAgreggate(id);
+                 return Result.Ok();
+            }
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+		
+	}
 
 
 
