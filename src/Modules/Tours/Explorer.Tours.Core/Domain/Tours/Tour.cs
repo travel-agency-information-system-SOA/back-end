@@ -17,7 +17,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public List<string> Tags { get; init; }
 
-        public TourStatus Status { get; init; }
+        public TourStatus Status { get; set; }
 
         public int Price { get; init; }
 
@@ -46,6 +46,7 @@ namespace Explorer.Tours.Core.Domain.Tours
             Price = 0;
             GuideId = guideId;
 
+
         }
 
         public void setCharacteristic(int distance, TimeSpan duration, TransportType transportType)
@@ -59,17 +60,23 @@ namespace Explorer.Tours.Core.Domain.Tours
              
         }
 
-        public void Publish()
+        public void Publish(Tour tour)
         {
             if (Status != TourStatus.Draft)
             {
                 throw new InvalidOperationException("Only draft tours can be published.");
             }
-            var publishedTour = new Tour(Name, DifficultyLevel, Description, GuideId)
-            {
-                Status = TourStatus.Published,
-                PublishedDateTime = DateTime.UtcNow
-            };
+
+            tour.Status= TourStatus.Published;
+            tour.PublishedDateTime = DateTime.UtcNow;
+
+
+
         }
+
+
+
     }
+
+
 }

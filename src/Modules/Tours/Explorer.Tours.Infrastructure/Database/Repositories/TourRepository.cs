@@ -28,5 +28,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			var tours= _tours.Include(t => t.TourPoints).Where(t=>t.GuideId == userId).GetPagedById(page, pageSize);
 			return tours.Result;
 		}
-	}
+
+        public Tour GetByTourId(int tourId)
+        {
+            var tour = _tours.Include(t => t.TourPoints).SingleOrDefault(t => t.Id == tourId);
+            return tour;
+        }
+
+    }
 }

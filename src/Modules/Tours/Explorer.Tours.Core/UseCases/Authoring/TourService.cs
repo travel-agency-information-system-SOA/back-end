@@ -55,8 +55,9 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         {
             try
             {
-                var tour = CrudRepository.Get(tourId);
+                var tour = _repository.GetByTourId(tourId);
 
+                
                 if (string.IsNullOrWhiteSpace(tour.Name) || string.IsNullOrWhiteSpace(tour.Description) || tour.Tags == null || tour.Tags.Count == 0)
                 {
                     return Result.Fail("Tour must have all basic data set.");
@@ -64,16 +65,17 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
                 if (tour.TourPoints.Count < 2)
                 {
-                    return Result.Fail("Tour must have at least two key points.");
+                    return Result.Fail("Tour must have at least two key points.But it has "+tour.TourPoints);
+                  
                 }
 
-              /*  bool validTimeDefined = tour.TourCharacteristics.Any(tc => tc.Duration > TimeSpan.Zero);
+                bool validTimeDefined = tour.TourCharacteristics.Any(tc => tc.Duration > TimeSpan.Zero);
                 if (!validTimeDefined)
                 {
                     return Result.Fail("At least one valid tour time must be defined.");
-                }*/
+                }
 
-                tour.Publish();
+                tour.Publish(tour);
                 CrudRepository.Update(tour);
 
                 return Result.Ok();

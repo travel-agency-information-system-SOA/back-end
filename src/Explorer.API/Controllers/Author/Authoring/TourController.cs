@@ -26,6 +26,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             tour.Price = 0;
 
             var result = _tourService.Create(tour);
+
             return CreateResponse(result);
 
         }
