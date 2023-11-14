@@ -36,5 +36,7 @@ namespace Explorer.Tours.API.Public.Administration
 
 		Result<PagedResult<TourDTO>> GetAll(int page, int pageSize);
 		
+
+		
 	}
 }
