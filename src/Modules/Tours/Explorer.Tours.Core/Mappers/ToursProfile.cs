@@ -22,11 +22,8 @@ public class ToursProfile : Profile
 
         CreateMap<ProblemDto, Problem>().ReverseMap();
 
-
-
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
-        //CreateMap<TourObjectDto, TourObject>().ReverseMap();
 
 
         CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();   //ShoppingCart
@@ -114,5 +111,7 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 
         CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
+
+        CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
     }
 }
