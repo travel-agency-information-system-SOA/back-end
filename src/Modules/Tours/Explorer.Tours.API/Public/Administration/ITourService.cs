@@ -27,6 +27,7 @@ namespace Explorer.Tours.API.Public.Administration
 
 		Result DeleteAggregate(int id);
 
+		Result<TourDTO> Get(int id);
 		
 	}
 }
