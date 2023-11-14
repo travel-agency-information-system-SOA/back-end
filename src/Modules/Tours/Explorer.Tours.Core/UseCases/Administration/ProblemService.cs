@@ -20,22 +20,49 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class ProblemService : CrudService<ProblemDto, Problem>, IProblemService
     {
-        public ProblemService(ICrudRepository<Problem> repository, IMapper mapper) : base(repository, mapper) { }
+        private readonly IProblemMessageService _messageService;
+        public ProblemService(ICrudRepository<Problem> repository, IMapper mapper, IProblemMessageService messageService) : base(repository, mapper)
+        {
+            _messageService = messageService;     
+        }
 
-        private readonly ICrudRepository<Problem> _repository;
-        private readonly IMapper _mapper;
-        //public ProblemService(ICrudRepository<Problem> repository, IMapper mapper) : base(repository, mapper)
-        //{
-        //    _repository = repository;
-        //    _mapper = mapper;
-        //}
-    
-        //public Result<PagedResult<ProblemDto>> GetByUserId(int page, int pageSize, int id)
-        //{
-        //    var allProblems= GetPaged(page, pageSize).Value;
-        //    var filteredProblems = allProblems.Results.Where(problem => problem.Id == id).ToList();
-        //    var pagedResult=new PagedResult<ProblemDto>(filteredProblems, filteredProblems.Count);
-        //    return Result.Ok(pagedResult);
-        //}
+        public Result<PagedResult<ProblemDto>> GetByTouristId(int userId, int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IdTourist == userId);
+            var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
+            return MapToDto(filteredPagedResult);
+        }
+
+        public int IsThereUnreadMessages(int userId, int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            foreach(var problem in allProblems.Results)
+            {
+                if(problem.IdGuide == userId || problem.IdTourist == userId)
+                {
+                    if(_messageService.IsThereNewMessages(userId, (int)problem.Id, page, pageSize)){
+                        return (int)problem.Id;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        public Result<PagedResult<ProblemDto>> GetByGuideId(int guideId, int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IdGuide == guideId);
+            var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
+            return MapToDto(filteredPagedResult);
+        }
+
+        public Result<PagedResult<ProblemDto>> GetUnsolvedProblems(int page, int pageSize)
+        {
+            var allProblems = CrudRepository.GetPaged(page, pageSize);
+            var filteredProblems = allProblems.Results.Where(prob => prob.IsSolved == false);
+            var filteredPagedResult = new PagedResult<Problem>(filteredProblems.ToList(), filteredProblems.Count());
+            return MapToDto(filteredPagedResult);
+        }
     }
 }

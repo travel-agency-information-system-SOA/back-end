@@ -38,6 +38,21 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return tours.Result;
 		}
 
+
+        public PagedResult<Tour> GetAllPublished(int page, int pageSize)
+        {
+			var tours = _tours.Include(t => t.TourPoints).Where(t => t.Status == TourStatus.Published).GetPagedById(page, pageSize);
+            return tours.Result;
+        }
+    
+
+        public Tour GetByTourId(int tourId)
+        {
+            var tour = _tours.Include(t => t.TourPoints).SingleOrDefault(t => t.Id == tourId);
+            return tour;
+        }
+
+    
         public Tour GetById(int tourId)
 		{
             var tour = _tours.Include(t => t.TourPoints).Where(t => t.Id == tourId).FirstOrDefault();
@@ -61,4 +76,5 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return Result.Fail("Tour not found");
 		}
 	}
+
 }

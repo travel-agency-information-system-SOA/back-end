@@ -1,7 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,11 +26,24 @@ namespace Explorer.API.Controllers.Author.Authoring
             tour.Price = 0;
 
             var result = _tourService.Create(tour);
+
             return CreateResponse(result);
 
         }
+
+
+        [HttpGet("search/{lat:double}/{lon:double}/{ran:int}")]
+        //[AllowAnonymous]
+        public ActionResult<PagedResult<TourDTO>> GetByRange(double lat, double lon, int ran, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetByRange(lat, lon, ran, page, pageSize);
+            return CreateResponse(result);
+        }
+
+
         
         [Authorize(Policy = "authorPolicy")]
+
         [HttpGet("{userId:int}")]
         public ActionResult<PagedResult<TourDTO>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -62,6 +74,14 @@ namespace Explorer.API.Controllers.Author.Authoring
             var result = _tourService.SetTourCharacteristic(id, tourCharacteristic.Distance, tourCharacteristic.Duration, tourCharacteristic.TransportType);
             return CreateResponse(result);
         }
+
+        [HttpPut("publish/{tourId:int}")]
+        public ActionResult Publish(int tourId)
+        {
+            var result = _tourService.Publish(tourId);
+            return CreateResponse(result);
+        }
+
        
         [Authorize(Policy = "authorPolicy")]
         [HttpPut("archive/{id:int}")]

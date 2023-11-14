@@ -17,6 +17,7 @@ public class ToursContext : DbContext
 
     public DbSet<Problem> Problems { get; set; }
 
+    public DbSet<ProblemMessage> ProblemMessages { get; set; }
 
 
     public DbSet<TourReview> TourReviews { get; set; }
@@ -39,7 +40,7 @@ public class ToursContext : DbContext
 
     //ShoppingCart
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }  
-    //public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<TourPurchaseToken> TourPurchaseTokens { get; set; }
 
 
 
