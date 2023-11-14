@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.Core.Domain.Problems;
+using Explorer.Tours.Core.Domain.Problems;
 using FluentResults;
 
-namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+namespace Explorer.Tours.Core.Domain.RepositoryInterfaces;
 
 public interface IProblemRepository
 {

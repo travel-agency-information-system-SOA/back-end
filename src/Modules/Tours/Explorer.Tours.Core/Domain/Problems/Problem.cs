@@ -8,7 +8,7 @@ using System.Xml.Linq;
 using AutoMapper.Configuration.Annotations;
 using Explorer.BuildingBlocks.Core.Domain;
 
-namespace Explorer.Stakeholders.Core.Domain.Problems;
+namespace Explorer.Tours.Core.Domain.Problems;
 
 public class Problem : Entity
 {

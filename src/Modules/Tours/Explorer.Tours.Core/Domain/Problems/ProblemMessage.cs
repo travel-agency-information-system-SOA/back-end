@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Stakeholders.Core.Domain.Problems;
+namespace Explorer.Tours.Core.Domain.Problems;
 
 public class ProblemMessage : Entity
 {

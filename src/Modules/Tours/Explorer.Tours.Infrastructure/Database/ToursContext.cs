@@ -4,6 +4,7 @@ using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using Explorer.Tours.Core.Domain.Problems;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -15,7 +16,9 @@ public class ToursContext : DbContext
     public DbSet<TouristEquipment> TouristEquipment { get; set; }
 
 
-    
+    public DbSet<Problem> Problems { get; set; }
+
+    public DbSet<ProblemMessage> ProblemMessages { get; set; }
 
 
     public DbSet<TourReview> TourReviews { get; set; }

@@ -1,28 +1,17 @@
-﻿using AutoMapper;
-using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.Core.Domain.Problems;
-using Explorer.Stakeholders.API.Dtos;
-using FluentResults;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.BuildingBlocks.Infrastructure.Database;
-using Explorer.Stakeholders.Core.Domain;
-using Explorer.Stakeholders.Core.UseCases;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Explorer.Stakeholders.Infrastructure.Database.Repositories;
+namespace Explorer.Tours.Infrastructure.Database.Repositories;
 
 internal class ProblemRepository : IProblemRepository
 {
     private readonly DbSet<Problem> _problems;
-    private readonly StakeholdersContext _context;
+    private readonly ToursContext _context;
 
-    public ProblemRepository(StakeholdersContext context)
+    public ProblemRepository(ToursContext context)
     {
         _context = context;
         _problems = _context.Set<Problem>();
