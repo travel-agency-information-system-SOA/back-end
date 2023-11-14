@@ -27,12 +27,20 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             _repository = tourRepository;
         }
 
+        //metoda za dobavljanje tura i recenzija
+        public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
+        {
+            var tours = _repository.GetAll( page, pageSize);
+            return MapToDto(tours);
+
+        }
         public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
         {
             var tours = _repository.GetByUserId(userId, page, pageSize);
             return MapToDto(tours);
 
         }
+
 
         public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int page, int pageSize)
         {
@@ -72,7 +80,18 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return distance <= rangeMeters;
         }
 
-        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transportType)
+       
+
+        public Result<PagedResult<TourDTO>> GetPublished()
+        {
+            var tours = GetPaged(1, int.MaxValue).Value;
+            var publishedTours = tours.Results.Where(tour => tour.Status == TourStatus.Published.ToString()).ToList();
+            var filteredPagedResult = new PagedResult<TourDTO>(publishedTours, publishedTours.Count());
+            return Result.Ok(filteredPagedResult);
+        }
+
+        public Result SetTourCharacteristic(int tourId, double distance, double duration, string transportType)
+
         {
             try
             {
@@ -88,7 +107,80 @@ namespace Explorer.Tours.Core.UseCases.Authoring
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
-    }
+
+
+        public Result Publish(int tourId)
+        {
+            try
+            {
+                var tour = _repository.GetByTourId(tourId);
+
+                
+                if (string.IsNullOrWhiteSpace(tour.Name) || string.IsNullOrWhiteSpace(tour.Description) || tour.Tags == null || tour.Tags.Count == 0)
+                {
+                    return Result.Fail("Tour must have all basic data set.");
+                }
+
+                if (tour.TourPoints.Count < 2)
+                {
+                    return Result.Fail("Tour must have at least two key points.But it has "+tour.TourPoints);
+                  
+                }
+
+                bool validTimeDefined = tour.TourCharacteristics.Any(tc => tc.Duration > 0);
+                if (!validTimeDefined)
+                {
+                    return Result.Fail("At least one valid tour time must be defined.");
+                }
+
+                tour.Publish(tour);
+                CrudRepository.Update(tour);
+
+                return Result.Ok();
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transposrtType)
+        {
+            throw new NotImplementedException();
+        }
+    
+
+        public Result ArchiveTour(int tourId)
+        {
+            try
+            {
+                Tour tour = CrudRepository.Get(tourId);
+                tour.Status = TourStatus.Archived;
+                CrudRepository.Update(tour);
+                return Result.Ok();
+            }
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+        public Result DeleteAggregate(int id)
+        {
+            try
+            {
+
+                _repository.DeleteAgreggate(id);
+                 return Result.Ok();
+            }
+			catch (Exception e)
+			{
+				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+		
+	}
 
 
 

@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -23,7 +28,13 @@ public class ToursProfile : Profile
 
         //CreateMap<TourObjectDto, TourObject>().ReverseMap();
 
-         CreateMap<TourObjectDto, TourObject>()
+
+        CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();   //ShoppingCart
+        CreateMap<OrderItemDto, OrderItem>().ReverseMap();
+        CreateMap<TourPurchaseTokenDto, TourPurchaseToken>().ReverseMap();
+       
+
+        CreateMap<TourObjectDto, TourObject>()
         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
         .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
@@ -50,17 +61,20 @@ public class ToursProfile : Profile
       .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourStatus), src.Status)))
      .ForMember(dest => dest.GuideId, opt => opt.MapFrom(src => src.GuideId))
      .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-     .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
-	 
+     .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+	 .ForMember(dest => dest.PublishedDateTime, opt => opt.MapFrom(src => src.PublishedDateTime)); 
 
-		CreateMap<Tour, TourDTO>()
+
+        CreateMap<Tour, TourDTO>()
 		.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
 		.ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
 		.ForMember(dest => dest.DifficultyLevel, opt => opt.MapFrom(src => src.DifficultyLevel.ToString()))
 		.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
 		.ForMember(dest => dest.GuideId, opt => opt.MapFrom(src => src.GuideId))
 	    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-		.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+		.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+        .ForMember(dest => dest.PublishedDateTime, opt => opt.MapFrom(src => src.PublishedDateTime)); 
+
 
         CreateMap<TourEquipmentDto, TourEquipment>().ReverseMap();
 
@@ -89,5 +103,21 @@ public class ToursProfile : Profile
 			.ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance))
 			.ForMember(dest => dest.TransportType, opt => opt.MapFrom(src => src.TransportType.ToString()))
 			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
-	}
+
+        CreateMap<TourPointExecutionDto, TourPointExecution>().ReverseMap();
+
+        CreateMap<TourExecutionDto, TourExecution>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourExecutionStatus), src.Status)));
+            
+
+        CreateMap<TourExecution, TourExecutionDto>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            
+
+        CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
+    }
 }
