@@ -12,9 +12,4 @@
   </ItemGroup>
 
 
-  <ItemGroup>
-    <Folder Include="Database\Repositories\" />
-  </ItemGroup>
-
-
 </Project>
