@@ -7,6 +7,7 @@ using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain.Problems;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -20,7 +21,7 @@ public class ToursProfile : Profile
 
         CreateMap<TouristEquipmentDto, TouristEquipment>().ReverseMap();
 
-        CreateMap<ProblemDto, Problem>().ReverseMap();
+        
 
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
@@ -117,6 +118,9 @@ public class ToursProfile : Profile
 
         CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
 
+        CreateMap<ProblemDto, Problem>().ReverseMap();
         CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
+
+
     }
 }

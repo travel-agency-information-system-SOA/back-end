@@ -11,12 +11,9 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
     public interface ITourRepository
 	{
-		
-
 		PagedResult<Tour> GetByUserId(int userId, int page, int pageSize);
 
         PagedResult<Tour> GetAllPublished(int page, int pageSize);
-
 
         public Tour GetByTourId(int tourId);
 
