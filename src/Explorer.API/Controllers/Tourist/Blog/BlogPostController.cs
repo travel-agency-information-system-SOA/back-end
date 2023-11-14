@@ -25,6 +25,13 @@ namespace Explorer.API.Controllers.Tourist.Blog
             return CreateResponse(result);
         }
 
+        [HttpGet("{blogPostId:int}")]
+        public ActionResult<BlogPostDto> GetById(int blogPostId)
+        {
+            var result = _blogPostService.GetById(blogPostId);
+            return CreateResponse(result);
+        }
+
         [HttpPost("{blogPostid:int}/comments")]
         public ActionResult<BlogPostDto> AddComment(int blogPostid, [FromBody] BlogPostCommentDto blogPostComment)
         {

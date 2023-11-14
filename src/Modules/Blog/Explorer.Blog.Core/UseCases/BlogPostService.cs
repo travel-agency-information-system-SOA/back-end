@@ -23,9 +23,34 @@ namespace Explorer.Blog.Core.UseCases
             _mapper = mapper;
         }
 
-        public BlogPost GetById(int blogPostId)
+        Result<BlogPostDto> IBlogPostService.GetById(int id)
         {
-            return CrudRepository.Get(blogPostId);
+            try
+            {
+                var blogPost = CrudRepository.Get(id);
+                var userIds = CollectSingleUserIds(blogPost);
+                var userIdUsernameDictionary = _internalUserService.GetUsernames(userIds.Select(id => (long)id).ToList());
+                var mappedDto = MapSingleUsernames(blogPost, userIdUsernameDictionary);
+                return mappedDto;
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        private List<int> CollectSingleUserIds(BlogPost blogPost)
+        {
+            var userIds = new List<int>();
+
+            // Collect AuthorId
+            userIds.Add(blogPost.AuthorId);
+
+            // Collect Comment.UserIds
+            userIds.AddRange(blogPost.Comments?.Select(comment => comment.UserId) ?? Enumerable.Empty<int>());
+
+            // Remove duplicates and return the list
+            return userIds.Distinct().ToList();
         }
 
         private List<int> CollectUserIds(PagedResult<BlogPost> blogPosts)
@@ -40,6 +65,25 @@ namespace Explorer.Blog.Core.UseCases
 
             // Remove duplicates and return the list
             return userIds.Distinct().ToList();
+        }
+
+        private BlogPostDto MapSingleUsernames(BlogPost blogPost, Dictionary<long, string> userIdUsernameDictionary)
+        {
+            var blogPostDto = _mapper.Map<BlogPostDto>(blogPost);
+
+            // Map AuthorUsername based on the dictionary
+            blogPostDto.AuthorUsername = userIdUsernameDictionary.GetValueOrDefault(blogPost.AuthorId);
+
+            // Map Username for each comment based on the dictionary
+            if (blogPostDto.Comments != null)
+            {
+                foreach (var commentDto in blogPostDto.Comments)
+                {
+                    commentDto.Username = userIdUsernameDictionary.GetValueOrDefault(commentDto.UserId);
+                }
+            }
+
+            return blogPostDto;
         }
 
         private PagedResult<BlogPostDto> MapUsernames(PagedResult<BlogPost> blogPosts, Dictionary<long, string> userIdUsernameDictionary)
@@ -92,7 +136,7 @@ namespace Explorer.Blog.Core.UseCases
             try
             {
                 // Retrieve the blog post from the repository
-                var blogPost = GetById(blogPostId);
+                var blogPost = CrudRepository.Get(blogPostId);
 
                 // Map the DTO to the domain entity
                 //var commentEntity = MapToDomain(comment);
@@ -118,7 +162,7 @@ namespace Explorer.Blog.Core.UseCases
         {
             try
             {
-                var blogPost = GetById(blogPostId);
+                var blogPost = CrudRepository.Get(blogPostId); 
 
                 blogPost.AddRating(rating);
 
@@ -140,7 +184,7 @@ namespace Explorer.Blog.Core.UseCases
             try
             {
                 // Retrieve the blog post from the repository
-                var blogPost = GetById(blogPostId);
+                var blogPost = CrudRepository.Get(blogPostId);
 
                 // Assuming that RemoveComment method in BlogPost entity handles the removal logic
                 blogPost.RemoveComment(userId, creationTime);
@@ -162,7 +206,7 @@ namespace Explorer.Blog.Core.UseCases
             try
             {
                 // Retrieve the blog post from the repository
-                var blogPost = GetById(blogPostId);
+                var blogPost = CrudRepository.Get(blogPostId);
 
                 // Assuming that RemoveComment method in BlogPost entity handles the removal logic
                 blogPost.RemoveRating(userId);
@@ -185,7 +229,7 @@ namespace Explorer.Blog.Core.UseCases
             try
             {
                 // Retrieve the blog post from the repository
-                var blogPost = GetById(blogPostId);
+                var blogPost = CrudRepository.Get(blogPostId);
 
                 // Assuming BlogPost entity has an EditComment method
                 blogPost.EditComment(editedComment);
@@ -202,5 +246,7 @@ namespace Explorer.Blog.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
+
+        
     }
 }

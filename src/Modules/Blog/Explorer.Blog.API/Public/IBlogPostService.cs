@@ -16,6 +16,8 @@ namespace Explorer.Blog.API.Public
         Result<BlogPostDto> Update(BlogPostDto blogPost);
         Result Delete(int id);
 
+        Result<BlogPostDto> GetById(int id);
+
         Result<PagedResult<BlogPostDto>> GetAll(int page, int pageSize);
         Result<BlogPostDto> AddComment(int blogPostId, BlogPostCommentDto comment);
         Result<BlogPostDto> RemoveComment(int blogPostId, int userId, DateTime creationTime);
