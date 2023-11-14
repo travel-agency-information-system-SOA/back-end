@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

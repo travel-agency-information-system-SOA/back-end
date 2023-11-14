@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +26,30 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
             Total = 0;  
         }
 
-        public void calculateTotal() 
+        public void RemoveOrderItem(OrderItem item)
         {
+            OrderItems.Remove(item);
+            CalculateTotal();
+        }
+
+        public void CalculateTotal() 
+        {   
+            Total = 0;
             foreach(var orderItem in OrderItems)
             {
                 Total += orderItem.Price;
             }
         }
+
+        public bool AddOrderItem(OrderItem item)
+        {
+            if(OrderItems.Contains(item)) return false;
+            OrderItems.Add(item);   
+            CalculateTotal();
+            return true;
+        }
+
+        
 
     }
 }

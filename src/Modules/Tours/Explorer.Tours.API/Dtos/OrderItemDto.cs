@@ -8,7 +8,6 @@ namespace Explorer.Tours.API.Dtos
 {
     public class OrderItemDto
     {
-        public int Id { get; set; }
         public string TourName { get; set; }
         public double Price { get; set; }
         public int IdTour { get; set; }
