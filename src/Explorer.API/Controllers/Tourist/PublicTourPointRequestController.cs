@@ -33,10 +33,10 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpPut("rejectRequest/{id:int}")] 
-        public ActionResult<TourPointRequestDto> RejectRequest(int id)
+        [HttpPut("rejectRequest/{id:int}/{comment}")] 
+        public ActionResult<TourPointRequestDto> RejectRequest(int id,string comment)
         {
-            var result = _requestService.RejectRequest(id);
+            var result = _requestService.RejectRequest(id,comment);
             return CreateResponse(result);
         }
 

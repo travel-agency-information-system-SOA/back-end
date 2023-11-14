@@ -19,7 +19,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _context = context;
             _requests = _context.Set<TourPointRequest>();
         }
-        public TourPointRequest AcceptRequest(int id)
+        public TourPointRequest AcceptRequest(int id,string comment)
         {
             TourPointRequest request = new TourPointRequest();
             foreach (var r in _requests)
@@ -34,7 +34,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             return request;
         }
 
-        public TourPointRequest RejectRequest(int id)
+        public TourPointRequest RejectRequest(int id,string comment)
         {
             TourPointRequest result = new TourPointRequest();
             foreach (var request in _requests)

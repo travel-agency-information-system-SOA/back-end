@@ -23,10 +23,10 @@ namespace Explorer.API.Controllers.Author.Administration
                 return CreateResponse(result);
             }
 
-        [HttpPost("createPublicTourPoint/{requestId:int}/{tourPointId:int}")]
-        public ActionResult<TourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId)
+        [HttpPost("createPublicTourPoint/{requestId:int}/{tourPointId:int}/{comment}")]
+        public ActionResult<TourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId,string comment)
         {
-            var result = _tourPointService.CreatePublicTourPointAndAcceptRequest(requestId, tourPointId);
+            var result = _tourPointService.CreatePublicTourPointAndAcceptRequest(requestId, tourPointId,comment);
             return CreateResponse(result);
         }
 

@@ -9,7 +9,7 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
     public interface ITourPointRequestRepository
     {
-        TourPointRequest AcceptRequest(int id);
-        TourPointRequest RejectRequest(int id);
+        TourPointRequest AcceptRequest(int id, string comment);
+        TourPointRequest RejectRequest(int id, string comment);
     }
 }

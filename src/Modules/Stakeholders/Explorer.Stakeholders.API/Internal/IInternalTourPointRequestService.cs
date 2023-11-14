@@ -11,6 +11,6 @@ namespace Explorer.Stakeholders.API.Internal
 {
     public interface IInternalTourPointRequestService
     {
-        Result<TourPointRequestDto> AcceptRequest(int id);
+        Result<TourPointRequestDto> AcceptRequest(int id,string comment);
     }
 }

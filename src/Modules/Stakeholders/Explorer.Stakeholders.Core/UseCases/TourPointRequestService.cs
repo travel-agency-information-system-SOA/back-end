@@ -29,17 +29,18 @@ namespace Explorer.Stakeholders.Core.UseCases
             var result = CrudRepository.Create(request); 
             return MapToDto(result);
         }
-        public Result<TourPointRequestDto> AcceptRequest(int id)
+        public Result<TourPointRequestDto> AcceptRequest(int id,string comment)
         {
-            var result = _tourPointRequestRepository.AcceptRequest(id);
+            var result = _tourPointRequestRepository.AcceptRequest(id,comment);
             return MapToDto(result);
         }
-        public Result<TourPointRequestDto> RejectRequest(int id)
+        public Result<TourPointRequestDto> RejectRequest(int id,string comment)
         {
-            var result = _tourPointRequestRepository.RejectRequest(id);
+            var result = _tourPointRequestRepository.RejectRequest(id,comment);
             return MapToDto(result);
         }
 
+       
     }
 
 }

@@ -36,13 +36,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         
 
-        public Result<PublicTourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId)
+        public Result<PublicTourPointDto> CreatePublicTourPointAndAcceptRequest(int requestId, int tourPointId,string comment)
         {
             TourPointDto tourPoint = new TourPointDto();
             tourPoint =_tourPointService.Get(tourPointId);
             PublicTourPoint publicTourPoint = new PublicTourPoint(tourPoint.TourId, tourPoint.Name, tourPoint.Description, tourPoint.Latitude, tourPoint.Longitude, tourPoint.ImageUrl);
             var result = CrudRepository.Create(publicTourPoint);
-            _internalTourPointRequestInterface.AcceptRequest(requestId);
+            _internalTourPointRequestInterface.AcceptRequest(requestId,comment);
             return MapToDto(result);
         }
     }
