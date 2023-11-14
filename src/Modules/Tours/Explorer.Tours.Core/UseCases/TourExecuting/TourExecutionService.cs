@@ -69,7 +69,14 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             execution.Tour = _mapper.Map<TourDTO>(tour);
         }
 
-        
+        //dodato zbog tourRating
+        public Result<PagedResult<TourExecutionDto>> GetAll(int page, int pageSize)
+        {
+            var executions = _repository.GetAll(page, pageSize);
+            return MapToDto(executions);
+
+        }
+
     }
 }
 
