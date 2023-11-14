@@ -30,8 +30,13 @@
     <ProjectReference Include="..\..\Tours\Explorer.Tours.Tests\Explorer.Tours.Tests.csproj" />
   </ItemGroup>
 
+
+ 
+
+
   
 	<ItemGroup>
+
     <Folder Include="Integration\" />
   </ItemGroup>
 

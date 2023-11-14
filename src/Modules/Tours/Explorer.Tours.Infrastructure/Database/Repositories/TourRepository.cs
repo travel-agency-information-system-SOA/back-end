@@ -40,10 +40,26 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Tour GetById(int tourId)
 		{
-            var tour = _tours.Include(t => t.TourPoints).Where(t => t.Id == tourId).FirstOrDefault();
+            Tour tour = _tours.Include(t => t.TourPoints).FirstOrDefault(t => t.Id == tourId);
+            if (tour == null) throw new KeyNotFoundException("Not found");
+			return tour;
+		}
 
+        public PagedResult<Tour> GetAllPublished(int page, int pageSize)
+        {
+			var tours = _tours.Include(t => t.TourPoints).Where(t => t.Status == TourStatus.Published).GetPagedById(page, pageSize);
+            return tours.Result;
+        }
+    
+
+        public Tour GetByTourId(int tourId)
+        {
+            var tour = _tours.Include(t => t.TourPoints).SingleOrDefault(t => t.Id == tourId);
             return tour;
         }
+
+    
+        
 
         public Result DeleteAgreggate(int tourId)
 		{
@@ -61,4 +77,5 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return Result.Fail("Tour not found");
 		}
 	}
+
 }
