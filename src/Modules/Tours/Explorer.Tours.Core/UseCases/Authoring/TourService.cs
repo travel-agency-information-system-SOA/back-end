@@ -79,6 +79,8 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			}
 		}
 
+        
+
 		
 	}
 
