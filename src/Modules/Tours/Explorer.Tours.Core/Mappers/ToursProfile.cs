@@ -30,8 +30,8 @@ public class ToursProfile : Profile
 
 
         CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();   //ShoppingCart
-
-      
+        CreateMap<OrderItemDto, OrderItem>().ReverseMap();
+        CreateMap<TourPurchaseTokenDto, TourPurchaseToken>().ReverseMap();
        
 
         CreateMap<TourObjectDto, TourObject>()
