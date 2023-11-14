@@ -9,6 +9,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
     public interface IUserPositionRepository
     {
-        public PagedResult<UserPosition> GetByUserId(int id,int page,int pageSize);
+        public UserPosition GetByUserId(int id,int page,int pageSize);
     }
 }

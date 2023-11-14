@@ -15,7 +15,7 @@ namespace Explorer.Stakeholders.Core.Domain
         
 
 
-        public UserPosition(long userId, int latitude, int longitude)
+        public UserPosition(long userId, double latitude, double longitude)
         {
             UserId = userId;
             Latitude = latitude;

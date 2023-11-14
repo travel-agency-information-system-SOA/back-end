@@ -22,13 +22,13 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _userPositions = _context.Set<UserPosition>();
         }
 
-        public PagedResult<UserPosition> GetByUserId(int id, int page, int pageSize)
+        public UserPosition GetByUserId(int id, int page, int pageSize)
         {
             var userPosition = _userPositions
-                .Where(te => te.UserId == id)
-                .GetPaged(page, pageSize);
+                .SingleOrDefault(te => te.UserId == id);
+                
 
-            return userPosition.Result;
+            return userPosition;
         }
     }
 }

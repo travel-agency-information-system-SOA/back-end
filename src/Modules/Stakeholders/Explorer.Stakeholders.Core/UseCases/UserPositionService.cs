@@ -22,7 +22,7 @@ public class UserPositionService : CrudService<UserPositionDto, UserPosition>, I
         _repository = userPositionRepository;
     }
 
-    public Result<PagedResult<UserPositionDto>> GetByUserId(int userId, int page, int pageSize)
+    public Result<UserPositionDto> GetByUserId(int userId, int page, int pageSize)
     {
         var execution = _repository.GetByUserId(userId, page, pageSize);
         return MapToDto(execution);

@@ -15,6 +15,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<UserPositionDto> Create(UserPositionDto userPosition);
         Result<UserPositionDto> Update(UserPositionDto userPosition);
         Result Delete(int id);
-        public Result<PagedResult<UserPositionDto>> GetByUserId(int tourExecutionId, int page, int pageSize);
+        public Result<UserPositionDto> GetByUserId(int tourExecutionId, int page, int pageSize);
     }
 }
