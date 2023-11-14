@@ -84,7 +84,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
                   
                 }
 
-                bool validTimeDefined = tour.TourCharacteristics.Any(tc => tc.Duration > TimeSpan.Zero);
+                bool validTimeDefined = tour.TourCharacteristics.Any(tc => tc.Duration > 0);
                 if (!validTimeDefined)
                 {
                     return Result.Fail("At least one valid tour time must be defined.");
@@ -101,8 +101,11 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             }
         }
 
-
-    }
+        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transposrtType)
+        {
+            throw new NotImplementedException();
+        }
+    
 
         public Result ArchiveTour(int tourId)
         {

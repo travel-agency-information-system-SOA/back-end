@@ -44,7 +44,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return tour;
         }
 
-    }
+    
         public Tour GetById(int tourId)
 		{
             var tour = _tours.Include(t => t.TourPoints).Where(t => t.Id == tourId).FirstOrDefault();
