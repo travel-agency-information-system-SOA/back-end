@@ -25,7 +25,11 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpPost]
-        [Authorize(Policy = "touristAndAuthorPolicy")]
+        [Authorize(Policy = "touristAuthorPolicy")]
+        //[Authorize(Policy = "touristPolicy, authorPolicy")]
+        // [Authorize(Policy = "touristPolicy")]
+        //[Authorize(Policy = "authorPolicy")]
+
         public ActionResult<AppRatingDto> Create([FromBody] AppRatingDto appRating)
         {
             bool userAlreadyRated = _appRatingService.HasUserRated(appRating.UserId);

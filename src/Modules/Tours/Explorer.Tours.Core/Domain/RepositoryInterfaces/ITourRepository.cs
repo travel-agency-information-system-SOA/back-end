@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.Core.Domain.Tours;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
@@ -13,6 +14,11 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 		
 
 		PagedResult<Tour> GetByUserId(int userId, int page, int pageSize);
+        PagedResult<Tour> GetAll( int page, int pageSize);
 
-	}
+		Tour GetById(int tourId);
+        Result DeleteAgreggate(int id);
+
+
+    }
 }

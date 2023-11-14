@@ -17,7 +17,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public List<string> Tags { get; private set; }
 
-        public TourStatus Status { get; private set; }
+        public TourStatus Status { get;  set; }
 
         public int Price { get; private set; }
 
@@ -26,6 +26,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public ICollection<TourPoint> TourPoints { get; } = new List<TourPoint>();
 
         public ICollection<TourCharacteristic> TourCharacteristics { get; } = new List<TourCharacteristic>();
+        public ICollection<TourReview> TourReviews { get; }= new List<TourReview>();
 
         public Tour(string name, DifficultyLevel difficultyLevel, string? description, int guideId)
         {

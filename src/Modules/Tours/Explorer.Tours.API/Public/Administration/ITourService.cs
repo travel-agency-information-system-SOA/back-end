@@ -17,10 +17,17 @@ namespace Explorer.Tours.API.Public.Administration
 
 		Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize);
 
+		Result<PagedResult<TourDTO>> GetPublished();
+
 		Result<TourDTO> Update(TourDTO tourDto);
 
 		Result SetTourCharacteristic(int tourId, double distance, double duration, string transposrtType);
 
+		Result ArchiveTour(int tourId);
+
+		Result DeleteAggregate(int id);
+
+		Result<PagedResult<TourDTO>> GetAll(int page, int pageSize);
 		
 	}
 }
