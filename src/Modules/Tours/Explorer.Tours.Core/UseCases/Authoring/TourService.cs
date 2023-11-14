@@ -44,7 +44,6 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         {
             try
             {
-
                 var Tour = CrudRepository.Get(tourId);
                 Tour.setCharacteristic(distance, duration, (TransportType)Enum.Parse(typeof(TransportType), transportType));
                 CrudRepository.Update(Tour);
@@ -76,7 +75,6 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         {
             try
             {
-
                 _repository.DeleteAgreggate(id);
                  return Result.Ok();
             }

@@ -21,13 +21,11 @@ namespace Explorer.API.Controllers.Author.Authoring
         [HttpPost]
         public ActionResult<TourDTO> Create([FromBody] TourDTO tour)
         {
-
             tour.Status = "Draft";
             tour.Price = 0;
 
             var result = _tourService.Create(tour);
             return CreateResponse(result);
-
         }
 
         [HttpGet("{userId:int}")]

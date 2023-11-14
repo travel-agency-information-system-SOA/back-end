@@ -20,7 +20,7 @@ public class ToursProfile : Profile
 
         CreateMap<TouristEquipmentDto, TouristEquipment>().ReverseMap();
 
-        CreateMap<ProblemDto, Problem>().ReverseMap();
+        
 
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
@@ -112,6 +112,6 @@ public class ToursProfile : Profile
 
         CreateMap<TourExecutionPositionDto, TourExecutionPosition>().ReverseMap();
 
-        CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
+        
     }
 }

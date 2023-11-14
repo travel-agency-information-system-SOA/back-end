@@ -11,12 +11,8 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
     public interface ITourRepository
 	{
-		
-
 		PagedResult<Tour> GetByUserId(int userId, int page, int pageSize);
-
         Tour GetById(int id);
-
 		Result DeleteAgreggate(int id);
 
 	}

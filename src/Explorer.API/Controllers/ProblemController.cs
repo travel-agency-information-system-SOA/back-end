@@ -1,9 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
-using FluentResults;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +18,7 @@ namespace Explorer.API.Controllers
             _problemService = problemService;
         }
 
-        [Authorize(Policy = "touristPolicy")]
+        //[Authorize(Policy = "touristPolicy")]
         [HttpGet("byTourist/{userId:int}")]
         public ActionResult<List<ProblemDto>> GetByTouristId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -29,7 +26,7 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "authorPolicy")]
+        //[Authorize(Policy = "authorPolicy")]
         [HttpGet("byGuide/{guideId:int}")]
         public ActionResult<List<ProblemDto>> GetByGuideId(int guideId, [FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -44,9 +41,7 @@ namespace Explorer.API.Controllers
             return id;
         }
 
-
-
-        [Authorize(Policy = "administratorPolicy")]
+        //[Authorize(Policy = "administratorPolicy")]
         [HttpGet("unsolved")]
         public ActionResult<PagedResult<ProblemDto>> GetUnsolvedProblems([FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -54,7 +49,7 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "administratorPolicy")]
+        //[Authorize(Policy = "administratorPolicy")]
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
@@ -63,7 +58,7 @@ namespace Explorer.API.Controllers
         }
 
 
-        [Authorize(Policy = "touristPolicy")]
+        //[Authorize(Policy = "touristPolicy")]
         [HttpPost]
         public ActionResult<ProblemDto> Create([FromBody] ProblemDto problem)
         {
@@ -82,6 +77,13 @@ namespace Explorer.API.Controllers
         public ActionResult Delete(int id)
         {
             var result = _problemService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("closestDeadline/{id:int}")]
+        public ActionResult<ProblemDto> getGuideProblemWithClosestDeadline(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _problemService.getGuideProblemWithClosestDeadline(id, page, pageSize);
             return CreateResponse(result);
         }
 
