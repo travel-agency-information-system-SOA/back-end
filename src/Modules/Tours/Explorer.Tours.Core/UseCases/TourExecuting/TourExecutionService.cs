@@ -54,12 +54,13 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
             TourExecutionDto executionDto = MapToDto(execution);
 
+            LoadTour(executionDto);
             executionDto.Position.Longitude = longitude;
             executionDto.Position.Latitude = latitude;
 
             // check if close to any key point
 
-            //CheckTourPoints(executionDto);
+            CheckTourPoints(executionDto);
 
             _repository.Update(MapToDomain(executionDto));
         }
@@ -88,7 +89,8 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             {
                 if(CalculateDistance(te.Position.Latitude, te.Position.Longitude, tp.Latitude, tp.Longitude) < 10.0)
                 {
-                    te.TourPoints.FirstOrDefault(tp => tp.TourPointId == tp.Id).Completed = true;
+                    int tourPointForChangeId = tp.Id;
+                    te.TourPoints.FirstOrDefault(tep => tep.TourPointId == tourPointForChangeId).Completed = true;
                 }
             }
         }
