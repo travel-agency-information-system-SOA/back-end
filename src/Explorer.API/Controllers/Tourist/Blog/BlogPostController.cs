@@ -26,15 +26,15 @@ namespace Explorer.API.Controllers.Tourist.Blog
         }
 
         [HttpPost("{blogPostid:int}/comments")]
-        public ActionResult<BlogPostDto> AddComment(int id, [FromBody] BlogPostCommentDto blogPostComment)
+        public ActionResult<BlogPostDto> AddComment(int blogPostid, [FromBody] BlogPostCommentDto blogPostComment)
         {
-            var result = _blogPostService.AddComment(id, blogPostComment);
+            var result = _blogPostService.AddComment(blogPostid, blogPostComment);
             return CreateResponse(result);
         }
         [HttpPost("{blogPostid:int}/ratings")]
-        public ActionResult<BlogPostDto> AddRating(int id, [FromBody] BlogPostRatingDto blogPostRating)
+        public ActionResult<BlogPostDto> AddRating(int blogPostid, [FromBody] BlogPostRatingDto blogPostRating)
         {
-            var result = _blogPostService.AddRating(id, blogPostRating);
+            var result = _blogPostService.AddRating(blogPostid, blogPostRating);
             return CreateResponse(result);
         }
 
