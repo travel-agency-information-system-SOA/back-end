@@ -24,8 +24,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 			var filteredPagedResult = new PagedResult<TourPoint>(filteredTourPoints.ToList(), filteredTourPoints.Count());
 			return MapToDto(filteredPagedResult);
-
-
 		}
 	}
 }

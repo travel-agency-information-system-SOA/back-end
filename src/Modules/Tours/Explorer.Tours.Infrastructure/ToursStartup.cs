@@ -7,7 +7,9 @@ using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.Core.Domain.Problems;
 using Explorer.Tours.Core.Mappers;
+using Explorer.Tours.Core.UseCases;
 using Explorer.Tours.Core.UseCases.Administration;
 using Explorer.Tours.Core.UseCases.Authoring;
 using Explorer.Tours.Core.UseCases.Marketplace;
@@ -23,7 +25,6 @@ public static class ToursStartup
 {
     public static IServiceCollection ConfigureToursModule(this IServiceCollection services)
     {
-        // Registers all profiles since it works on the assembly
         services.AddAutoMapper(typeof(ToursProfile).Assembly);
         SetupCore(services);
         SetupInfrastructure(services);
@@ -38,7 +39,6 @@ public static class ToursStartup
 
         services.AddScoped<ITouristEquipmentService, TouristEquipmentService>();
 
-        services.AddScoped<IProblemService, ProblemService>();
 
 
         services.AddScoped<ITourReviewService, TourReviewService>();
@@ -54,6 +54,8 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionService, TourExecutionService>();
         services.AddScoped<ITourPointExecutionService, TourPointExecutionService>();
         services.AddScoped<ITourExecutionPositionService, TourExecutionPositionService>();
+        services.AddScoped<IProblemService, ProblemService>();
+        services.AddScoped<IProblemMessageService, ProblemMessageService>();
 
 
 
@@ -68,7 +70,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<TouristEquipment>), typeof(CrudDatabaseRepository<TouristEquipment, ToursContext>));
 
 
-        services.AddScoped(typeof(ICrudRepository<Problem>), typeof(CrudDatabaseRepository<Problem, ToursContext>));
+        
 
 
         services.AddScoped(typeof(ICrudRepository<TourReview>), typeof(CrudDatabaseRepository<TourReview, ToursContext>));
@@ -88,8 +90,13 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<TourExecution>),typeof(CrudDatabaseRepository<TourExecution,ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourPointExecution>), typeof(CrudDatabaseRepository<TourPointExecution, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourExecutionPosition>), typeof(CrudDatabaseRepository<TourExecutionPosition, ToursContext>));
+        services.AddScoped<ITourExecutionRepository, TourExecutionRepository>();
+
+        services.AddScoped(typeof(ICrudRepository<Problem>), typeof(CrudDatabaseRepository<Problem, ToursContext>));
+        services.AddScoped<IProblemRepository, ProblemRepository>();
 
 
+        services.AddScoped(typeof(ICrudRepository<ProblemMessage>), typeof(CrudDatabaseRepository<ProblemMessage, ToursContext>));
 
 
         services.AddDbContext<ToursContext>(opt =>

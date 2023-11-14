@@ -8,7 +8,7 @@ namespace Explorer.Tours.API.Dtos
 {
 	public class TourCharacteristicDTO
 	{
-		public int Distance {  get; set; }
+		public double Distance {  get; set; }
 
 		public double Duration { get; set; }
 

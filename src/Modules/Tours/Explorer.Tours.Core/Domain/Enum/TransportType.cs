@@ -1,6 +1,6 @@
-﻿public enum TransportType
+﻿	public enum TransportType
 {
-	Driving,
-	Walking,
-	Cycling
+	driving,
+	walking,
+	cycling
 }
