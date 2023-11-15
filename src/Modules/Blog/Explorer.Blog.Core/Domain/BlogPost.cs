@@ -59,7 +59,10 @@ namespace Explorer.Blog.Core.Domain
             // Assuming a hypothetical method that identifies and removes the comment based on certain criteria
             var commentToRemove = Comments.FirstOrDefault(c =>
                 c.UserId == userId &&
-                c.CreationTime.Equals(creationTime));
+                c.CreationTime.Date == creationTime.Date &&
+                c.CreationTime.Hour == creationTime.Hour &&
+                c.CreationTime.Minute == creationTime.Minute &&
+                c.CreationTime.Second == creationTime.Second);
 
             if (commentToRemove != null)
             {
@@ -125,13 +128,13 @@ namespace Explorer.Blog.Core.Domain
                 return;
             }
 
-            if (totalScore >= 0 && Comments.Count > 10)
+            if (totalScore > 500 && Comments.Count > 30)
             {
                 Status = BlogPostStatus.FAMOUS;
                 return;
             }
 
-            if (totalScore >= -10 || Comments.Count > 5)
+            if (totalScore > 100 || Comments.Count > 10)
             {
                 Status = BlogPostStatus.ACTIVE;
                 return;
