@@ -44,7 +44,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return _tourExecutions
                 .Include(te => te.TourPoints)
                 .Include(te => te.Position)
-                .SingleOrDefault(te => te.UserId == userId);
+                .SingleOrDefault(te => te.UserId == userId && te.Status == TourExecutionStatus.InProgress);
         }
 
         public Result Update(TourExecution updatedTourExecution)

@@ -17,7 +17,7 @@ namespace Explorer.Tours.API.Public.TourExecuting
         public Result<TourExecutionDto> GetByUser(int userId);
         public void UpdateStatus(int tourExecutionId, string status);
 
-        
+        public bool IsFinished(int tourExecutionId);
         public void Create(int userId, int tourId, double longitude, double latitude);
     }
 }

@@ -40,7 +40,8 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             try
             {
                 _tourExecutionService.UpdatePosition(tourExecutionId, longitude, latitude);
-                return Ok("Position updated successfully");
+                _tourExecutionService.IsFinished(tourExecutionId);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -70,7 +71,7 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             {
                 _tourExecutionService.CompleteTourPoint(tourExecutionId, tourPointId);
 
-                return Ok("Tour point completed successfully.");
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -85,7 +86,7 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             {
                 _tourExecutionService.Create(userId, tourId, longitude, latitude);
 
-                return Ok("TourExecution created successfully");
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -93,7 +94,6 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             }
         }
 
-        
 
     }
 }

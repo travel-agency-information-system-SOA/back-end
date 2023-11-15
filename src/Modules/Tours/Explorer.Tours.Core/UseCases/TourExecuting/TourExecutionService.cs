@@ -48,7 +48,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             return executionDto;
         }
 
-        // TODO: lastActivity
+        
         public void UpdatePosition(int tourExecutionId, double longitude, double latitude)
         {
             var execution = _repository.GetById(tourExecutionId);
@@ -61,6 +61,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             executionDto.Position.LastActivity = DateTime.UtcNow;
 
             CheckTourPoints(executionDto);
+            
             _repository.Update(MapToDomain(executionDto));
         }
 
@@ -107,6 +108,25 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             }
         }
 
+        public bool IsFinished(int tourExecutionId)
+        {
+            var execution = _repository.GetById(tourExecutionId);
+
+            TourExecutionDto executionDto = MapToDto(execution);
+
+            foreach (TourPointExecutionDto point in executionDto.TourPoints)
+            {
+                if (!point.Completed)
+                {
+                    return false;
+                }
+            }
+
+            UpdateStatus(tourExecutionId, "Completed");
+
+            return true;
+        }
+
         public double CalculateDistance(double userLat, double userLon, double pointLat, double pointLon)
         {
             double EarthRadiusKm = 6371.0;
@@ -148,8 +168,8 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
             _repository.CreatePosition(longitude, latitude, executionId);
             
-
         }
+
     }
 }
 
