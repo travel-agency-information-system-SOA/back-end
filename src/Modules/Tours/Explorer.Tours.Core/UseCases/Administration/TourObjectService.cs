@@ -16,8 +16,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
     {
         public TourObjectService(ICrudRepository<TourObject> repository, IMapper mapper) : base(repository, mapper) { }
 
+        TourObjectDto ITourObjectService.GetTour(int id)
+        {
+            var result = CrudRepository.Get(id);
+            return MapToDto(result);
+        }
 
-		
 
-	}
+    }
 }

@@ -35,6 +35,8 @@ public static class StakeholdersStartup
         services.AddScoped<ITourPointRequestService, TourPointRequestService>();
         services.AddScoped<IInternalTourPointRequestService,TourPointRequestService>();
         services.AddScoped<IUserService,UserService>();
+        services.AddScoped<ITourObjectRequestService, TourObjectRequestService>();
+       services.AddScoped<IInternalTourObjectRequestService, TourObjectRequestService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -43,9 +45,11 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
         services.AddScoped<ITourPointRequestRepository, TourPointRequestRepository>();
+        services.AddScoped<ITourObjectRequestRepository, TourObjectRequestRepository>();
         services.AddScoped(typeof(ICrudRepository<AppRating>), typeof(CrudDatabaseRepository<AppRating,StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<TourPointRequest>), typeof(CrudDatabaseRepository<TourPointRequest, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<User>), typeof(CrudDatabaseRepository<User, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<TourObjectRequest>), typeof(CrudDatabaseRepository<TourObjectRequest, StakeholdersContext>));
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
