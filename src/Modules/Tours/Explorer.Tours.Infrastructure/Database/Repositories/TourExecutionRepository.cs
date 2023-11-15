@@ -2,16 +2,10 @@
 using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
-using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
@@ -83,6 +77,49 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             {
                 return Result.Fail($"Failed to update TourExecution. Error: {ex.Message}");
             }
+        }
+
+        public int Create(int userId, int tourId)
+        {
+            var maxId = _context.TourExecutions.Max(entity => (int?)entity.Id) ?? 0;
+            var id = maxId + 1;
+            var execution = new TourExecution(userId, tourId, TourExecutionStatus.InProgress);
+
+            execution.SetId(id);
+            _context.Add(execution);
+
+
+
+            _context.SaveChanges();
+
+            return id;
+        }
+
+        public void CreatePoint(int executionId, int tourPointId)
+        {
+            var point = new TourPointExecution(executionId, tourPointId, DateTime.UtcNow);
+
+            var maxId = _context.TourPointExecutions.Max(entity => (int?)entity.Id) ?? 0;
+
+            var id = maxId + 1;
+            point.SetId(id);
+            _context.Add(point);
+
+            _context.SaveChanges();
+        }
+
+        public void CreatePosition(int longitude, int latitude, int executionId)
+        {
+            
+            var position = new TourExecutionPosition(executionId, DateTime.UtcNow, latitude, longitude);
+            var maxId = _context.TourExecutionPositions.Max(entity => (int?)entity.Id) ?? 0;
+
+            var id = maxId + 1;
+            position.SetId(id);
+
+            _context.Add(position);
+            _context.SaveChanges();
+
         }
 
 

@@ -18,5 +18,6 @@ namespace Explorer.Tours.API.Public.TourExecuting
         public void UpdateStatus(int tourExecutionId, string status);
 
         
+        public void Create(int userId, int tourId, int longitude, int latitude);
     }
 }

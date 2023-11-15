@@ -11,6 +11,7 @@ using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,12 +55,13 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
             TourExecutionDto executionDto = MapToDto(execution);
 
+            LoadTour(executionDto);
             executionDto.Position.Longitude = longitude;
             executionDto.Position.Latitude = latitude;
-
+            executionDto.Position.LastActivity = DateTime.UtcNow;
             // check if close to any key point
 
-            //CheckTourPoints(executionDto);
+            CheckTourPoints(executionDto);
 
             _repository.Update(MapToDomain(executionDto));
         }
@@ -100,7 +102,8 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             {
                 if(CalculateDistance(te.Position.Latitude, te.Position.Longitude, tp.Latitude, tp.Longitude) < 10.0)
                 {
-                    te.TourPoints.FirstOrDefault(tp => tp.TourPointId == tp.Id).Completed = true;
+                    int tourPointForChangeId = tp.Id;
+                    te.TourPoints.FirstOrDefault(tep => tep.TourPointId == tourPointForChangeId).Completed = true;
                 }
             }
         }
@@ -130,6 +133,23 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         private double DegreesToRadians(double degrees)
         {
             return degrees * Math.PI / 180.0;
+        }
+
+        public void Create(int userId, int tourId, int longitude, int latitude)
+        {
+            var tour = _tourRepository.GetById(tourId);
+            var execution = new TourExecution(userId, tourId, TourExecutionStatus.InProgress);
+
+            int executionId = _repository.Create(userId, tourId);
+
+            foreach(TourPoint tp in tour.TourPoints)
+            {
+                _repository.CreatePoint(executionId, Convert.ToInt32(tp.Id));
+            }
+
+            _repository.CreatePosition(longitude, latitude, executionId);
+            
+
         }
     }
 }

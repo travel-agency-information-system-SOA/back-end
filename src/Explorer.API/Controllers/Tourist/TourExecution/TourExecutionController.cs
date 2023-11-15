@@ -2,6 +2,7 @@
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.API.Public.TourExecuting;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -77,6 +78,23 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             {
                 Console.Error.WriteLine(ex);
                 return StatusCode(500, "An error occurred while completing the tour point.");
+            }
+        }
+        [HttpPost("create")]
+        public IActionResult CreateTourExecution(int userId, int tourId, int longitude, int latitude)
+        {
+            try
+            {
+                // You can replace this with your actual logic for creating a TourExecution
+                _tourExecutionService.Create(userId, tourId, longitude, latitude);
+
+                // Assuming you want to return a success response
+                return Ok("TourExecution created successfully");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it based on your requirements
+                return BadRequest($"Error creating TourExecution: {ex.Message}");
             }
         }
 

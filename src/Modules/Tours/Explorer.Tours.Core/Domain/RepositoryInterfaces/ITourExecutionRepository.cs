@@ -15,5 +15,8 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public TourExecution GetById(int id);
         public Result Update(TourExecution updatedTourExecution);
         public TourExecution GetByUser(int userId);
+        public int Create(int userId, int tourId);
+        public void CreatePoint(int executionId, int tourPointId);
+        public void CreatePosition(int longitude, int latitude, int executionId);
     }
 }
