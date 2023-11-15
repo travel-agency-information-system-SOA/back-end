@@ -25,6 +25,7 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             var result = _tourExecutionService.GetById(tourExecutionId);
             return CreateResponse(result);
         }
+
         [HttpGet("user/{userId:int}")]
         public ActionResult<PagedResult<TourExecutionDto>> GetByUser(int userId)
         {
@@ -46,6 +47,21 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             }
         }
 
+        [HttpPut("{tourExecutionId}/update-status/{status}")]
+        public IActionResult UpdateStatus(int tourExecutionId, string status)
+        {
+            try
+            {
+                _tourExecutionService.UpdateStatus(tourExecutionId, status);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating status: {ex.Message}");
+            }
+        }
+
+
         [HttpPost("{tourExecutionId}/complete/{tourPointId}")]
         public IActionResult CompleteTourPoint(int tourExecutionId, int tourPointId)
         {
@@ -63,6 +79,8 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
                 return StatusCode(500, "An error occurred while completing the tour point.");
             }
         }
+
+        
 
     }
 }

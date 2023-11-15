@@ -37,7 +37,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             LoadTour(executionDto);
             return executionDto;
         }
-
+        
         public Result<TourExecutionDto> GetByUser(int userId)
         {
             var execution = _repository.GetByUser(userId);
@@ -60,6 +60,18 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             // check if close to any key point
 
             //CheckTourPoints(executionDto);
+
+            _repository.Update(MapToDomain(executionDto));
+        }
+
+        public void UpdateStatus(int tourExecutionId, string status )
+        {
+            var execution = _repository.GetById(tourExecutionId);
+
+            TourExecutionDto executionDto = MapToDto(execution);
+
+            executionDto.Status = status;
+            //executionDto.Position.LastActivity= DateTime.Now;
 
             _repository.Update(MapToDomain(executionDto));
         }

@@ -84,5 +84,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 return Result.Fail($"Failed to update TourExecution. Error: {ex.Message}");
             }
         }
+
+
     }
 }
