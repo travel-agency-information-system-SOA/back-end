@@ -38,7 +38,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             return CreateResponse(result);
         }
 
-        /*
+        
         //Remove Order Item -  puca pri dobavljanju shoppingCart-a na osnovu ovog cartId
         [HttpPut("{cartId:long}/{tourId:int}")]
         public ActionResult RemoveOrderItem(long cartId, int tourId )
@@ -47,7 +47,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
                 var result = _shoppingCartService.RemoveOrderItem(cartId, tourId);
                 return CreateResponse(result);
         }
-        */
+        
 
 
         /*

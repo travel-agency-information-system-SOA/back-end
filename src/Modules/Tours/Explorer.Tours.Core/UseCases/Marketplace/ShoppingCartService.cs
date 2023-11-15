@@ -91,7 +91,5 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
             return MapToDto(cart);
         }
 
-       
-
     }
 }
