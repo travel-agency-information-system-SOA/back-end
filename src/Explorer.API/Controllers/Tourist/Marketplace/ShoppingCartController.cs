@@ -2,6 +2,7 @@
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Marketplace;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,58 +19,48 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             _shoppingCartService = shoppingCartService;
         }
 
+      
 
-        [HttpGet]
-        public ActionResult<PagedResult<ShoppingCartDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        
+        [HttpGet("{id:int}")]          //dobavljanje ShoppingCart-a od bas tog trenutno ulogovanog turiste
+        public ActionResult<ShoppingCartDto> GetByUserId(int id)
         {
-            var result =    _shoppingCartService.GetPaged(page, pageSize);
+            var result = _shoppingCartService.GetByUserId(id);
             return CreateResponse(result);
         }
 
-        //dobavljanje ShoppingCart-a od bas tog trenutno ulogovanog turiste
-        [HttpGet("{id:int}")]
-        public ActionResult<ShoppingCartDto> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
+       
+        
+        [HttpPut("/purchase")]
+        public ActionResult Purchase([FromBody] ShoppingCartDto cart)
         {
-            var result = _shoppingCartService.GetByUserId(userId, page, pageSize);
-            return CreateResponse(result);
-        }
-
-        //racunanje trenutnog Totala za OrderIteme u korpi
-        //[HttpGet("{id:int}")]
-        //public ActionResult<double> CalculateTotalPrice([FromBody] ShoppingCartDto cart)
-        //{
-        //    var result = _shoppingCartService.CalculateTotalPrice(cart.OrderItems);
-        //    return CreateResponse(result);
-        //}
-
-
-        [HttpPost]
-        public ActionResult<ShoppingCartDto> Create([FromBody] ShoppingCartDto cart)
-        {
-            var result = _shoppingCartService.Create(cart);
-            return CreateResponse(result);
-        }
-
-        [HttpPut]
-        public ActionResult<ShoppingCartDto> Update([FromBody] ShoppingCartDto cart)
-        {
-            var result = _shoppingCartService.Update(cart);
+            var result = _shoppingCartService.Purchase(cart);
             return CreateResponse(result);
         }
 
         /*
-        [HttpPut("purchase")]
-        public ActionResult<ShoppingCartDto> Purchase([FromBody] ShoppingCartDto cart)
+        //Remove Order Item -  puca pri dobavljanju shoppingCart-a na osnovu ovog cartId
+        [HttpPut("{cartId:long}/{tourId:int}")]
+        public ActionResult RemoveOrderItem(long cartId, int tourId )
         {
-            var result = _shoppingCartService.Update(cart);
-            return CreateResponse(result);
-        }*/
 
+                var result = _shoppingCartService.RemoveOrderItem(cartId, tourId);
+                return CreateResponse(result);
+        }
+        */
+
+
+        /*
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
             var result = _shoppingCartService.Delete(id);
             return CreateResponse(result);
-        }
+        }*/
+
+
+
+
+
     }
 }
