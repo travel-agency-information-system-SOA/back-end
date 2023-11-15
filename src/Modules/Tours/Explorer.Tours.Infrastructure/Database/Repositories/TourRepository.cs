@@ -76,6 +76,8 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
 			return Result.Fail("Tour not found");
 		}
+
+		
 	}
 
 }

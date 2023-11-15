@@ -15,7 +15,7 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
         public double Price {get; set;}
         public int IdTour { get; set;}
 
-        // TourPurchaseToken 
+        
 
         [JsonConstructor]
         public OrderItem(string tourName, double price, int idTour) 
@@ -34,6 +34,11 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
             yield return TourName;
             yield return Price;
             yield return IdTour;
+        }
+
+        public TourPurchaseToken ToPurchaseToken(int touristId)
+        {
+            return new TourPurchaseToken(touristId, IdTour);
         }
     }
 }

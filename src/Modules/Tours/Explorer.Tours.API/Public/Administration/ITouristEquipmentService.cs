@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using AutoMapper.Configuration.Conventions;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using FluentResults;
 using System;
@@ -12,11 +13,10 @@ namespace Explorer.Tours.API.Public.Administration
 {
     public interface ITouristEquipmentService
     {
+        Result<TouristEquipmentDto> GetTouristEquipment(int touristId);
+        Result<TouristEquipmentDto> AddToMyEquipment(int touristId, int equipmentId);
+        Result<TouristEquipmentDto> DeleteFromMyEquipment(int touristId, int equipmentId);
 
-        Result<PagedResult<TouristEquipmentDto>> GetPaged(int page, int pageSize);
-        Result<TouristEquipmentDto> Update(TouristEquipmentDto touristEquipment);
-        Result<TouristEquipmentDto> Create(TouristEquipmentDto touristEquipment);
-        Result Delete(int touristEquipmentDtoId);
-
+        Result<TouristEquipmentDto> Create(int touristId);
     }
 }
