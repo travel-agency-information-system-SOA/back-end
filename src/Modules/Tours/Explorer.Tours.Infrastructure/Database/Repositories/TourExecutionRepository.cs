@@ -108,7 +108,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _context.SaveChanges();
         }
 
-        public void CreatePosition(int longitude, int latitude, int executionId)
+        public void CreatePosition(double longitude, double latitude, int executionId)
         {
             
             var position = new TourExecutionPosition(executionId, DateTime.UtcNow, latitude, longitude);

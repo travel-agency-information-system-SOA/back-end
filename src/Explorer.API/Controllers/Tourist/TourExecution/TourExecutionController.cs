@@ -35,7 +35,7 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
         }
 
         [HttpPut("{tourExecutionId}/update-position/{longitude}/{latitude}")]
-        public IActionResult UpdatePosition(int tourExecutionId, int longitude, int latitude)
+        public IActionResult UpdatePosition(int tourExecutionId, double longitude, double latitude)
         {
             try
             {
@@ -68,10 +68,8 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
         {
             try
             {
-                // Call the service method to complete the tour point
                 _tourExecutionService.CompleteTourPoint(tourExecutionId, tourPointId);
 
-                // Return a successful response
                 return Ok("Tour point completed successfully.");
             }
             catch (Exception ex)
@@ -81,19 +79,16 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             }
         }
         [HttpPost("create")]
-        public IActionResult CreateTourExecution(int userId, int tourId, int longitude, int latitude)
+        public IActionResult CreateTourExecution(int userId, int tourId, double longitude, double latitude)
         {
             try
             {
-                // You can replace this with your actual logic for creating a TourExecution
                 _tourExecutionService.Create(userId, tourId, longitude, latitude);
 
-                // Assuming you want to return a success response
                 return Ok("TourExecution created successfully");
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it based on your requirements
                 return BadRequest($"Error creating TourExecution: {ex.Message}");
             }
         }

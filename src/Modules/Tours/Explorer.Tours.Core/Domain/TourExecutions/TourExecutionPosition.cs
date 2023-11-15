@@ -11,12 +11,12 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
     {
         public long TourExecutionId { get; private set; }
         public DateTime? LastActivity { get; private set; }
-        public int Latitude { get; private set; }
-        public int Longitude { get; private set; }
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
         public TourExecution Execution { get; private set; } = null!;
 
 
-        public TourExecutionPosition(int tourExecutionId, DateTime? lastActivity, int latitude, int longitude)
+        public TourExecutionPosition(int tourExecutionId, DateTime? lastActivity, double latitude, double longitude)
         {
             TourExecutionId = tourExecutionId;
             LastActivity = lastActivity;

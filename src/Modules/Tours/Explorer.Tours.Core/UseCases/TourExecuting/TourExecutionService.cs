@@ -49,7 +49,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         }
 
         // TODO: lastActivity
-        public void UpdatePosition(int tourExecutionId, int longitude, int latitude)
+        public void UpdatePosition(int tourExecutionId, double longitude, double latitude)
         {
             var execution = _repository.GetById(tourExecutionId);
 
@@ -59,10 +59,8 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             executionDto.Position.Longitude = longitude;
             executionDto.Position.Latitude = latitude;
             executionDto.Position.LastActivity = DateTime.UtcNow;
-            // check if close to any key point
 
             CheckTourPoints(executionDto);
-
             _repository.Update(MapToDomain(executionDto));
         }
 
@@ -73,7 +71,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             TourExecutionDto executionDto = MapToDto(execution);
 
             executionDto.Status = status;
-            //executionDto.Position.LastActivity= DateTime.Now;
+            executionDto.Position.LastActivity= DateTime.UtcNow;
 
             _repository.Update(MapToDomain(executionDto));
         }
@@ -85,7 +83,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             TourExecutionDto executionDto = MapToDto(execution);
 
             executionDto.TourPoints.FirstOrDefault(tp => tp.Id == tourPointId).Completed = true;
-            //executionDto.TourPoints.FirstOrDefault(tp => tp.TourPointId == tourPointId).CompletionTime = DateTime.Now;
+            executionDto.TourPoints.FirstOrDefault(tp => tp.TourPointId == tourPointId).CompletionTime = DateTime.UtcNow;
 
             _repository.Update(MapToDomain(executionDto));
         }
@@ -100,10 +98,11 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         {
             foreach(TourPointDto tp in te.Tour.TourPoints)
             {
-                if(CalculateDistance(te.Position.Latitude, te.Position.Longitude, tp.Latitude, tp.Longitude) < 10.0)
+                if(CalculateDistance(te.Position.Latitude, te.Position.Longitude, tp.Latitude, tp.Longitude) < 50.0)
                 {
                     int tourPointForChangeId = tp.Id;
                     te.TourPoints.FirstOrDefault(tep => tep.TourPointId == tourPointForChangeId).Completed = true;
+                    te.TourPoints.FirstOrDefault(tep => tep.TourPointId == tourPointForChangeId).CompletionTime = DateTime.UtcNow;
                 }
             }
         }
@@ -125,7 +124,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
             double c = 2.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-            double distance = EarthRadiusKm * c * 1000;
+            double distance = EarthRadiusKm * c*1000;
 
             return distance;
         }
@@ -135,7 +134,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             return degrees * Math.PI / 180.0;
         }
 
-        public void Create(int userId, int tourId, int longitude, int latitude)
+        public void Create(int userId, int tourId, double longitude, double latitude)
         {
             var tour = _tourRepository.GetById(tourId);
             var execution = new TourExecution(userId, tourId, TourExecutionStatus.InProgress);
