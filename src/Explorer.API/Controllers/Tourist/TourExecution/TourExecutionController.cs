@@ -95,5 +95,12 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
         }
 
 
+        //dodato zbog TourRating
+        [HttpGet("allExecutions")]
+        public ActionResult<PagedResult<TourExecutionDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourExecutionService.GetAll(page, pageSize);
+            return CreateResponse(result);
+        }
     }
 }

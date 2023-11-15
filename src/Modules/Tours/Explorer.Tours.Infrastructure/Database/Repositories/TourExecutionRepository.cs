@@ -123,5 +123,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         }
 
 
+        //za recenzije
+        public PagedResult<TourExecution> GetAll(int page, int pageSize)
+        {
+            var executions = _tourExecutions.Include(t => t.Position).Include(t => t.TourPoints).GetPaged(page, pageSize);
+            return executions.Result;
+        }
     }
 }

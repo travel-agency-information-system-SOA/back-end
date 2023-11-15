@@ -12,6 +12,9 @@ namespace Explorer.Tours.API.Dtos
 	    public int Id { get; set; }
 		public string Name {  get; set; }
 
+        public DateTime? PublishedDateTime { get; private set; }
+
+		public DateTime? ArchivedDateTime { get; private set; }
 
 		public string? Description { get; set; }
 

@@ -22,9 +22,11 @@ public static class StakeholdersStartup
         SetupInfrastructure(services);
         return services;
     }
+
     
     private static void SetupCore(IServiceCollection services)
     {
+
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenGenerator, JwtGenerator>();
         services.AddScoped<IProfileService, ProfileService>();
