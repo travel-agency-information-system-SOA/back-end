@@ -46,5 +46,10 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             Position.UpdateFrom(updatedTourExecution.Position);
         }
 
+        public void SetId(int id)
+        {
+            this.Id = id;
+        }
+
     }
 }

@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Tours.API.Dtos.TourExecutionsDTO
+namespace Explorer.Stakeholders.API.Dtos
 {
-    public class TourExecutionPositionDto
+    public class UserPositionDto
     {
         public int Id { get; set; }
-        public long TourExecutionId { get; set; }
-        public DateTime LastActivity { get; set; }
+        public long UserId { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public TourExecutionDto? TourExecutionDto { get; set; }
     }
 }
+

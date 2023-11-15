@@ -33,7 +33,7 @@ public static class StakeholdersStartup
         services.AddScoped<IAccountManagementService, AccountManagementService>();
         services.AddScoped<IAppRatingService, AppRatingService>();  
         services.AddScoped<IClubService, ClubService>();
-        
+        services.AddScoped<IUserPositionService, UserPositionService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -42,7 +42,8 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<AppRating>), typeof(CrudDatabaseRepository<AppRating,StakeholdersContext>));
-        
+        services.AddScoped(typeof(ICrudRepository<UserPosition>),typeof(CrudDatabaseRepository<UserPosition,StakeholdersContext>));
+        services.AddScoped<IUserPositionRepository, UserPositionRepository>();
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

@@ -63,7 +63,12 @@ public class ToursContext : DbContext
             .WithOne(p => p.Execution)
             .HasForeignKey<TourExecutionPosition>(p => p.TourExecutionId)
             .IsRequired();
-            
+
+        modelBuilder.Entity<TourExecution>()
+        .HasMany(te => te.TourPoints)
+        .WithOne(tep => tep.ТоurExecution)
+        .HasForeignKey(tep => tep.TourExecutionId);
+
     }
 
    
