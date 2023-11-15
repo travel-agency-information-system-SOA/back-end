@@ -76,5 +76,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 return Result.Fail($"Failed to update TourExecution. Error: {ex.Message}");
             }
         }
+
+        //za recenzije
+        public PagedResult<TourExecution> GetAll(int page, int pageSize)
+        {
+            var executions = _tourExecutions.Include(t => t.Position).Include(t => t.TourPoints).GetPaged(page, pageSize);
+            return executions.Result;
+        }
     }
 }
