@@ -101,7 +101,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
             tour.Status = TourStatus.Archived;
             tour.ArchivedDateTime = DateTime.UtcNow;
-        }
+		}
 
 
 

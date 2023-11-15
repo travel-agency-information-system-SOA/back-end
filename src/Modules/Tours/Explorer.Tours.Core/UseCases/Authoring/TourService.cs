@@ -159,7 +159,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             try
             {
                 Tour tour = CrudRepository.Get(tourId);
-                tour.Status = TourStatus.Archived;
+                tour.Archive(tour);
                 CrudRepository.Update(tour);
                 return Result.Ok();
             }
