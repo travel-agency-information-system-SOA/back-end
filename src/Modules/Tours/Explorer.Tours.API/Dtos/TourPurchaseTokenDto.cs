@@ -9,6 +9,8 @@ namespace Explorer.Tours.API.Dtos
     public class TourPurchaseTokenDto
     {
         public int TouristId { get; set; }
-        public List<int> PurchasedTours { get; set; }
+        
+
+        public int IdTour { get; set; }
     }
 }
