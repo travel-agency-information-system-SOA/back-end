@@ -16,5 +16,8 @@ namespace Explorer.Tours.API.Public.Marketplace
         //na ovo se toda ( u parametrima List<...> ids) sto je povratna vrednost onoga
         //sto smo radili
 
+
+        //dodato zbog recenzija
+        Result<PagedResult<TourPurchaseTokenDto>> GetPaged(int page, int pageSize);
     }
 }
