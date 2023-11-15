@@ -16,14 +16,14 @@ namespace Explorer.Tours.Core.Domain
         public double Latitude { get; init; }
         public double Longitude { get; init; }
 
-        public PublicTourObject(string name, string description, string imageUrl, ObjectCategory category, double latitude, double longitude)
+        public PublicTourObject(string name, string description, string imageUrl, double latitude, double longitude)
         {
             Name = name;
             Description = description;
             ImageUrl = imageUrl;
-            Category = category;
             Latitude = latitude;
             Longitude = longitude;
+            Category = ObjectCategory.Other;
         }
     }
 }

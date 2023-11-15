@@ -36,8 +36,8 @@ namespace Explorer.Stakeholders.Core.UseCases
         }
         public Result<TourPointRequestDto> RejectRequest(int id,string comment)
         {
-            var result = _tourPointRequestRepository.RejectRequest(id,comment);
-            return MapToDto(result);
+             var result = _tourPointRequestRepository.RejectRequest(id,comment);
+             return MapToDto(result);
         }
 
        
