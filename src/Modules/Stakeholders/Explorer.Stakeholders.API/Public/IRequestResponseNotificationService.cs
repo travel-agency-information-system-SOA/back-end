@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Public
 {
-    public interface IClubService
+    public interface IRequestResponseNotificationService
     {
-        Result<PagedResult<ClubDto>> GetPaged(int page, int pageSize);
-        Result<PagedResult<ClubDto>> GetByUserId(int userId, int page, int pageSize);
-        Result<ClubDto> Create(ClubDto club);
-        Result<ClubDto> Update(ClubDto club);
+        Result<PagedResult<RequestResponseNotificationDto>> GetByAuthorId(int authorId, int page, int pageSize);
+        Result<RequestResponseNotificationDto> Create(RequestResponseNotificationDto notification);
         Result Delete(int id);
     }
 }
