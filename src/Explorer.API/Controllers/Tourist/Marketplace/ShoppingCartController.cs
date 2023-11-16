@@ -19,10 +19,8 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             _shoppingCartService = shoppingCartService;
         }
 
-      
 
-        
-        [HttpGet("{id:int}")]          //dobavljanje ShoppingCart-a od bas tog trenutno ulogovanog turiste
+        [HttpGet("{id:int}")]  
         public ActionResult<ShoppingCartDto> GetByUserId(int id)
         {
             var result = _shoppingCartService.GetByUserId(id);
@@ -30,37 +28,21 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
         }
 
        
+        [HttpPut("/purchase/{cartId:int}")]
+        public ActionResult Purchase(int cartId)
+        {
+            var result = _shoppingCartService.Purchase(cartId);
+            return CreateResponse(result);
+        }
+
         
-        [HttpPut("/purchase")]
-        public ActionResult Purchase([FromBody] ShoppingCartDto cart)
-        {
-            var result = _shoppingCartService.Purchase(cart);
-            return CreateResponse(result);
-        }
-
-        /*
-        //Remove Order Item -  puca pri dobavljanju shoppingCart-a na osnovu ovog cartId
         [HttpPut("{cartId:long}/{tourId:int}")]
-        public ActionResult RemoveOrderItem(long cartId, int tourId )
+        public ActionResult<ShoppingCartDto> RemoveOrderItem(long cartId, int tourId )
         {
-
-                var result = _shoppingCartService.RemoveOrderItem(cartId, tourId);
-                return CreateResponse(result);
-        }
-        */
-
-
-        /*
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
-        {
-            var result = _shoppingCartService.Delete(id);
+            var result = _shoppingCartService.RemoveOrderItem(cartId, tourId);
             return CreateResponse(result);
-        }*/
-
-
-
-
+        }
+        
 
     }
 }

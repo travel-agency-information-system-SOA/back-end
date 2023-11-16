@@ -12,10 +12,7 @@ namespace Explorer.Tours.API.Public.Marketplace
     public interface IShoppingCartService
     {
         Result<ShoppingCartDto> GetByUserId(int touristId);
-
-        Result <ShoppingCartDto> Purchase(ShoppingCartDto cart);
-
-        //Result<ShoppingCartDto> RemoveOrderItem(ShoppingCartDto cartDto, OrderItemDto item);
+        Result<ShoppingCartDto> Purchase(int cartId);
         Result<ShoppingCartDto> RemoveOrderItem(long cartId, int tourId);
 
     }
