@@ -32,5 +32,15 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             }
             return CreateResponse(result);
         }
+
+        [HttpGet("{tourId:int}")]
+
+        public ActionResult<List<TourPointDto>> GetFirstTourPointByTourId(int tourId)
+        {
+            var result = _tourPointService.GetFirstTourPoint(tourId);
+            return CreateResponse(result);
+        }
+
+
     }
 }

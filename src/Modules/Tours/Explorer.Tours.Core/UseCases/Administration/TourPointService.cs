@@ -27,5 +27,24 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 
 		}
-	}
+
+        public Result<TourPointDto> GetFirstTourPoint(int tourId)
+        {
+            var allTourPoints = CrudRepository.GetPaged(1, int.MaxValue);
+
+            var firstTourPoint = allTourPoints.Results
+                .Where(tp => tp.TourId == tourId)
+                .First();
+              
+
+            if (firstTourPoint == null)
+            {
+                return Result.Fail("Nije pronađen prvi TourPoint za datu turu.");
+            }
+
+            var firstTourPointDto = MapToDto(firstTourPoint); 
+
+            return Result.Ok(firstTourPointDto);
+        }
+    }
 }
