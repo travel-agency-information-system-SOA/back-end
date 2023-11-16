@@ -122,19 +122,19 @@ namespace Explorer.Blog.Core.Domain
         {
             int totalScore = Ratings.Sum(r => r.IsPositive ? 1 : -1);
 
-            if(totalScore < -10)
+            if(totalScore < -1)
             {
                 Status = BlogPostStatus.CLOSED;
                 return;
             }
 
-            if (totalScore > 500 && Comments.Count > 30)
+            if (totalScore > 3 && Comments.Count > 3)
             {
                 Status = BlogPostStatus.FAMOUS;
                 return;
             }
 
-            if (totalScore > 100 || Comments.Count > 10)
+            if (totalScore > 1 || Comments.Count > 1)
             {
                 Status = BlogPostStatus.ACTIVE;
                 return;
