@@ -20,6 +20,11 @@ namespace Explorer.Tours.API.Public.Administration
 
         Result<PagedResult<TourPointDto>> GetTourPointsByTourId(int tourId);
 
+        Result<TourPointDto> GetFirstTourPoint(int tourId);
+
+
+
+
 
     }
 }
