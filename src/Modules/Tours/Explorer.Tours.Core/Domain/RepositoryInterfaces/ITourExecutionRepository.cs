@@ -14,6 +14,10 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public PagedResult<TourExecution> GetById(int id, int page, int pageSize);
         public TourExecution GetById(int id);
         public Result Update(TourExecution updatedTourExecution);
+        public TourExecution GetByUser(int userId);
+        public int Create(int userId, int tourId);
+        public void CreatePoint(int executionId, int tourPointId);
+        public void CreatePosition(double longitude, double latitude, int executionId);
 
         PagedResult<TourExecution> GetAll(int page, int pageSize);
     }

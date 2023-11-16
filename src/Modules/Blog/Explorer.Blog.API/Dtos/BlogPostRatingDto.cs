@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Explorer.Blog.API.Dtos
 {
-    public class BlogPostCommentDto
+    public class BlogPostRatingDto
     {
-        public string Text { get; set; }
-        public int UserId { get; set; }
-        public string? Username { get; set; }
+        public bool IsPositive { get; set; }
         public DateTime CreationTime { get; set; }
-        public DateTime LastUpdatedTime { get; set;}
+        public int UserId { get; set; }
     }
 }

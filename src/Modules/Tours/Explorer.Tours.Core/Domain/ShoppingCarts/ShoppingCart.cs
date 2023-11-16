@@ -14,7 +14,7 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
         public int TouristId { get; set; }
         public ICollection<OrderItem> OrderItems { get; } = new List<OrderItem>();
 
-        public double Total {  get; set; }  //total price of all OrderItems that are in ShoppingCart
+        public double Total {  get; set; }  //total price of OrderItems in ShoppingCart
 
 
         public ShoppingCart(int touristId)
@@ -40,7 +40,8 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
                 Total += orderItem.Price;
             }
         }
-
+        
+        // implement the metod in method for buying the Tour  ( MarketplaceService )
         public bool AddOrderItem(OrderItem item)
         {
             if(OrderItems.Contains(item)) return false;
@@ -48,8 +49,6 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
             CalculateTotal();
             return true;
         }
-
-        
 
     }
 }
