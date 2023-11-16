@@ -9,6 +9,8 @@ namespace Explorer.Tours.API.Dtos
     public class TourObjectDto
     {
         public int? Id { get; set; }
+
+        public int? Tourid { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }

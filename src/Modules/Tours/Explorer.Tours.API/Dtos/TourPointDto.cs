@@ -9,13 +9,15 @@ namespace Explorer.Tours.API.Dtos
     public class TourPointDto
     {
         public int Id { get; set; }
-        public int IdTour { get; set; }
 
-       
+        public long TourId { get; set; }
+        
         public string Name { get; set; }
         public string? Description { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string ImageUrl { get; set; }
+
+        public string Secret {  get; set; }
     }
 }

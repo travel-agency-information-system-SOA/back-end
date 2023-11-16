@@ -3,6 +3,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.ObjectModel;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
@@ -23,6 +24,20 @@ namespace Explorer.API.Controllers.Administrator.Administration
         public ActionResult<PagedResult<EquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _equipmentService.GetPaged(page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("getTouristEquipment")]
+        public ActionResult<ObservableCollection<EquipmentDto>> GetTouristEquipment([FromQuery]List<int> ids)
+        {
+            var result = _equipmentService.GetTouristEquipment(ids);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("getOtherEquipment")]
+        public ActionResult<ObservableCollection<EquipmentDto>> GetOtherEquipment([FromQuery] List<int> ids)
+        {
+            var result = _equipmentService.GetOtherEquipment(ids);
             return CreateResponse(result);
         }
 

@@ -10,14 +10,14 @@ namespace Explorer.Tours.Core.Domain.Tours
 {
 	public class TourCharacteristic : ValueObject
 	{
-		public int Distance { get;  private set; }
+		public double Distance { get;  private set; }
 
-		public TimeSpan Duration { get; private set; }
+		public double Duration { get; private set; }
 
 		public TransportType TransportType { get; private set; }
 
 		[JsonConstructor]
-		public TourCharacteristic(int distance, TimeSpan duration, TransportType transportType)
+		public TourCharacteristic(double distance, double duration, TransportType transportType)
 		{
 			Distance = distance;
 			Duration = duration;

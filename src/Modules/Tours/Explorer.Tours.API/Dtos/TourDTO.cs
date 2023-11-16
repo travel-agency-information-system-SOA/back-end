@@ -9,9 +9,12 @@ namespace Explorer.Tours.API.Dtos
 {
 	public class TourDTO
 	{
-	    public int? Id { get; set; }
+	    public int Id { get; set; }
 		public string Name {  get; set; }
 
+        public DateTime? PublishedDateTime { get; private set; }
+
+		public DateTime? ArchivedDateTime { get; private set; }
 
 		public string? Description { get; set; }
 
@@ -28,5 +31,7 @@ namespace Explorer.Tours.API.Dtos
 		public List<TourPointDto> TourPoints { get; set; }
 
 		public List<TourCharacteristicDTO> TourCharacteristics { get; set; }
+
+		public List<TourReviewDto> TourReviews { get; set; }
 	}
 }

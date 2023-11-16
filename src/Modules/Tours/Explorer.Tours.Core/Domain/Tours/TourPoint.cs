@@ -10,8 +10,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 {
     public class TourPoint : Entity
     {
-        public int IdTour { get; init; }
-
+        public long TourId { get; init; }
         public Tour? Tour { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
@@ -19,15 +18,20 @@ namespace Explorer.Tours.Core.Domain.Tours
         public double Longitude { get; init; }
         public string ImageUrl { get; init; }
 
-        public TourPoint(int idTour, string name, string? description, double latitude, double longitude, string imageUrl)
+        public string Secret { get; init; }
+
+        public TourPoint(int idTour, string name, string? description, double latitude, double longitude, string imageUrl, string secret)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
-            IdTour = idTour;
+            TourId = idTour;
             Name = name;
             Description = description;
             Latitude = latitude;
             Longitude = longitude;
             ImageUrl = imageUrl;
+            Secret = secret;
         }
+
+        public TourPoint() { }
     }
 }
