@@ -15,6 +15,6 @@ namespace Explorer.Tours.API.Dtos
         public DateTime AttendanceDate { get; set; }
         public DateTime ReviewDate { get; set; }
         public List<string> Images { get; set; }
-        public int TourId { get; set; }
+        public long TourId { get; set; }
     }
 }

@@ -10,9 +10,13 @@ public class StakeholdersContext : DbContext
     public DbSet<Person> People { get; set; }
     public DbSet<AppRating> AppRatings { get; set; }
     public DbSet<Club> Clubs { get; set; }
+
     public DbSet<TourPointRequest> TourPointRequests { get; set; }
     public DbSet<TourObjectRequest>TourObjectRequests { get; set; }
     public DbSet<RequestResponseNotification> RequestResponseNotifications { get; set; }
+
+    public DbSet<UserPosition> UserPositions { get; set; }
+
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 

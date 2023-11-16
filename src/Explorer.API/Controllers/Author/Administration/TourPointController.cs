@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
+
     [Authorize(Policy = "authorAndAdminPolicy")]
+
     [Route("api/administration/tourPoint")] 
     public class TourPointController : BaseApiController
     {
@@ -18,14 +20,14 @@ namespace Explorer.API.Controllers.Author.Administration
         {
             _tourPointService = tourPointService;
         }
-
+        [Authorize(Policy = "authorPolicy")]
         [HttpGet]
         public ActionResult<PagedResult<TourPointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _tourPointService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
-
+        [Authorize(Policy = "authorPolicy")]
         [HttpPost]/*
         public (ActionResult<TourPointDto>, int) Create([FromBody] TourPointDto tourPoint)
         {
@@ -34,7 +36,7 @@ namespace Explorer.API.Controllers.Author.Administration
 
             return (CreateResponse(result), result.Value.Id);
         }*/
-
+        
         public ActionResult<PagedResult<TourPointDto>> Create([FromBody] TourPointDto tourPoint)
         {
             var result = _tourPointService.Create(tourPoint);
@@ -43,7 +45,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-
+        [Authorize(Policy = "authorPolicy")]
         [HttpPut("{id:int}")]
         public ActionResult<TourPointDto> Update([FromBody] TourPointDto tourPoint)
         {
@@ -51,6 +53,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
@@ -58,8 +61,8 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-
-		[HttpGet("{tourId:int}")]
+        [Authorize(Policy = "touristAuthorPolicy")]
+        [HttpGet("{tourId:int}")]
 
 		public ActionResult<List<TourPointDto>> GetTourPointsByTourId(int tourId)
 		{
