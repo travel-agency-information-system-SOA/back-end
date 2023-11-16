@@ -22,8 +22,25 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
                 return CreateResponse(result);
             }
 
-            [HttpGet("purchasedTours/{touristId:int}")]
-            public ActionResult<List<TourDTO>> GetPurchasedTours([FromRoute] int touristId)
+        [HttpGet("purchasedTours/{touristId}")]
+        public ActionResult<PagedResult<TourDTO>> GetPurchasedTours(int touristId)
+        {
+            try
+            {
+                var purchasedTours = _tourTokenService.GetPurchasedTours(touristId);
+
+                return Ok(purchasedTours);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        
+
+            [HttpGet("purchasedTourss/{touristId:int}")]
+            public ActionResult<List<TourDTO>> GetPurchasedTourss([FromRoute] int touristId)
             {
                 var result = _tourTokenService.GetPurchasedTours(touristId);
                 return CreateResponse(result);
