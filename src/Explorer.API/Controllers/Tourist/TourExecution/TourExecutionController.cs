@@ -6,6 +6,7 @@ using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Any;
 
 namespace Explorer.API.Controllers.Tourist.TourExecution
 {
@@ -79,14 +80,15 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
                 return StatusCode(500, "An error occurred while completing the tour point.");
             }
         }
-        [HttpPost("create")]
-        public IActionResult CreateTourExecution(int userId, int tourId, double longitude, double latitude)
+        [HttpPost("create/{userId:int}/{tourId:int}")]
+        public ActionResult<TourExecutionDto> CreateTourExecution(int userId, int tourId)
         {
             try
             {
-                _tourExecutionService.Create(userId, tourId, longitude, latitude);
+                var result = _tourExecutionService.Create(userId, tourId, 0, 0);
+                return CreateResponse(result);
 
-                return Ok();
+                //return Ok();
             }
             catch (Exception ex)
             {

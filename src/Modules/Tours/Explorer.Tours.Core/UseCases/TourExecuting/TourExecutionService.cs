@@ -156,7 +156,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             return degrees * Math.PI / 180.0;
         }
 
-        public void Create(int userId, int tourId, double longitude, double latitude)
+        public Result<TourExecutionDto> Create(int userId, int tourId, double longitude, double latitude)
         {
             var tour = _tourRepository.GetById(tourId);
             var execution = new TourExecution(userId, tourId, TourExecutionStatus.InProgress);
@@ -169,6 +169,8 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             }
 
             _repository.CreatePosition(longitude, latitude, executionId);
+            
+            return MapToDto(execution);
         }   
         //dodato zbog tourRating
         public Result<PagedResult<TourExecutionDto>> GetAll(int page, int pageSize)
