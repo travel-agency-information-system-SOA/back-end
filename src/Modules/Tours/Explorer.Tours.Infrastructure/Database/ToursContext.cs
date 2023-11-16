@@ -4,6 +4,7 @@ using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using Explorer.Tours.Core.Domain.Problems;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -17,6 +18,7 @@ public class ToursContext : DbContext
 
     public DbSet<Problem> Problems { get; set; }
 
+    public DbSet<ProblemMessage> ProblemMessages { get; set; }
 
 
     public DbSet<TourReview> TourReviews { get; set; }
@@ -48,6 +50,8 @@ public class ToursContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
+
+
         modelBuilder.Entity<Tour>().Property(item => item.TourCharacteristics).HasColumnType("jsonb");
 
 
@@ -59,7 +63,12 @@ public class ToursContext : DbContext
             .WithOne(p => p.Execution)
             .HasForeignKey<TourExecutionPosition>(p => p.TourExecutionId)
             .IsRequired();
-            
+
+        modelBuilder.Entity<TourExecution>()
+        .HasMany(te => te.TourPoints)
+        .WithOne(tep => tep.ТоurExecution)
+        .HasForeignKey(tep => tep.TourExecutionId);
+
     }
 
    

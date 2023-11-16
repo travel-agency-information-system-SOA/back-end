@@ -12,17 +12,19 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
 {
     public class TourPointExecution : Entity
     {
-        public int TourExecutionId { get; private set; }
+        public long TourExecutionId { get; private set; }
         public int TourPointId { get; init; }
         public DateTime? CompletionTime { get; init; }
         public bool Completed { get; init; }
+        public string Secret { get; private set; }
         public TourExecution? ТоurExecution {get; init; }
-        public TourPointExecution(int tourExecutionId, int tourPointId, DateTime? completionTime)
+        public TourPointExecution(long tourExecutionId, int tourPointId, DateTime? completionTime)
         {
             TourExecutionId = tourExecutionId;
             TourPointId = tourPointId;
             CompletionTime = completionTime;
             Completed = false;
+            Secret = "First reach the tour point to reveal secret ! ";
             Validate();
         }
         private void Validate()
@@ -33,11 +35,12 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                 throw new ArgumentException("TourPointId must be a positive integer.");
         }
 
-        public void UpdateFrom(TourPointExecution updatedPoint)
+        public void SetId(int id)
         {
-
+            Id = id;
         }
         
+
 
     }
 }

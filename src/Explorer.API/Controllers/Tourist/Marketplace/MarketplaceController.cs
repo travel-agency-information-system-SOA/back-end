@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -41,6 +42,17 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             return CreateResponse(result);
         }
 
+
+
+        /*[HttpGet("{tourId:int}")]
+
+        public ActionResult<TourDTO> Get([FromRoute] int tourId)
+        {
+            var result = _tourService.Get(tourId);
+            var tourPoints = _tourPointService.GetTourPointsByTourId(result.Value.Id);
+            result.Value.TourPoints = tourPoints.Value.Results;
+            return CreateResponse(result);
+        }*/
 
     }
 }

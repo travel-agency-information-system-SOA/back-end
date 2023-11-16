@@ -12,7 +12,13 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
     {
         public int TouristId { get; set; }
 
-        public ICollection<int> PurchasedTours { get; } = new List<int>();  
+        public int IdTour {  get; set; }
+
+        public TourPurchaseToken(int touristId, int idTour) 
+        {
+            TouristId = touristId;
+            IdTour = idTour;
+        }
 
     }
 }

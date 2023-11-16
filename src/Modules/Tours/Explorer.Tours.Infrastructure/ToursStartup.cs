@@ -5,9 +5,12 @@ using Explorer.Tours.API.Public.Marketplace;
 using Explorer.Tours.API.Public.TourExecuting;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.Core.Domain.Problems;
 using Explorer.Tours.Core.Mappers;
+using Explorer.Tours.Core.UseCases;
 using Explorer.Tours.Core.UseCases.Administration;
 using Explorer.Tours.Core.UseCases.Authoring;
 using Explorer.Tours.Core.UseCases.Marketplace;
@@ -37,7 +40,6 @@ public static class ToursStartup
 
         services.AddScoped<ITouristEquipmentService, TouristEquipmentService>();
 
-        services.AddScoped<IProblemService, ProblemService>();
 
 
         services.AddScoped<ITourReviewService, TourReviewService>();
@@ -53,9 +55,11 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionService, TourExecutionService>();
         services.AddScoped<ITourPointExecutionService, TourPointExecutionService>();
         services.AddScoped<ITourExecutionPositionService, TourExecutionPositionService>();
+        services.AddScoped<IProblemService, ProblemService>();
+        services.AddScoped<IProblemMessageService, ProblemMessageService>();
 
-
-
+        services.AddScoped<IShoppingCartService, ShoppingCartService>();   //ShoppingCart
+        services.AddScoped<ITourPurchaseTokenService, TourPurchaseTokenService>();  //Token
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -67,7 +71,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<TouristEquipment>), typeof(CrudDatabaseRepository<TouristEquipment, ToursContext>));
 
 
-        services.AddScoped(typeof(ICrudRepository<Problem>), typeof(CrudDatabaseRepository<Problem, ToursContext>));
+        
 
 
         services.AddScoped(typeof(ICrudRepository<TourReview>), typeof(CrudDatabaseRepository<TourReview, ToursContext>));
@@ -89,6 +93,14 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<TourExecutionPosition>), typeof(CrudDatabaseRepository<TourExecutionPosition, ToursContext>));
         services.AddScoped<ITourExecutionRepository, TourExecutionRepository>();
 
+
+        services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, ToursContext>));    //ShoppingCart
+        services.AddScoped(typeof(ICrudRepository<TourPurchaseToken>), typeof(CrudDatabaseRepository<TourPurchaseToken, ToursContext>));    
+        services.AddScoped(typeof(ICrudRepository<Problem>), typeof(CrudDatabaseRepository<Problem, ToursContext>));
+        services.AddScoped<IProblemRepository, ProblemRepository>();
+
+
+        services.AddScoped(typeof(ICrudRepository<ProblemMessage>), typeof(CrudDatabaseRepository<ProblemMessage, ToursContext>));
 
 
 

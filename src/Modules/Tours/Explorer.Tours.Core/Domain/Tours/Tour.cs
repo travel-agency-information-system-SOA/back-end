@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,10 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public DateTime? PublishedDateTime { get; private set; }
 
+		public DateTime? ArchivedDateTime { get; private set; }
 
-        public ICollection<TourPoint> TourPoints { get; } = new List<TourPoint>();
+
+		public ICollection<TourPoint> TourPoints { get; } = new List<TourPoint>();
 
         public ICollection<TourCharacteristic> TourCharacteristics { get; } = new List<TourCharacteristic>();
         public ICollection<TourReview> TourReviews { get; }= new List<TourReview>();
@@ -45,6 +48,7 @@ namespace Explorer.Tours.Core.Domain.Tours
             Description = description;
             Status = TourStatus.Draft;
             PublishedDateTime = null; 
+            ArchivedDateTime = null;
             Price = 0;
             GuideId = guideId;
 
@@ -86,6 +90,18 @@ namespace Explorer.Tours.Core.Domain.Tours
 
 
         }
+
+        public void Archive(Tour tour)
+        {
+            if(Status != TourStatus.Published)
+            {
+
+				throw new InvalidOperationException("Only published tours can be archived.");
+			}
+
+            tour.Status = TourStatus.Archived;
+            tour.ArchivedDateTime = DateTime.UtcNow;
+		}
 
 
 
