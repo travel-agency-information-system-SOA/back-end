@@ -25,5 +25,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			var filteredPagedResult = new PagedResult<TourPoint>(filteredTourPoints.ToList(), filteredTourPoints.Count());
 			return MapToDto(filteredPagedResult);
 		}
-	}
+        TourPointDto ITourPointService.Get(int id)
+        {
+            var result = CrudRepository.Get(id);
+            return MapToDto(result);
+        }
+    }
 }

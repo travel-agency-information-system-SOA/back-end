@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {
-    internal class ClubRepository : IClubRepository
+    public class ClubRepository : IClubRepository
     {
         private readonly DbSet<Club> _clubs;
 
