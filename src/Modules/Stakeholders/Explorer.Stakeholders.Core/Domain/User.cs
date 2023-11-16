@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
 
 namespace Explorer.Stakeholders.Core.Domain;
 
@@ -30,9 +31,3 @@ public class User : Entity
     }
 }
 
-public enum UserRole
-{
-    Administrator,
-    Author,
-    Tourist
-}

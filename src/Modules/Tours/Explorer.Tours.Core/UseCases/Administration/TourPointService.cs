@@ -26,6 +26,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			return MapToDto(filteredPagedResult);
 		}
 
+
         public Result<TourPointDto> GetFirstTourPoint(int tourId)
         {
             var allTourPoints = CrudRepository.GetPaged(1, int.MaxValue);
@@ -43,6 +44,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var firstTourPointDto = MapToDto(firstTourPoint); 
 
             return Result.Ok(firstTourPointDto);
+
+        TourPointDto ITourPointService.Get(int id)
+        {
+            var result = CrudRepository.Get(id);
+            return MapToDto(result);
+
         }
     }
 }
