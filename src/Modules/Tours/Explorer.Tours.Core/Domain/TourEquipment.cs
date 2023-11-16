@@ -12,15 +12,17 @@ namespace Explorer.Tours.Core.Domain
         public long TourId { get; set; }  
         public long EquipmentId { get; set; }  
 
+        public bool IsSelected { get; set; }
         public TourEquipment()
         {
             
         }
 
-        public TourEquipment(long tourId, long equipmentId)
+        public TourEquipment(long tourId, long equipmentId, bool isSelected)
         {
             TourId = tourId;
             EquipmentId = equipmentId;
+            IsSelected = isSelected;
         }
     }
 }

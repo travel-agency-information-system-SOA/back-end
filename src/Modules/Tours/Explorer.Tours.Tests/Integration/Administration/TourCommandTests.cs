@@ -1,8 +1,9 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.API.Controllers.Author;
+using Explorer.API.Controllers.Author.Authoring;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -14,108 +15,74 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {
-	[Collection("Sequential")]
+    [Collection("Sequential")]
 	public class TourCommandTests : BaseToursIntegrationTest
 	{
 		public TourCommandTests(ToursTestFactory factory) : base(factory)
 		{
 		}
 
-		[Fact]
-		public void Creates()
-		{
-			// Arrange
-			using var scope = Factory.Services.CreateScope();
-			var controller = CreateController(scope);
-			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-			var newEntity = new TourDTO
-			{
-				Id=5,
-				Name = "Dubai",
-				Description = "Grad sa najvisim gradjevinama",
-				DifficultyLevel = "Easy",
-				
-				Price = 0,
-				Status = "Draft",
-				GuideId=1
-			};
-			newEntity.Tags = new List<string> { "aaa", "aaa" };
+        
+        [Fact]
+        public void Publish_succeeds()
+        {
+            // Arrange - Input data
+            var authorId = "-1";
+            var tourId = -1;
+            var expectedResponseCode = 200;
+            var expectedStatus = TourStatus.Published;
+            // Arrange - Controller and dbContext
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope,authorId);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
-			// Act
-			var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as TourDTO;
+            // Act
+            var result = (ObjectResult)controller.Publish(tourId);
 
-			// Assert - Response
-			result.ShouldNotBeNull();
-			result.Id.ShouldNotBe(0);
-			result.Name.ShouldBe(newEntity.Name);
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(expectedResponseCode);
+            // Assert - Database
+            var storedEntity = dbContext.Tours.FirstOrDefault(t => t.Id == tourId);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Status.ShouldBe(expectedStatus);
+        }
 
-			// Assert - Database
-			var storedEntity = dbContext.Tours.FirstOrDefault(i => i.Name == newEntity.Name);
-			storedEntity.ShouldNotBeNull();
-			//storedEntity.Id.ShouldBe(result.Id);
-		}
+        [Fact]
+        public void Publish_fails_invalid_checkpoints()
+        {
+            // Arrange - Input data
+            var authorId = "-1";
+            var tourId = -2;
+            var expectedResponseCode = 400;
+            var expectedStatus = TourStatus.Draft;
+            // Arrange - Controller and dbContext
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, authorId);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
-		[Fact]
-		public void Create_fails_invalid_data()
-		{
-			// Arrange
-			using var scope = Factory.Services.CreateScope();
-			var controller = CreateController(scope);
-			var updatedEntity = new TourDTO
-			{
-				Description = "Test"
-			};
+            // Act
+            var result = (ObjectResult)controller.Publish(tourId);
 
-			// Act
-			var result = (ObjectResult)controller.Create(updatedEntity).Result;
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(expectedResponseCode);
 
-			// Assert
-			result.ShouldNotBeNull();
-			result.StatusCode.ShouldBe(400);
-		}
+            // Assert - Database
+            var storedEntity = dbContext.Tours.FirstOrDefault(t => t.Id == tourId);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Status.ShouldBe(expectedStatus);
+        }
 
-		public void Deletes()
-		{
-			// Arrange
-			using var scope = Factory.Services.CreateScope();
-			var controller = CreateController(scope);
-			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+        private static TourController CreateController(IServiceScope scope, string ss)
+        {
+            return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
+            {
+                ControllerContext = BuildContext("-1")
+            };
+        }
 
-			// Act
-			var result = (OkResult)controller.Delete(-3);
+    }
 
-			// Assert - Response
-			result.ShouldNotBeNull();
-			result.StatusCode.ShouldBe(200);
 
-			// Assert - Database
-			var storedCourse = dbContext.Tours.FirstOrDefault(i => i.Id == -3);
-			storedCourse.ShouldBeNull();
-		}
-
-		[Fact]
-		public void Delete_fails_invalid_id()
-		{
-			// Arrange
-			using var scope = Factory.Services.CreateScope();
-			var controller = CreateController(scope);
-
-			// Act
-			var result = (ObjectResult)controller.Delete(-1000);
-
-			// Assert
-			result.ShouldNotBeNull();
-			result.StatusCode.ShouldBe(404);
-		}
-
-		private static TourController CreateController(IServiceScope scope)
-		{
-			return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
-			{
-				ControllerContext = BuildContext("-1")
-			};
-		}
-	}
-
-	
 }

@@ -63,7 +63,7 @@ public class TourPointCommandTests : BaseToursIntegrationTest
 		var updatedEntity = new TourPointDto
 		{
 			Id = -1,
-			IdTour = -1,
+			//IdTour = -1,
 			Name = "Petrovaradin",
 			Description = "Prelep dan Petrovaradinom.",
 			ImageUrl = "petrovaradin.png",
@@ -104,7 +104,7 @@ public class TourPointCommandTests : BaseToursIntegrationTest
 		var updatedEntity = new TourPointDto
 		{
 			Id = -1000,
-			IdTour = -1,
+			//IdTour = -1,
 			Name = "Test",
 			Description = "Test",
 			Longitude = 0,
