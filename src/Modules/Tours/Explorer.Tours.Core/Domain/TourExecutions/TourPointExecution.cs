@@ -16,6 +16,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public int TourPointId { get; init; }
         public DateTime? CompletionTime { get; init; }
         public bool Completed { get; init; }
+        public string Secret { get; private set; }
         public TourExecution? ТоurExecution {get; init; }
         public TourPointExecution(long tourExecutionId, int tourPointId, DateTime? completionTime)
         {
@@ -23,6 +24,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             TourPointId = tourPointId;
             CompletionTime = completionTime;
             Completed = false;
+            Secret = "First reach the tour point to reveal secret ! ";
             Validate();
         }
         private void Validate()
