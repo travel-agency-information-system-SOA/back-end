@@ -19,9 +19,12 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
     {
         private readonly ICrudRepository<Tour> _tourRepository;
         private readonly IMapper _mapper;
-        public TourPurchaseTokenService(ICrudRepository<TourPurchaseToken> crudRepository, IMapper mapper, ICrudRepository<Tour> tourRepository) : base(crudRepository, mapper)
+        private readonly ITourRepository _tRepository;
+        public TourPurchaseTokenService(ICrudRepository<TourPurchaseToken> crudRepository, IMapper mapper, ICrudRepository<Tour> tourRepository, ITourRepository tRepository) : base(crudRepository, mapper)
         {
             _tourRepository = tourRepository;
+            _tRepository = tRepository;
+            _mapper = mapper;
         }
 
         public Result<List<TourDTO>> GetPurchasedTours(int touristId)
@@ -32,7 +35,7 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
             var purchacedTours = new List<TourDTO>();
             foreach(var token in tokens) 
             {
-                Tour tour = _tourRepository.Get(token.IdTour);
+                Tour tour = _tRepository.GetByTourId(token.IdTour);
                 TourDTO tourDto = _mapper.Map<TourDTO>(tour);
                 purchacedTours.Add(tourDto);
             }

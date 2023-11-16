@@ -20,6 +20,22 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
                 var result = _tourTokenService.GetPaged(page, pageSize);
                 return CreateResponse(result);
             }
+
+        [HttpGet("purchasedTours/{touristId}")]
+        public ActionResult<PagedResult<TourDTO>> GetPurchasedTours(int touristId)
+        {
+            try
+            {
+                var purchasedTours = _tourTokenService.GetPurchasedTours(touristId);
+
+                return Ok(purchasedTours);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return StatusCode(500, "Internal server error");
+            }
         }
+    }
     
 }
