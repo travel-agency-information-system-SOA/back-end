@@ -1,11 +1,12 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Marketplace;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Tourist.Marketplace
 {
-    
+        [Authorize(Policy = "touristPolicy")]
         [Route("api/tokens")]
         public class TourPurchaseTokenController : BaseApiController
         {
@@ -20,6 +21,13 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
                 var result = _tourTokenService.GetPaged(page, pageSize);
                 return CreateResponse(result);
             }
-        }
+
+            [HttpGet("purchasedTours/{touristId:int}")]
+            public ActionResult<List<TourDTO>> GetPurchasedTours([FromRoute] int touristId)
+            {
+                var result = _tourTokenService.GetPurchasedTours(touristId);
+                return CreateResponse(result);
+            }
+    }
     
 }

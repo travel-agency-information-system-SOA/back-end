@@ -22,6 +22,7 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
         public TourPurchaseTokenService(ICrudRepository<TourPurchaseToken> crudRepository, IMapper mapper, ICrudRepository<Tour> tourRepository) : base(crudRepository, mapper)
         {
             _tourRepository = tourRepository;
+            _mapper = mapper;
         }
 
         public Result<List<TourDTO>> GetPurchasedTours(int touristId)
