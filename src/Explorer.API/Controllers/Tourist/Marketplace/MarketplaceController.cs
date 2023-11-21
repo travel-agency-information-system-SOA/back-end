@@ -44,7 +44,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
 
 
 
-        /*[HttpGet("{tourId:int}")]
+        [HttpGet("selectedTour/{tourId:int}")]
 
         public ActionResult<TourDTO> Get([FromRoute] int tourId)
         {
@@ -52,7 +52,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             var tourPoints = _tourPointService.GetTourPointsByTourId(result.Value.Id);
             result.Value.TourPoints = tourPoints.Value.Results;
             return CreateResponse(result);
-        }*/
+        }
 
     }
 }
