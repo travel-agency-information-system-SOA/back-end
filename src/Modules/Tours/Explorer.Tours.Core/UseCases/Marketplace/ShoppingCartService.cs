@@ -30,46 +30,27 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
 
         public Result<ShoppingCartDto> GetByUserId(int touristId)
         {
-            
             var cart = _shoppingCartRepository.GetPaged(1, int.MaxValue).Results.FirstOrDefault(s => s.TouristId == touristId);
             
             if (cart == null)
             {
-                /*
-                var newCart = new ShoppingCartDto
-                {
-                    TouristId = touristId,
-                    OrderItems = new List<OrderItemDto>()
-                };*/
-
-
-                //cart = _shoppingCartRepository.Create(MapToDomain(newCart));
                 cart = _shoppingCartRepository.Create(new ShoppingCart(touristId));
-
             }
                 
             return MapToDto(cart);
         }
 
-
-        public Result<ShoppingCartDto> Buy(ShoppingCartDto cartDto)
+        public Result<ShoppingCartDto> Purchase(int cartId)
         {
-            var cart = MapToDomain(cartDto);
-            _shoppingCartRepository.Update(cart);
+            var cart = _shoppingCartRepository.Get(cartId);
+            var orderItems = new List<OrderItem>(cart.OrderItems);
 
-            return MapToDto(cart);
-        }
-
-        public Result<ShoppingCartDto> Purchase(ShoppingCartDto cartDto)
-        {
-            var cart = MapToDomain(cartDto);
-            var items = new List<OrderItem>(cart.OrderItems);
-            foreach(OrderItem orderItem in items)
+            foreach(OrderItem item in orderItems)
             {
-                TourPurchaseToken token = orderItem.ToPurchaseToken(cart.TouristId);
+                TourPurchaseToken token = item.ToPurchaseToken(cart.TouristId);
                 _tourPurhcaseTokenRepository.Create(token);
                 
-                cart.RemoveOrderItem(orderItem);
+               cart.RemoveOrderItem(item);
             }
             
             _shoppingCartRepository.Update(cart);
@@ -78,16 +59,9 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
         }
 
       
-        //iz baze dobaviti sve ture, pomocu where dobavio sve keypointove i pomocu any proverio uslov 
         public Result<ShoppingCartDto> RemoveOrderItem(long cartId,int tourId)
         {
-            // var cart = MapToDomain(cartDto);
-
-            //ovde da nadje koja je korpa u pitanju preko ulogovanog korisnika 
-
-            var cart = _shoppingCartRepository.Get( cartId);
-           // var item = new OrderItem(itemDto.TourName, itemDto.Price, itemDto.IdTour);
-
+            var cart = _shoppingCartRepository.Get(cartId);
             var item = cart.OrderItems.FirstOrDefault(x => x.IdTour == tourId);
 
             cart.RemoveOrderItem(item);
@@ -97,7 +71,13 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
             return MapToDto(cart);
         }
 
-       
+        public Result<ShoppingCartDto> Buy(ShoppingCartDto cartDto)
+        {
+            var cart = MapToDomain(cartDto);
+            _shoppingCartRepository.Update(cart);
+
+            return MapToDto(cart);
+        }
 
     }
 }

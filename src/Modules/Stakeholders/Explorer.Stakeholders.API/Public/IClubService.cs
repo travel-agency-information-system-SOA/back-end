@@ -18,4 +18,3 @@ namespace Explorer.Stakeholders.API.Public
         Result Delete(int id);
     }
 }
-

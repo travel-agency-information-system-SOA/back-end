@@ -31,6 +31,7 @@ public class ToursContext : DbContext
 
     public DbSet<ObjInTour> ObjInTours { get; set; }
     public DbSet<TourPoint> TourPoint { get; set; }
+    public DbSet<PublicTourPoint> PublicTourPoint { get; set; }
 
     public DbSet<TourEquipment> TourEquipments { get; set; }
 
@@ -63,7 +64,12 @@ public class ToursContext : DbContext
             .WithOne(p => p.Execution)
             .HasForeignKey<TourExecutionPosition>(p => p.TourExecutionId)
             .IsRequired();
-            
+
+        modelBuilder.Entity<TourExecution>()
+        .HasMany(te => te.TourPoints)
+        .WithOne(tep => tep.ТоurExecution)
+        .HasForeignKey(tep => tep.TourExecutionId);
+
     }
 
    

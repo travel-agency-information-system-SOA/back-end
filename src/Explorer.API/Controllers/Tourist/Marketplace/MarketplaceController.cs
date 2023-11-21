@@ -46,6 +46,17 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
 
 
         [HttpGet("{tourId:int}")]
+
+        public ActionResult<List<TourPointDto>> GetFirstTourPointByTourId(int tourId)
+        {
+            var result = _tourPointService.GetFirstTourPoint(tourId);
+            return CreateResponse(result);
+        }
+
+
+
+        [HttpGet("selectedTour/{tourId:int}")]
+
         public ActionResult<TourDTO> Get([FromRoute] int tourId)
         {
             var result = _tourService.Get(tourId);
