@@ -40,7 +40,6 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
             return MapToDto(cart);
         }
 
-
         public Result<ShoppingCartDto> Purchase(int cartId)
         {
             var cart = _shoppingCartRepository.Get(cartId);
@@ -67,6 +66,14 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
 
             cart.RemoveOrderItem(item);
 
+            _shoppingCartRepository.Update(cart);
+
+            return MapToDto(cart);
+        }
+
+        public Result<ShoppingCartDto> Buy(ShoppingCartDto cartDto)
+        {
+            var cart = MapToDomain(cartDto);
             _shoppingCartRepository.Update(cart);
 
             return MapToDto(cart);

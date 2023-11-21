@@ -14,7 +14,7 @@ namespace Explorer.Tours.API.Public.Marketplace
         Result<ShoppingCartDto> GetByUserId(int touristId);
         Result<ShoppingCartDto> Purchase(int cartId);
         Result<ShoppingCartDto> RemoveOrderItem(long cartId, int tourId);
-
+        Result<ShoppingCartDto> Buy(ShoppingCartDto cart);
     }
 }
 
