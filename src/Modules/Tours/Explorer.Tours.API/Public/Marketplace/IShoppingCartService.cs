@@ -15,6 +15,8 @@ namespace Explorer.Tours.API.Public.Marketplace
 
         Result <ShoppingCartDto> Purchase(ShoppingCartDto cart);
 
+        Result <ShoppingCartDto> Buy(ShoppingCartDto cart);
+
         //Result<ShoppingCartDto> RemoveOrderItem(ShoppingCartDto cartDto, OrderItemDto item);
         Result<ShoppingCartDto> RemoveOrderItem(long cartId, int tourId);
 

@@ -52,7 +52,13 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
         }
 
 
+        public Result<ShoppingCartDto> Buy(ShoppingCartDto cartDto)
+        {
+            var cart = MapToDomain(cartDto);
+            _shoppingCartRepository.Update(cart);
 
+            return MapToDto(cart);
+        }
 
         public Result<ShoppingCartDto> Purchase(ShoppingCartDto cartDto)
         {
@@ -63,7 +69,7 @@ namespace Explorer.Tours.Core.UseCases.Marketplace
                 TourPurchaseToken token = orderItem.ToPurchaseToken(cart.TouristId);
                 _tourPurhcaseTokenRepository.Create(token);
                 
-               cart.RemoveOrderItem(orderItem);
+                cart.RemoveOrderItem(orderItem);
             }
             
             _shoppingCartRepository.Update(cart);
