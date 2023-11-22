@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos.ShoppingCartDtos;
+using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Marketplace;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             }
 
         
-            [HttpGet("purchasedTours/{touristId:int}")]
+            /*[HttpGet("purchasedTours/{touristId:int}")]
             public ActionResult<List<TourDTO>> GetPurchasedTours([FromRoute] int touristId)
             {
                 try 
@@ -36,7 +37,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
                     // Log the exception or handle it as needed
                     return StatusCode(500, "Internal server error");
                 }
-            }
+            }*/
     }
     
 }

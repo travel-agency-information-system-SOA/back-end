@@ -1,8 +1,10 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos.ShoppingCartDtos;
+using Explorer.Payments.API.Public.ShoppingCart;
+using Explorer.Payments.Core.Domain.ShoppingCarts;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.API.Public.Marketplace;
 using Explorer.Tours.Core.UseCases.Administration;
 using Explorer.Tours.Core.UseCases.Marketplace;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +43,7 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
         public ActionResult<ShoppingCartDto> Buy([FromBody] ShoppingCartDto cart)
         {
                 var result = _shoppingCartService.Buy(cart);
-            return CreateResponse(result);
+                return CreateResponse(result);
         }
 
 
