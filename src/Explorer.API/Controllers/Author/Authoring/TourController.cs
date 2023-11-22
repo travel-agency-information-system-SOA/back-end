@@ -100,7 +100,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
         public ActionResult<TourDTO> getTourByTourId(int id)
         {
-            var result = _tourService.getTourByTourId(id);
+            var result = _tourService.GetTourByTourId(id);
             return CreateResponse(result);
         }
 
