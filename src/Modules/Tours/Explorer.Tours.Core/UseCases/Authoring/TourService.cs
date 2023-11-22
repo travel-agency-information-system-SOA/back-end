@@ -9,7 +9,6 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Internal;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
@@ -18,7 +17,7 @@ using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Authoring
 {
-    public class TourService : CrudService<TourDTO, Tour>, ITourService, IInternalTourService
+    public class TourService : CrudService<TourDTO, Tour>, ITourService
     {
         private readonly IMapper _mapper;
         private readonly ITourRepository _repository;
