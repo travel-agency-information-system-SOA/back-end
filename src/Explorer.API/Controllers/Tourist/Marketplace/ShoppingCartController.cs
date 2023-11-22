@@ -1,10 +1,7 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.API.Dtos;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Marketplace;
-using Explorer.Tours.Core.Domain.ShoppingCarts;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Explorer.Payments.API.Dtos.ShoppingCartDtos;
+using Explorer.Payments.API.Public.ShoppingCart;
 
 namespace Explorer.API.Controllers.Tourist.Marketplace
 {

@@ -5,20 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace Explorer.Tours.Core.Domain.ShoppingCarts
+namespace Explorer.Payments.Core.Domain.ShoppingCarts
 {
     public class OrderItem : ValueObject
     {
         public string TourName { get; set; }
-        public double Price {get; set;}
-        public int IdTour { get; set;}
+        public double Price { get; set; }
+        public int IdTour { get; set; }
 
-        
+
 
         [JsonConstructor]
-        public OrderItem(string tourName, double price, int idTour) 
+        public OrderItem(string tourName, double price, int idTour)
         {
             if (string.IsNullOrEmpty(tourName)) throw new ArgumentException("Invalid TourName.");
             if (idTour == 0) throw new ArgumentException("Invalid IdTour.");
