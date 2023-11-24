@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Encounters.Core.Domain;
 
-public enum EncounterStatus { ACTIVE, DRAFT, ARCHIEVED };
+public enum EncounterStatus { ACTIVE, DRAFT, ARCHIVED };
 public enum EncounterType { SOCIAL, LOCATION, MISC };
 
 public class Encounter : Entity
