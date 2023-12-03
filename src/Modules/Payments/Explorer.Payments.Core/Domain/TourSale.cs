@@ -13,14 +13,15 @@ namespace Explorer.Payments.Core.Domain
         public DateTime StartDate { get; init; }
         public DateTime EndDate { get; init; }
         public int SalePercentage { get; init; }
-        //authid dodt
-        public TourSale(List<int> tourIds, DateTime startDate, DateTime endDate, int salePercentage) 
+        public int AuthorId { get; init; }
+        public TourSale(List<int> tourIds, DateTime startDate, DateTime endDate, int salePercentage, int authorId) 
         {
             if(salePercentage < 0 || salePercentage > 100 || endDate < startDate || (endDate - startDate).Days >= 14) throw new ArgumentOutOfRangeException("Invalid Value.");
             TourIds = tourIds;
             StartDate = startDate;
             EndDate = endDate;
             SalePercentage = salePercentage;
+            AuthorId = authorId;
         }
     }
 }

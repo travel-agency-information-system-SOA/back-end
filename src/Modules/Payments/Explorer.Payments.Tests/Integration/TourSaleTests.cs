@@ -1,6 +1,7 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Public;
 using Explorer.Payments.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ namespace Explorer.Payments.Tests.Integration
     public class TourSaleTests : BasePaymentsIntegrationTest
     {
         public TourSaleTests(PaymentsTestFactory factory) : base(factory) { }
-        // fali dole, podaci, sve
+        // fali dole, podaci, sve, autor id
         [Fact]
         public void Creates()
         {
@@ -184,7 +185,7 @@ namespace Explorer.Payments.Tests.Integration
 
         private static TourSaleController CreateController(IServiceScope scope)
         {
-            return new TourSaleController(/*scope.ServiceProvider.GetRequiredService<ITourSaleService>()*/)
+            return new TourSaleController(scope.ServiceProvider.GetRequiredService<ITourSaleService>())
             {
                 ControllerContext = BuildContext("-1")
             };

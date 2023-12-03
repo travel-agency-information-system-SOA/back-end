@@ -1,5 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -12,35 +14,42 @@ namespace Explorer.API.Controllers.Author.Administration
     [Route("api/administration/tourSale")]
     public class TourSaleController : BaseApiController
     {
-        //servis
-        //constr
+        private readonly ITourSaleService _tourSaleService;
+        public TourSaleController(ITourSaleService tourSaleService)
+        {
+            _tourSaleService = tourSaleService;
+        }
 
         [Authorize(Policy = "authorPolicy")]
         [HttpGet("{id:int}")]
         public ActionResult<PagedResult<TourSaleDto>> GetAllByAuthor([FromQuery] int page, [FromQuery] int pageSize, int id)
         {
-            throw new NotImplementedException();
+            var result = _tourSaleService.GetAllByAuthor(page, pageSize, id);
+            return CreateResponse(result);
         }
 
         [Authorize(Policy = "authorPolicy")]
         [HttpPost]
         public ActionResult<PagedResult<TourSaleDto>> Create([FromBody] TourSaleDto tourSale)
         {
-            throw new NotImplementedException();
+            var result = _tourSaleService.Create(tourSale);
+            return CreateResponse(result);
         }
 
         [Authorize(Policy = "authorPolicy")]
         [HttpPut("{id:int}")]
         public ActionResult<TourSaleDto> Update([FromBody] TourSaleDto tourSale)
         {
-            throw new NotImplementedException();
+            var result = _tourSaleService.Update(tourSale);
+            return CreateResponse(result);
         }
 
         [Authorize(Policy = "authorPolicy")]
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = _tourSaleService.Delete(id);
+            return CreateResponse(result);
         }
 
         //salje turu prima popust
@@ -48,7 +57,8 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpGet("tour/{id:int}")]
         public ActionResult<TourSaleDto> GetDiscount(int id)
         {
-            throw new NotImplementedException();
+            var result = _tourSaleService.GetDiscount(id);
+            return CreateResponse(result);
         }
     }
 }
