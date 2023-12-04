@@ -104,7 +104,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "touristPolicy")]
+        
         [HttpGet("allTours")]
         public ActionResult<PagedResult<TourReviewDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize) {
             var result = _tourService.GetAll(page, pageSize);

@@ -7,6 +7,7 @@ using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain.Problems;
+using Explorer.Tours.Core.Domain.TourBundle;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -121,6 +122,16 @@ public class ToursProfile : Profile
         CreateMap<ProblemDto, Problem>().ReverseMap();
         CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
 
+        CreateMap<TourBundleDto, TourBundle>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse(typeof(TourBundleStatus), src.Status)))
+            .ForMember(dest => dest.TourIds, opt => opt.MapFrom(src => src.TourIds))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
 
+        CreateMap<TourBundle, TourBundleDto>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.TourIds, opt => opt.MapFrom(src => src.TourIds))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
     }
 }

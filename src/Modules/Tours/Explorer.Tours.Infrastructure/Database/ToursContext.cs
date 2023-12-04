@@ -4,6 +4,7 @@ using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Explorer.Tours.Core.Domain.Problems;
+using Explorer.Tours.Core.Domain.TourBundle;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -39,6 +40,7 @@ public class ToursContext : DbContext
     public DbSet<TourExecution> TourExecutions { get; set; }
     public DbSet<TourExecutionPosition> TourExecutionPositions { get; set; }
 
+    public DbSet<TourBundle> TourBundles { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
