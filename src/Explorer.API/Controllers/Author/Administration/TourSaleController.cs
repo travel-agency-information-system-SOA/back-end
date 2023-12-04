@@ -1,11 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
-using Explorer.Payments.Core.Domain;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
-using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,7 +35,7 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpPut("{id:int}")]
         public ActionResult<TourSaleDto> Update([FromBody] TourSaleDto tourSale)
         {
-            var result = _tourSaleService.Update(tourSale);
+            var result = _tourSaleService.UpdateTourSale(tourSale);
             return CreateResponse(result);
         }
 
@@ -55,7 +50,7 @@ namespace Explorer.API.Controllers.Author.Administration
         //salje turu prima popust
         [Authorize(Policy = "authorPolicy")]
         [HttpGet("tour/{id:int}")]
-        public ActionResult<TourSaleDto> GetDiscount(int id)
+        public ActionResult<int> GetDiscount(int id)
         {
             var result = _tourSaleService.GetDiscount(id);
             return CreateResponse(result);
