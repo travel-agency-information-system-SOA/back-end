@@ -35,7 +35,7 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpPut("{id:int}")]
         public ActionResult<TourSaleDto> Update([FromBody] TourSaleDto tourSale)
         {
-            var result = _tourSaleService.UpdateTourSale(tourSale);
+            var result = _tourSaleService.Update(tourSale);
             return CreateResponse(result);
         }
 

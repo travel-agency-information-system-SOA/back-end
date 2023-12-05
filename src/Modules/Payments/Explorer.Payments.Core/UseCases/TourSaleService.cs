@@ -17,7 +17,7 @@ namespace Explorer.Payments.Core.UseCases
 
             DateTime today = DateTime.Today;
             var filteredSales = allSales.Results
-                .Where(sa => sa.AuthorId == author && today >= sa.StartDate && today <= sa.EndDate)
+                .Where(sa => sa.AuthorId == author && today <= sa.EndDate)
                 .ToList();
 
             var pagedResult = new PagedResult<TourSaleDto>(filteredSales, filteredSales.Count);
@@ -40,12 +40,6 @@ namespace Explorer.Payments.Core.UseCases
             }
 
             return Result.Ok(0);
-        }
-
-        public Result<TourSaleDto> UpdateTourSale(TourSaleDto tourSale)
-        {
-            // Proveriti datume??
-            return Update(tourSale);
         }
     }
 }

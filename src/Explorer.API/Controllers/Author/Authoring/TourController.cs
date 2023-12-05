@@ -110,5 +110,13 @@ namespace Explorer.API.Controllers.Author.Authoring
             var result = _tourService.GetAll(page, pageSize);
             return CreateResponse(result);
         }
+
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("sales/{id:int}")]
+        public ActionResult<PagedResult<TourDTO>> GetAllPublishedByAuthor(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetAllPublishedByAuthor(id, page, pageSize);
+            return CreateResponse(result);
+        }
     }
 }

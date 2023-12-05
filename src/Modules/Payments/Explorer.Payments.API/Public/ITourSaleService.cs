@@ -12,6 +12,5 @@ namespace Explorer.Payments.API.Public
         Result Delete(int id);
         Result<PagedResult<TourSaleDto>> GetAllByAuthor(int page, int pageSize, int author);
         Result<int> GetDiscount(int id);
-        Result<TourSaleDto> UpdateTourSale(TourSaleDto tourSale);
     }
 }
