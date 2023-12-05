@@ -49,13 +49,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Blog.Tests", "Modu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payments", "Payments", "{842B2BA5-7AD6-4F0D-A2CA-421097E10D5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.API", "Explorer.Payments.API\Explorer.Payments.API.csproj", "{F7BDA92D-9B52-4026-9698-79BD60C13B23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.API", "Modules\Payments\Explorer.Payments.API\Explorer.Payments.API.csproj", "{F7BDA92D-9B52-4026-9698-79BD60C13B23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Core", "Explorer.Payments.Core\Explorer.Payments.Core.csproj", "{9CC89FEC-90F0-4560-A29F-DC67C5D9F426}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Core", "Modules\Payments\Explorer.Payments.Core\Explorer.Payments.Core.csproj", "{9CC89FEC-90F0-4560-A29F-DC67C5D9F426}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Infrastructure", "Explorer.Payments.Infrastructure\Explorer.Payments.Infrastructure.csproj", "{161F698F-E634-4148-82B9-D89F132DDADA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Infrastructure", "Modules\Payments\Explorer.Payments.Infrastructure\Explorer.Payments.Infrastructure.csproj", "{161F698F-E634-4148-82B9-D89F132DDADA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Tests", "Explorer.Payments.Tests\Explorer.Payments.Tests.csproj", "{BF6A2767-8C37-4D8B-92A4-9B7C94221DDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Tests", "Modules\Payments\Explorer.Payments.Tests\Explorer.Payments.Tests.csproj", "{BF6A2767-8C37-4D8B-92A4-9B7C94221DDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encounters", "Encounters", "{C11DC456-8C74-4643-A97D-5E8D60B4D9C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Encounters.API", "Modules\Encounters\Explorer.Encounters.API\Explorer.Encounters.API.csproj", "{E06E3A9D-4A41-4D7A-8012-6B533AEF59DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Encounters.Core", "Modules\Encounters\Explorer.Encounters.Core\Explorer.Encounters.Core.csproj", "{5F7156DD-6F8A-445B-83B2-F1C05373CDB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Encounters.Infrastructure", "Modules\Encounters\Explorer.Encounters.Infrastructure\Explorer.Encounters.Infrastructure.csproj", "{39DAC9DB-3094-4750-9A6D-CB232F195B44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Encounters.Tests", "Modules\Encounters\Explorer.Encounters.Tests\Explorer.Encounters.Tests.csproj", "{617CB780-6C2B-42AB-B068-7DD80628AC08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +157,22 @@ Global
 		{BF6A2767-8C37-4D8B-92A4-9B7C94221DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF6A2767-8C37-4D8B-92A4-9B7C94221DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF6A2767-8C37-4D8B-92A4-9B7C94221DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E06E3A9D-4A41-4D7A-8012-6B533AEF59DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E06E3A9D-4A41-4D7A-8012-6B533AEF59DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E06E3A9D-4A41-4D7A-8012-6B533AEF59DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E06E3A9D-4A41-4D7A-8012-6B533AEF59DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7156DD-6F8A-445B-83B2-F1C05373CDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7156DD-6F8A-445B-83B2-F1C05373CDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7156DD-6F8A-445B-83B2-F1C05373CDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7156DD-6F8A-445B-83B2-F1C05373CDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39DAC9DB-3094-4750-9A6D-CB232F195B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39DAC9DB-3094-4750-9A6D-CB232F195B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39DAC9DB-3094-4750-9A6D-CB232F195B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39DAC9DB-3094-4750-9A6D-CB232F195B44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{617CB780-6C2B-42AB-B068-7DD80628AC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{617CB780-6C2B-42AB-B068-7DD80628AC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{617CB780-6C2B-42AB-B068-7DD80628AC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{617CB780-6C2B-42AB-B068-7DD80628AC08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +201,11 @@ Global
 		{9CC89FEC-90F0-4560-A29F-DC67C5D9F426} = {842B2BA5-7AD6-4F0D-A2CA-421097E10D5D}
 		{161F698F-E634-4148-82B9-D89F132DDADA} = {842B2BA5-7AD6-4F0D-A2CA-421097E10D5D}
 		{BF6A2767-8C37-4D8B-92A4-9B7C94221DDA} = {842B2BA5-7AD6-4F0D-A2CA-421097E10D5D}
+		{C11DC456-8C74-4643-A97D-5E8D60B4D9C0} = {B8BD4B35-C40B-4BC6-9A8D-7FBE215FD1CE}
+		{E06E3A9D-4A41-4D7A-8012-6B533AEF59DB} = {C11DC456-8C74-4643-A97D-5E8D60B4D9C0}
+		{5F7156DD-6F8A-445B-83B2-F1C05373CDB2} = {C11DC456-8C74-4643-A97D-5E8D60B4D9C0}
+		{39DAC9DB-3094-4750-9A6D-CB232F195B44} = {C11DC456-8C74-4643-A97D-5E8D60B4D9C0}
+		{617CB780-6C2B-42AB-B068-7DD80628AC08} = {C11DC456-8C74-4643-A97D-5E8D60B4D9C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C378FE87-3A2E-4BB0-8E39-FB8767789244}

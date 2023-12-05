@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Explorer.BuildingBlocks.Infrastructure\Explorer.BuildingBlocks.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Payments\Explorer.Payments.Core\Explorer.Payments.Core.csproj" />
-    <ProjectReference Include="..\Explorer.Tours.Core\Explorer.Tours.Core.csproj" />
+    <ProjectReference Include="..\Explorer.Payments.Core\Explorer.Payments.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\Repositories\" />
+  </ItemGroup>
 
 </Project>
