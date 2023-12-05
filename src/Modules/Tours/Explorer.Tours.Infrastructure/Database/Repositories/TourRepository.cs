@@ -24,7 +24,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			 _tours = _context.Set<Tour>();
 		}
 
-		//za dobavljanje recenzija
+		
 		public PagedResult<Tour> GetAll(int page, int pageSize)
 		{
 			var tours = _tours.Include(t => t.TourReviews).Include(t=>t.TourPoints).GetPaged(page, pageSize);

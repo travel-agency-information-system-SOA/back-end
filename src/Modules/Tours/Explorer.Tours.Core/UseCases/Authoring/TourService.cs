@@ -27,14 +27,15 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             _repository = tourRepository;
         }
 
-        //metoda za dobavljanje tura i recenzija
+        //celi agregat se dobavlja
         public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
         {
             var tours = _repository.GetAll( page, pageSize);
             return MapToDto(tours);
 
         }
-        public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
+
+		public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
         {
             var tours = _repository.GetByUserId(userId, page, pageSize);
             return MapToDto(tours);
@@ -148,10 +149,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             }
         }
 
-        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transposrtType)
-        {
-            throw new NotImplementedException();
-        }
+      
     
 
         public Result ArchiveTour(int tourId)
@@ -182,9 +180,36 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			}
 		}
 
-        
+        public Result<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints, int page, int pageSize)
+        {
+            var tours = _repository.GetAll(page, pageSize).Results;
+            
+            
+			
+			var filteredTours = new List<Tour>();
 
-		
+            foreach (var tour in tours)
+            {
+                foreach(var tourPoint in tour.TourPoints)
+                {
+                    foreach(var publicTp in publicTourPoints)
+                    {
+                        if(publicTp.Latitude == tourPoint.Latitude && publicTp.Longitude == tourPoint.Longitude)
+                        {
+                            filteredTours.Add(tour);
+                        }
+                    }
+                }
+            }
+
+			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
+            return MapToDto(filteredPagedResult);
+
+		}
+
+
+
+
 	}
 
 

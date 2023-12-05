@@ -25,6 +25,8 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public int GuideId { get; private set; }
 
+        public int TouristId { get; private set; }
+
         public DateTime? PublishedDateTime { get; private set; }
 
 		public DateTime? ArchivedDateTime { get; private set; }
@@ -35,7 +37,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public ICollection<TourCharacteristic> TourCharacteristics { get; } = new List<TourCharacteristic>();
         public ICollection<TourReview> TourReviews { get; }= new List<TourReview>();
 
-        public Tour(string name, DifficultyLevel difficultyLevel, string? description, int guideId)
+        public Tour(string name, DifficultyLevel difficultyLevel, string? description, int guideId, int touristId)
         {
             if (string.IsNullOrWhiteSpace(name) || guideId == 0) throw new ArgumentException("Field empty.");
 
@@ -51,6 +53,7 @@ namespace Explorer.Tours.Core.Domain.Tours
             ArchivedDateTime = null;
             Price = 0;
             GuideId = guideId;
+            TouristId = touristId;
 
 
         }
