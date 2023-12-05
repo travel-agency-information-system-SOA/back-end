@@ -110,5 +110,13 @@ namespace Explorer.API.Controllers.Author.Authoring
             var result = _tourService.GetAll(page, pageSize);
             return CreateResponse(result);
         }
-    }
+
+		[Authorize(Policy = "touristPolicy")]
+		[HttpGet("filteredTours")]
+		public ActionResult<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints,[FromQuery] int page, [FromQuery] int pageSize)
+		{
+			var result = _tourService.FilterToursByPublicTourPoints(publicTourPoints, page, pageSize);
+			return CreateResponse(result);
+		}
+	}
 }

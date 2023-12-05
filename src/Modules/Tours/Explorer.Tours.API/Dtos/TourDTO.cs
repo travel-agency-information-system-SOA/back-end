@@ -28,6 +28,8 @@ namespace Explorer.Tours.API.Dtos
 
 		public int GuideId { get; set; }
 
+		public int TouristId { get; set; }
+
 		public List<TourPointDto> TourPoints { get; set; }
 
 		public List<TourCharacteristicDTO> TourCharacteristics { get; set; }
