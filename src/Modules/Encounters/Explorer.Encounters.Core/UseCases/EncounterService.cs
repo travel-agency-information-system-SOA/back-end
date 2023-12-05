@@ -16,5 +16,6 @@ public class EncounterService : CrudService<EncounterDto, Encounter>, IEncounter
 {
     public EncounterService(ICrudRepository<Encounter> crudRepository, IMapper mapper) : base(crudRepository, mapper)
     {
+
     }
 }
