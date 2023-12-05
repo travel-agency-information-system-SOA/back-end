@@ -15,6 +15,9 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourPointDto> Create(TourPointDto tourPoint);
         Result<TourPointDto> Update(TourPointDto tourPoint);
         Result Delete(int id);
+
+        TourPointDto Get(int id);
+
         Result<PagedResult<TourPointDto>> GetTourPointsByTourId(int tourId);
 
         Result<TourPointDto> GetFirstTourPoint(int tourId);

@@ -4,7 +4,6 @@ using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
-using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain.Problems;
@@ -22,14 +21,15 @@ public class ToursProfile : Profile
         CreateMap<TouristEquipmentDto, TouristEquipment>().ReverseMap();
 
 
+        CreateMap<PublicTourPointDto, PublicTourPoint>().ReverseMap();
+
+
+
 
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
 
-
-        CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();   //ShoppingCart
-        CreateMap<OrderItemDto, OrderItem>().ReverseMap();
-        CreateMap<TourPurchaseTokenDto, TourPurchaseToken>().ReverseMap();
+        CreateMap<PublicTourObjectDto, PublicTourObject>().ReverseMap();
        
 
         CreateMap<TourObjectDto, TourObject>()

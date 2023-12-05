@@ -41,7 +41,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 
         }
 
-        public Result<TourDTO> getTourByTourId(int id)
+        public Result<TourDTO> GetTourByTourId(int id)
         {
             var tours = _repository.GetById(id);
             return MapToDto(tours);
