@@ -31,5 +31,7 @@ namespace Explorer.Tours.API.Public.Administration
 		Result<TourDTO> Get(int id);
 		Result<PagedResult<TourDTO>> GetAll(int page, int pageSize);
 		Result<PagedResult<TourDTO>> GetAllPublishedByAuthor(int id, int page, int pageSize);
-    }
+		Result<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints, int page, int pageSize);
+		long GetLastTourId(int page, int pageSize);
+	}
 }
