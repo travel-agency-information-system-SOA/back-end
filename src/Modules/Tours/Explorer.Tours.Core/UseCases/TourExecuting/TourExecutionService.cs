@@ -32,9 +32,14 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         public Result<TourExecutionDto> GetById(int tourExecutionId)
         {
             var execution = _repository.GetById(tourExecutionId);
+
             
-            
+
             var executionDto = MapToDto(execution);
+            if (execution == null)
+            {
+                return executionDto;
+            }
             LoadTour(executionDto);
             return executionDto;
         }
@@ -44,6 +49,10 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             var execution = _repository.GetByUser(userId);
             
             var executionDto = MapToDto(execution);
+            if (execution == null)
+            {
+                return executionDto;
+            }
             LoadTour(executionDto);
 
             return executionDto;
@@ -53,6 +62,11 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         public void UpdatePosition(int tourExecutionId, double longitude, double latitude)
         {
             var execution = _repository.GetById(tourExecutionId);
+
+            if(execution == null)
+            {
+                return;
+            }
 
             TourExecutionDto executionDto = MapToDto(execution);
 
@@ -183,9 +197,15 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         public Result<PagedResult<TourPointExecutionDto>> GetPointsByExecution(int executionId)
         {
             var execution = _repository.GetByUser(executionId);
+            var pointsDto = new List<TourPointExecutionDto>();
+
+            if (execution == null)
+            {
+                var ret = new PagedResult<TourPointExecutionDto>(null, 0);
+                return ret;
+            }
             var points = execution.TourPoints;
 
-            var pointsDto = new List<TourPointExecutionDto>();
             foreach (var point in points)
             {
                 pointsDto.Add(_mapper.Map<TourPointExecutionDto>(point));
