@@ -18,7 +18,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             _tourService = tourService;
         }
 
-       // [Authorize(Policy = "authorPolicy")] i turista moze da je kreira!
+
         [HttpPost]
         public ActionResult<TourDTO> Create([FromBody] TourDTO tour)
         {
@@ -41,7 +41,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 
         
-        [Authorize(Policy = "authorPolicy")]
+        //[Authorize(Policy = "authorPolicy")]
 
         [HttpGet("{userId:int}")]
         public ActionResult<PagedResult<TourDTO>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
@@ -106,7 +106,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "touristPolicy")]
+        //[Authorize(Policy = "touristPolicy")]
         [HttpGet("allTours")]
         public ActionResult<PagedResult<TourReviewDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize) {
             var result = _tourService.GetAll(page, pageSize);

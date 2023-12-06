@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-   
+
     [Route("api/administration/object")]
     public class ObjectController : BaseApiController
     {
