@@ -1,4 +1,5 @@
-﻿using Explorer.Payments.Core.Domain.ShoppingCarts;
+﻿using Explorer.Payments.Core.Domain;
+using Explorer.Payments.Core.Domain.ShoppingCarts;
 //using Explorer.Tours.Core.Domain.TourExecutions;
 //using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace Explorer.Payments.Infrastructure.Database
     {
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<TourPurchaseToken> TourPurchaseTokens { get; set; }
+        public DbSet<TourSale> TourSale { get; set; }
 
 
         public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }

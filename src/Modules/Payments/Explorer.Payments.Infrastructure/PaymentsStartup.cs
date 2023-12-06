@@ -7,6 +7,9 @@ using Explorer.Payments.Infrastructure.Database;
 using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Payments.Core.UseCases.ShoppingCarts;
 using Microsoft.EntityFrameworkCore;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.UseCases;
+using Explorer.Payments.Core.Domain;
 
 namespace Explorer.Payments.Infrastructure
 {
@@ -24,6 +27,7 @@ namespace Explorer.Payments.Infrastructure
         {            
             services.AddScoped<IShoppingCartService, ShoppingCartService>();   //ShoppingCart
             services.AddScoped<ITourPurchaseTokenService, TourPurchaseTokenService>();  //Token
+            services.AddScoped<ITourSaleService, TourSaleService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)
@@ -31,6 +35,7 @@ namespace Explorer.Payments.Infrastructure
 
             services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, PaymentsContext>));
             services.AddScoped(typeof(ICrudRepository<TourPurchaseToken>), typeof(CrudDatabaseRepository<TourPurchaseToken, PaymentsContext>));
+            services.AddScoped(typeof(ICrudRepository<TourSale>), typeof(CrudDatabaseRepository<TourSale, PaymentsContext>));
 
             services.AddDbContext<PaymentsContext>(opt =>
                 opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),

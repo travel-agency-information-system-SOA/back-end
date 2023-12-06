@@ -180,6 +180,15 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			}
 		}
 
+        public Result<PagedResult<TourDTO>> GetAllPublishedByAuthor(int id, int page, int pageSize)
+        {
+            var tours = _repository.GetByUserId(id, page, pageSize);
+            var t = MapToDto(tours).Value;
+            var publishedTours = t.Results.Where(tour => tour.Status == TourStatus.Published.ToString()).ToList();
+            var filteredPagedResult = new PagedResult<TourDTO>(publishedTours, publishedTours.Count());
+            return Result.Ok(filteredPagedResult);
+        }
+        
         public Result<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints, int page, int pageSize)
         {
             var tours = _repository.GetAll(page, pageSize).Results;
@@ -204,16 +213,5 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			return lastTourId;
 
 		}
-
-
-
-
     }
-
-
-
-
-
-
-
 }

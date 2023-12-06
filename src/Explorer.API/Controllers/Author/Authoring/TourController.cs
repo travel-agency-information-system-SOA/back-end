@@ -113,7 +113,13 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("sales/{id:int}")]
+        public ActionResult<PagedResult<TourDTO>> GetAllPublishedByAuthor(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetAllPublishedByAuthor(id, page, pageSize);
+            return CreateResponse(result);
+        }
 
         [Authorize(Policy = "touristPolicy")]
         [HttpGet("filteredTours")]
@@ -148,19 +154,13 @@ namespace Explorer.API.Controllers.Author.Authoring
 
                 return StatusCode(500, "Internal server error");
             }
-
-			
-
-
 		}
 
 		[Authorize(Policy = "touristPolicy")]
 		[HttpGet("lastId")]
-        public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
-        {
-            return _tourService.GetLastTourId(page, pageSize);
-        }
-
-
+    public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
+    {
+        return _tourService.GetLastTourId(page, pageSize);
+    }
 	}
 }
