@@ -27,17 +27,20 @@ public static class EncountersStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IEncounterService, EncounterService>();
+        services.AddScoped<IHiddenLocationEncounterService, HiddenLocationEncounterService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         
         services.AddScoped(typeof(ICrudRepository<Encounter>), typeof(CrudDatabaseRepository<Encounter, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<HiddenLocationEncounter>), typeof(CrudDatabaseRepository<HiddenLocationEncounter, EncountersContext>));
 
         services.AddDbContext<EncountersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "encounters")));
-    
+
+
     }
 
 }

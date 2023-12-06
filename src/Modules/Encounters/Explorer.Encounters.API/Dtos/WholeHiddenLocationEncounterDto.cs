@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Encounters.API.Dtos;
 
-public class EncounterDto
+public class WholeHiddenLocationEncounterDto
 {
     public long Id { get; set; }
     public string Name { get; set; }
@@ -16,4 +16,9 @@ public class EncounterDto
     public string Type { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public long EncounterId { get; set; }
+    public string ImageURL { get; set; }
+    public double ImageLatitude { get; set; }
+    public double ImageLongitude { get; set; }
+    public double DistanceTreshold { get; set; }
 }

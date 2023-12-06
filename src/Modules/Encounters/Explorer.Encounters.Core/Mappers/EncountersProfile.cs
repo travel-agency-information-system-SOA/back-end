@@ -34,6 +34,24 @@ public class EncountersProfile : Profile
            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude));
 
+        CreateMap<HiddenLocationEncounterDto, HiddenLocationEncounter>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+           .ForMember(dest => dest.EncounterId, opt => opt.MapFrom(src => src.EncounterId))
+           .ForMember(dest => dest.DistanceTreshold, opt => opt.MapFrom(src => src.DistanceTreshold))
+           .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.ImageURL))
+           .ForMember(dest => dest.ImageLongitude, opt => opt.MapFrom(src => src.ImageLongitude))
+           .ForMember(dest => dest.ImageLatitude, opt => opt.MapFrom(src => src.ImageLatitude));
+
+
+        CreateMap<HiddenLocationEncounter, HiddenLocationEncounterDto>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+           .ForMember(dest => dest.EncounterId, opt => opt.MapFrom(src => src.EncounterId))
+           .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.ImageURL))
+           .ForMember(dest => dest.DistanceTreshold, opt => opt.MapFrom(src => src.DistanceTreshold))
+           .ForMember(dest => dest.ImageLatitude, opt => opt.MapFrom(src => src.ImageLatitude))
+           .ForMember(dest => dest.ImageLongitude, opt => opt.MapFrom(src => src.ImageLongitude));
+
+
 
     }
 }
