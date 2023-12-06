@@ -7,6 +7,7 @@ using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Explorer.API.Controllers.Administrator.Administration;
 
@@ -63,6 +64,10 @@ public class EncounterController : BaseApiController
         encounterDto.Longitude = wholeEncounter.Longitude;
         encounterDto.Latitude = wholeEncounter.Latitude;
         var baseEncounter = _encounterService.Create(encounterDto);
+        if (!baseEncounter.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
+        }
 
         HiddenLocationEncounterDto hiddenLocationEncounterDto = new HiddenLocationEncounterDto();
         hiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
@@ -72,10 +77,30 @@ public class EncounterController : BaseApiController
         hiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
 
         var result = _hiddenLocationEncounterService.Create(hiddenLocationEncounterDto);
-        return CreateResponse(result);
+        if (!result.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, result);
+        }
+
+        var wholeHiddenLocationEncounterDto = new WholeHiddenLocationEncounterDto();
+        wholeHiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
+        wholeHiddenLocationEncounterDto.Name = wholeEncounter.Name;
+        wholeHiddenLocationEncounterDto.Description = wholeEncounter.Description;
+        wholeHiddenLocationEncounterDto.XpPoints = wholeEncounter.XpPoints;
+        wholeHiddenLocationEncounterDto.Status = wholeEncounter.Status;
+        wholeHiddenLocationEncounterDto.Type = wholeEncounter.Type;
+        wholeHiddenLocationEncounterDto.Latitude = wholeEncounter.Latitude;
+        wholeHiddenLocationEncounterDto.Longitude = wholeEncounter.Longitude;
+        wholeHiddenLocationEncounterDto.Id = result.Value.Id;
+        wholeHiddenLocationEncounterDto.ImageURL = wholeEncounter.ImageURL;
+        wholeHiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
+        wholeHiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
+        wholeHiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
+        return StatusCode((int)HttpStatusCode.Created, wholeHiddenLocationEncounterDto);
+    
     }
     [HttpPost("social")]
-    public ActionResult<SocialEncounterDto> Create([FromBody] WholeSocialEncounterDto socialEncounter)
+    public ActionResult<WholeSocialEncounterDto> Create([FromBody] WholeSocialEncounterDto socialEncounter)
     {
         EncounterDto encounterDto = new EncounterDto();
         encounterDto.Name = socialEncounter.Name;
@@ -86,13 +111,36 @@ public class EncounterController : BaseApiController
         encounterDto.Longitude = socialEncounter.Longitude;
         encounterDto.Latitude = socialEncounter.Latitude;
         var baseEncounter = _encounterService.Create(encounterDto);
+        if (!baseEncounter.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
+        }
         SocialEncounterDto socialEncounterDto = new SocialEncounterDto();
         socialEncounterDto.EncounterId = baseEncounter.Value.Id;
         socialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
         socialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
         socialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
         var result = _socialEncounterService.Create(socialEncounterDto);
-        return CreateResponse(result);
+        if (!result.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, result);
+        }
+
+        var wholeSocialEncounterDto = new WholeSocialEncounterDto();
+        wholeSocialEncounterDto.EncounterId = baseEncounter.Value.Id;
+        wholeSocialEncounterDto.Name = socialEncounter.Name;
+        wholeSocialEncounterDto.Description = socialEncounter.Description;
+        wholeSocialEncounterDto.XpPoints = socialEncounter.XpPoints;
+        wholeSocialEncounterDto.Status = socialEncounter.Status;
+        wholeSocialEncounterDto.Type = socialEncounter.Type;
+        wholeSocialEncounterDto.Latitude = socialEncounter.Latitude;
+        wholeSocialEncounterDto.Longitude = socialEncounter.Longitude;
+        wholeSocialEncounterDto.Id = result.Value.Id;
+        wholeSocialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
+        wholeSocialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
+        wholeSocialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
+
+        return StatusCode((int)HttpStatusCode.Created, wholeSocialEncounterDto);
     }
     [HttpPut]
     public ActionResult<EncounterDto> Update([FromBody] EncounterDto encounter)
@@ -114,6 +162,10 @@ public class EncounterController : BaseApiController
         encounterDto.Longitude = wholeEncounter.Longitude;
         encounterDto.Latitude = wholeEncounter.Latitude;
         var baseEncounter = _encounterService.Update(encounterDto);
+        if (!baseEncounter.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
+        }
 
         HiddenLocationEncounterDto hiddenLocationEncounterDto = new HiddenLocationEncounterDto();
         hiddenLocationEncounterDto.Id = wholeEncounter.Id;
@@ -124,11 +176,30 @@ public class EncounterController : BaseApiController
         hiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
 
         var result = _hiddenLocationEncounterService.Update(hiddenLocationEncounterDto);
-        return CreateResponse(result);  
+        if (!result.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, result);
+        }
+        var wholeHiddenLocationEncounterDto = new WholeHiddenLocationEncounterDto();
+        wholeHiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
+        wholeHiddenLocationEncounterDto.Name = wholeEncounter.Name;
+        wholeHiddenLocationEncounterDto.Description = wholeEncounter.Description;
+        wholeHiddenLocationEncounterDto.XpPoints = wholeEncounter.XpPoints;
+        wholeHiddenLocationEncounterDto.Status = wholeEncounter.Status;
+        wholeHiddenLocationEncounterDto.Type = wholeEncounter.Type;
+        wholeHiddenLocationEncounterDto.Latitude = wholeEncounter.Latitude;
+        wholeHiddenLocationEncounterDto.Longitude = wholeEncounter.Longitude;
+        wholeHiddenLocationEncounterDto.Id = result.Value.Id;
+        wholeHiddenLocationEncounterDto.ImageURL = wholeEncounter.ImageURL;
+        wholeHiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
+        wholeHiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
+        wholeHiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
+
+        return StatusCode((int)HttpStatusCode.NoContent, wholeHiddenLocationEncounterDto);
     }
 
     [HttpPut("social")]
-    public ActionResult<SocialEncounterDto> Update([FromBody] WholeSocialEncounterDto socialEncounter)
+    public ActionResult<WholeSocialEncounterDto> Update([FromBody] WholeSocialEncounterDto socialEncounter)
     {
         EncounterDto encounterDto = new EncounterDto();
         encounterDto.Id = socialEncounter.EncounterId;
@@ -140,6 +211,10 @@ public class EncounterController : BaseApiController
         encounterDto.Longitude = socialEncounter.Longitude;
         encounterDto.Latitude = socialEncounter.Latitude;
         var baseEncounter = _encounterService.Update(encounterDto);
+        if (!baseEncounter.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
+        }
         SocialEncounterDto socialEncounterDto = new SocialEncounterDto();
         socialEncounterDto.Id = socialEncounter.Id;
         socialEncounterDto.EncounterId = baseEncounter.Value.Id;
@@ -147,8 +222,29 @@ public class EncounterController : BaseApiController
         socialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
         socialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
         var result = _socialEncounterService.Update(socialEncounterDto);
-        return CreateResponse(result);
+        if (!result.IsSuccess)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, result);
+        }
+
+        var wholeSocialEncounterDto = new WholeSocialEncounterDto();
+        wholeSocialEncounterDto.EncounterId = baseEncounter.Value.Id;
+        wholeSocialEncounterDto.Name = socialEncounter.Name;
+        wholeSocialEncounterDto.Description = socialEncounter.Description;
+        wholeSocialEncounterDto.XpPoints = socialEncounter.XpPoints;
+        wholeSocialEncounterDto.Status = socialEncounter.Status;
+        wholeSocialEncounterDto.Type = socialEncounter.Type;
+        wholeSocialEncounterDto.Latitude = socialEncounter.Latitude;
+        wholeSocialEncounterDto.Longitude = socialEncounter.Longitude;
+        wholeSocialEncounterDto.Id = result.Value.Id;
+        wholeSocialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
+        wholeSocialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
+        wholeSocialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
+
+
+        return StatusCode((int)HttpStatusCode.NoContent, wholeSocialEncounterDto);
     }
+    /*
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id)
     {
@@ -171,4 +267,31 @@ public class EncounterController : BaseApiController
         var result = _socialEncounterService.Delete(socialEncounterId);
         return CreateResponse(result);
     }
+    */
+    [HttpDelete("{baseEncounterId:int}")]
+    public ActionResult DeleteEncounter(int baseEncounterId)
+    {
+        var baseEncounter = _encounterService.Delete(baseEncounterId);
+
+        if (baseEncounter.IsSuccess)
+        {
+            long socialEncounterId = _socialEncounterService.GetId(baseEncounterId);
+            long hiddenLocationEncounterId = _hiddenLocationEncounterService.GetId(baseEncounterId);
+
+            if (socialEncounterId != -1)
+            {
+                var result = _socialEncounterService.Delete((int)socialEncounterId);
+                return CreateResponse(result);
+            }
+            else if (hiddenLocationEncounterId != -1)
+            {
+                var hiddenLocationResult = _hiddenLocationEncounterService.Delete((int)hiddenLocationEncounterId);
+                return CreateResponse(hiddenLocationResult);
+            }
+        }
+
+        // Handle the case when baseEncounterId doesn't match any specific type
+        return CreateResponse(baseEncounter);
+    }
+
 }

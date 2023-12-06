@@ -16,4 +16,21 @@ public class HiddenLocationEncounterService : CrudService<HiddenLocationEncounte
     public HiddenLocationEncounterService(ICrudRepository<HiddenLocationEncounter> crudRepository, IMapper mapper) : base(crudRepository, mapper)
     {
     }
+    public long GetId(long encounterId)
+    {
+        // Assuming EncounterId is a property in your SocialEncounterDto
+        var pagedResult = CrudRepository.GetPaged(1, int.MaxValue);  // Fetch all records
+
+        var hiddenLocationEncounter = pagedResult.Results.FirstOrDefault(s => s.EncounterId == encounterId);
+
+        if (hiddenLocationEncounter != null)
+        {
+            return hiddenLocationEncounter.Id;
+        }
+
+        // Handle the case when EncounterId doesn't match any SocialEncounter
+        // You might want to throw an exception or return a specific value based on your requirements.
+        // For simplicity, let's return -1 indicating not found.
+        return -1;
+    }
 }
