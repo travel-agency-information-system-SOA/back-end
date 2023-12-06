@@ -25,7 +25,6 @@ public class ToursProfile : Profile
 
 
 
-
         CreateMap<TourReviewDto, TourReview>().ReverseMap();
 
 

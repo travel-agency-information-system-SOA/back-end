@@ -1,8 +1,10 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
@@ -16,7 +18,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             _tourService = tourService;
         }
 
-        [Authorize(Policy = "authorPolicy")]
+       // [Authorize(Policy = "authorPolicy")] i turista moze da je kreira!
         [HttpPost]
         public ActionResult<TourDTO> Create([FromBody] TourDTO tour)
         {
@@ -111,12 +113,46 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-		[Authorize(Policy = "touristPolicy")]
-		[HttpGet("filteredTours")]
-		public ActionResult<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints,[FromQuery] int page, [FromQuery] int pageSize)
-		{
-			var result = _tourService.FilterToursByPublicTourPoints(publicTourPoints, page, pageSize);
-			return CreateResponse(result);
-		}
-	}
+
+
+        [Authorize(Policy = "touristPolicy")]
+        [HttpGet("filteredTours")]
+        public ActionResult<PagedResult<TourDTO>> FilterToursByPublicTourPoints(
+        [FromQuery] string publicTourPoints,
+        [FromQuery] int page,
+        [FromQuery] int pageSize)
+        {
+            try
+            {
+                // Deserialize the JSON string into an array or list of PublicTourPoint
+                var publicTourPointsArray = JsonConvert.DeserializeObject<PublicTourPointDto[]>(publicTourPoints);
+
+                // Log the values for debugging
+                Console.WriteLine($"publicTourPointsArray: { publicTourPointsArray}");
+                Console.WriteLine($"page: {page}");
+                Console.WriteLine($"pageSize: {pageSize}");
+
+                var result = _tourService.FilterToursByPublicTourPoints(publicTourPointsArray, page, pageSize);
+                return CreateResponse(result);
+            }
+            catch (JsonException ex)
+            {
+                // Log the exception for debugging
+                Console.WriteLine($"Error deserializing publicTourPoints: {ex.Message}");
+
+                // Return a BadRequest response indicating the deserialization error
+                return BadRequest("Invalid publicTourPoints format");
+            }
+            catch (Exception ex)
+            {
+                // Log other exceptions for further investigation
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+
+                // Return a generic error response
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
+    }
 }

@@ -183,34 +183,23 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         public Result<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints, int page, int pageSize)
         {
             var tours = _repository.GetAll(page, pageSize).Results;
-            
-            
-			
-			var filteredTours = new List<Tour>();
+            Console.WriteLine($"Number of Public Tour Points: {publicTourPoints.Length}");
 
-            foreach (var tour in tours)
-            {
-                foreach(var tourPoint in tour.TourPoints)
-                {
-                    foreach(var publicTp in publicTourPoints)
-                    {
-                        if(publicTp.Latitude == tourPoint.Latitude && publicTp.Longitude == tourPoint.Longitude)
-                        {
-                            filteredTours.Add(tour);
-                        }
-                    }
-                }
-            }
+            var filteredTours = tours
+                .Where(tour => tour.TourPoints.Any(tourPoint =>
+                    publicTourPoints.Any(publicTp =>
+                        publicTp.Latitude == tourPoint.Latitude && publicTp.Longitude == tourPoint.Longitude)))
+                .ToList();
 
-			var filteredPagedResult = new PagedResult<Tour>(filteredTours.ToList(), filteredTours.Count());
+            var filteredPagedResult = new PagedResult<Tour>(filteredTours.DistinctBy(t => t.Id).ToList(), filteredTours.Count());
             return MapToDto(filteredPagedResult);
-
-		}
-
+        }
 
 
 
-	}
+
+
+    }
 
 
 
