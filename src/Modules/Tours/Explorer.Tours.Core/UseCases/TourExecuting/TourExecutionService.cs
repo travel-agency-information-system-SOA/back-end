@@ -180,7 +180,21 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
         }
 
+        public Result<PagedResult<TourPointExecutionDto>> GetPointsByExecution(int executionId)
+        {
+            var execution = _repository.GetByUser(executionId);
+            var points = execution.TourPoints;
 
+            var pointsDto = new List<TourPointExecutionDto>();
+            foreach (var point in points)
+            {
+                pointsDto.Add(_mapper.Map<TourPointExecutionDto>(point));
+            }
+
+            var pointsDtoPagedResult = new PagedResult<TourPointExecutionDto>(pointsDto.ToList(), pointsDto.Count());
+
+            return pointsDtoPagedResult;
+        }
     }
 }
 
