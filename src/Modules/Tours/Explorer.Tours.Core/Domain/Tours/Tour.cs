@@ -23,7 +23,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public int Price { get; private set; }
 
-        public int GuideId { get; private set; }
+        public int UserId { get; private set; }
 
         public DateTime? PublishedDateTime { get; private set; }
 
@@ -35,9 +35,9 @@ namespace Explorer.Tours.Core.Domain.Tours
         public ICollection<TourCharacteristic> TourCharacteristics { get; } = new List<TourCharacteristic>();
         public ICollection<TourReview> TourReviews { get; }= new List<TourReview>();
 
-        public Tour(string name, DifficultyLevel difficultyLevel, string? description, int guideId)
+        public Tour(string name, DifficultyLevel difficultyLevel, string? description, int userId)
         {
-            if (string.IsNullOrWhiteSpace(name) || guideId == 0) throw new ArgumentException("Field empty.");
+            if (string.IsNullOrWhiteSpace(name) || userId == 0) throw new ArgumentException("Field empty.");
 
             if (!Enum.IsDefined(typeof(DifficultyLevel), difficultyLevel))
             {
@@ -50,17 +50,18 @@ namespace Explorer.Tours.Core.Domain.Tours
             PublishedDateTime = null; 
             ArchivedDateTime = null;
             Price = 0;
-            GuideId = guideId;
+            UserId = userId;
+            
 
 
         }
 
-        public void UpdateTour(string name, DifficultyLevel difficultyLevel, string? description, int guideId, TourStatus status)
+        public void UpdateTour(string name, DifficultyLevel difficultyLevel, string? description, int userId, TourStatus status)
         {
             Name=name;
 			DifficultyLevel = difficultyLevel;
             Description = description;
-            GuideId = guideId;
+            UserId = userId;
             Status = status;
 
 

@@ -24,7 +24,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			 _tours = _context.Set<Tour>();
 		}
 
-		//za dobavljanje recenzija
+		
 		public PagedResult<Tour> GetAll(int page, int pageSize)
 		{
 			var tours = _tours.Include(t => t.TourReviews).Include(t=>t.TourPoints).GetPaged(page, pageSize);
@@ -34,7 +34,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
 		public PagedResult<Tour> GetByUserId(int userId, int page, int pageSize)
 		{
-			var tours= _tours.Include(t => t.TourPoints).Where(t=>t.GuideId == userId).GetPagedById(page, pageSize);
+			var tours= _tours.Include(t => t.TourPoints).Where(t=>t.UserId == userId).GetPagedById(page, pageSize);
 			return tours.Result;
 		}
 

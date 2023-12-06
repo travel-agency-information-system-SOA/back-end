@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
+
     [Route("api/administration/objInTour")]
     public class ObjInTourController : BaseApiController
     {
