@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
     [Route("api/administration/objInTour")]
     public class ObjInTourController : BaseApiController
     {
