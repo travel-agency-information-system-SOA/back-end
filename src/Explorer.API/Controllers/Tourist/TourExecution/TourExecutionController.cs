@@ -104,5 +104,12 @@ namespace Explorer.API.Controllers.Tourist.TourExecution
             var result = _tourExecutionService.GetAll(page, pageSize);
             return CreateResponse(result);
         }
+
+        [HttpGet("getPoints/{executionId:int}")]
+        public ActionResult<PagedResult<TourPointExecutionDto>> GetPointsByExecution(int executionId)
+        {
+            var result = _tourExecutionService.GetPointsByExecution(executionId);
+            return CreateResponse(result);
+        }
     }
 }
