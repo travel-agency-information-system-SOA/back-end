@@ -31,7 +31,7 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
         [HttpGet("toursByBundle")]
-        public ActionResult<PagedResult<TourDTO>> GetToursByBundle(List<int> tourIds)
+        public ActionResult<PagedResult<TourDTO>> GetToursByBundle([FromQuery] List<int> tourIds)
         {
             var result = _tourBundleService.GetToursByBundle(tourIds);
             return CreateResponse(result);
