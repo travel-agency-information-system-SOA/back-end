@@ -28,9 +28,9 @@ namespace Explorer.Tours.Core.UseCases.Authoring
         }
 
         //metoda za dobavljanje tura i recenzija
-        public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
+        public Result<PagedResult<TourDTO>> GetAll(int page, int pageSize)
         {
-            var tours = _repository.GetAll( page, pageSize);
+            var tours = _repository.GetAll(page, pageSize);
             return MapToDto(tours);
 
         }
@@ -85,7 +85,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return distance <= rangeMeters;
         }
 
-       
+
 
         public Result<PagedResult<TourDTO>> GetPublished()
         {
@@ -112,6 +112,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             }
         }
 
+       
 
         public Result Publish(int tourId)
         {
@@ -182,10 +183,10 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			}
 		}
 
+
         
 
-		
-	}
+}
 
 
 

@@ -25,13 +25,11 @@ public static class BlogStartup
     {
         //services.AddScoped<IBlogPostCommentService, BlogPostCommentService>();
         services.AddScoped<IBlogPostService, BlogPostService>();
-        services.AddScoped<ITourBlogPostService, TourBlogPostService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<BlogPost>), typeof(CrudDatabaseRepository<BlogPost, BlogContext>));
-        services.AddScoped(typeof(ICrudRepository<TourBlogPost>), typeof(CrudDatabaseRepository<TourBlogPost, BlogContext>));
 
         //services.AddScoped(typeof(ICrudRepository<BlogPostComment>), typeof(CrudDatabaseRepository<BlogPostComment, BlogContext>));
 
@@ -39,8 +37,5 @@ public static class BlogStartup
             opt.UseNpgsql(DbConnectionStringBuilder.Build("blog"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "blog")));
 
-        services.AddDbContext<BlogContext>(opt =>
-            opt.UseNpgsql(DbConnectionStringBuilder.Build("tourBlog"),
-                x => x.MigrationsHistoryTable("__EFMigrationsHistory", "tourBlog")));
     }
 }
