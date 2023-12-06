@@ -7,6 +7,10 @@ using Explorer.Payments.Infrastructure.Database;
 using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Payments.Core.UseCases.ShoppingCarts;
 using Microsoft.EntityFrameworkCore;
+using Explorer.Payments.API.Public.BundlePayRecord;
+using Explorer.Payments.Core.UseCases.BundlePayRecords;
+using Explorer.Payments.Core.Domain.BundlePayRecords;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Payments.Infrastructure
 {
@@ -21,14 +25,16 @@ namespace Explorer.Payments.Infrastructure
         }
 
         private static void SetupCore(IServiceCollection services)
-        {            
+        {   
+            services.AddScoped<IBundlePayRecordService, BundlePayRecordService>();  //BundlePayRecordService
             services.AddScoped<IShoppingCartService, ShoppingCartService>();   //ShoppingCart
             services.AddScoped<ITourPurchaseTokenService, TourPurchaseTokenService>();  //Token
         }
 
         private static void SetupInfrastructure(IServiceCollection services)
         {
-
+            //services.AddScoped<IBundlePayRecordsRepository, BundlePayRecordRepository>();
+            services.AddScoped(typeof(ICrudRepository<BundlePayRecord>), typeof(CrudDatabaseRepository<BundlePayRecord, PaymentsContext>));
             services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, PaymentsContext>));
             services.AddScoped(typeof(ICrudRepository<TourPurchaseToken>), typeof(CrudDatabaseRepository<TourPurchaseToken, PaymentsContext>));
 

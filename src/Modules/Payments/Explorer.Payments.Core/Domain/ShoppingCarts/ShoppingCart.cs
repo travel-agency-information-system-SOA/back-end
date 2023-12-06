@@ -39,7 +39,6 @@ namespace Explorer.Payments.Core.Domain.ShoppingCarts
             }
         }
 
-        // implement the metod in method for buying the Tour  ( MarketplaceService )
         public bool AddOrderItem(OrderItem item)
         {
             if (OrderItems.Contains(item)) return false;
