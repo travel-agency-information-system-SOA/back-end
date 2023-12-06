@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos.BundlePayRecord;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,17 @@ namespace Explorer.API.Controllers.Author.Authoring
         public ActionResult Delete(int id)
         {
             var result = _tourBundleService.Delete(id);
+            return CreateResponse(result);
+        }
+
+
+
+        [HttpGet("publishedTourBundles")]  // dobavljanje svih publish-ovaih bundl-a
+        public ActionResult<PagedResult<BundlePayRecordDto>> GetAllPublishedTourBundles(int page, int pageSize)
+        {
+
+            var result = _tourBundleService.GetPublishedBundles(page, pageSize); //da dobavim sve publishovane bundles
+
             return CreateResponse(result);
         }
 

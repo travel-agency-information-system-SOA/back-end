@@ -57,10 +57,10 @@ namespace Explorer.Payments.Core.UseCases.BundlePayRecords
                 TouristId = touristId,
                 TourBundleId = tourBundleId,
                 Price = tourBundle.Price,
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.UtcNow
             };
 
-
+            _bundlePayRecordRepository.Create(result);
             /*
             // PRAVLJENJE PAYMENT RECORDA ZA BAS OVAJ BUNDLE
             var result = _bundlePayRecordRepository.PayRecordCreate(bundleId, touristId);

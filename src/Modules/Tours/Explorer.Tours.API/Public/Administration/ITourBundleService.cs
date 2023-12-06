@@ -18,5 +18,8 @@ namespace Explorer.Tours.API.Public.Administration
 
         Result<PagedResult<TourDTO>> GetToursByBundle(List<int> TourIds);
 
+
+        Result<PagedResult<TourBundleDto>> GetPublishedBundles(int page, int pageSize);
+
     }
 }
