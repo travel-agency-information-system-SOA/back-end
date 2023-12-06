@@ -28,6 +28,8 @@ public static class EncountersStartup
     {
         services.AddScoped<IEncounterService, EncounterService>();
         services.AddScoped<IHiddenLocationEncounterService, HiddenLocationEncounterService>();
+        services.AddScoped<IEncounterExecutionService, EncounterExecutionService>();
+        services.AddScoped<ISocialEncounterService, SocialEncounterService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -35,6 +37,8 @@ public static class EncountersStartup
         
         services.AddScoped(typeof(ICrudRepository<Encounter>), typeof(CrudDatabaseRepository<Encounter, EncountersContext>));
         services.AddScoped(typeof(ICrudRepository<HiddenLocationEncounter>), typeof(CrudDatabaseRepository<HiddenLocationEncounter, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<EncounterExecution>), typeof(CrudDatabaseRepository<EncounterExecution, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<SocialEncounter>), typeof(CrudDatabaseRepository<SocialEncounter, EncountersContext>));
 
         services.AddDbContext<EncountersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),

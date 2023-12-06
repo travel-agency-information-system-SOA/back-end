@@ -2,6 +2,8 @@
 using Explorer.Blog.API.Dtos;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +53,22 @@ public class EncountersProfile : Profile
            .ForMember(dest => dest.ImageLatitude, opt => opt.MapFrom(src => src.ImageLatitude))
            .ForMember(dest => dest.ImageLongitude, opt => opt.MapFrom(src => src.ImageLongitude));
 
+
+        CreateMap<EncounterExecutionDto, EncounterExecution>().ReverseMap();
+
+        CreateMap<SocialEncounterDto, SocialEncounter>()
+        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+        .ForMember(dest => dest.EncounterId, opt => opt.MapFrom(src => src.EncounterId))
+        .ForMember(dest => dest.TouristsRequiredForCompletion, opt => opt.MapFrom(src => src.TouristsRequiredForCompletion))
+        .ForMember(dest => dest.DistanceTreshold, opt => opt.MapFrom(src => src.DistanceTreshold))
+        .ForMember(dest => dest.TouristIDs, opt => opt.MapFrom(src => src.TouristIDs));
+
+        CreateMap<SocialEncounter, SocialEncounterDto>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+           .ForMember(dest => dest.EncounterId, opt => opt.MapFrom(src => src.EncounterId))
+           .ForMember(dest => dest.TouristsRequiredForCompletion, opt => opt.MapFrom(src => src.TouristsRequiredForCompletion))
+           .ForMember(dest => dest.DistanceTreshold, opt => opt.MapFrom(src => src.DistanceTreshold))
+           .ForMember(dest => dest.TouristIDs, opt => opt.MapFrom(src => src.TouristIDs));
 
 
     }
