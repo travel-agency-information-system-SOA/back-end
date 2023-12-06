@@ -66,7 +66,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "authorPolicy")]
+        
         [HttpPut("caracteristics/{id:int}")]
         public ActionResult AddCaracteristics(int id, [FromBody] TourCharacteristicDTO tourCharacteristic)
         {
@@ -124,35 +124,43 @@ namespace Explorer.API.Controllers.Author.Authoring
         {
             try
             {
-                // Deserialize the JSON string into an array or list of PublicTourPoint
+                
                 var publicTourPointsArray = JsonConvert.DeserializeObject<PublicTourPointDto[]>(publicTourPoints);
 
-                // Log the values for debugging
-                Console.WriteLine($"publicTourPointsArray: { publicTourPointsArray}");
-                Console.WriteLine($"page: {page}");
-                Console.WriteLine($"pageSize: {pageSize}");
+                
+              
 
                 var result = _tourService.FilterToursByPublicTourPoints(publicTourPointsArray, page, pageSize);
                 return CreateResponse(result);
             }
             catch (JsonException ex)
             {
-                // Log the exception for debugging
+          
                 Console.WriteLine($"Error deserializing publicTourPoints: {ex.Message}");
 
-                // Return a BadRequest response indicating the deserialization error
+                
                 return BadRequest("Invalid publicTourPoints format");
             }
             catch (Exception ex)
             {
-                // Log other exceptions for further investigation
+                
                 Console.WriteLine($"Unexpected error: {ex.Message}");
 
-                // Return a generic error response
                 return StatusCode(500, "Internal server error");
             }
+
+			
+
+
+		}
+
+		[Authorize(Policy = "touristPolicy")]
+		[HttpGet("lastId")]
+        public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
+        {
+            return _tourService.GetLastTourId(page, pageSize);
         }
 
 
-    }
+	}
 }

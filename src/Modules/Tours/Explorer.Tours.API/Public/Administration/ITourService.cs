@@ -33,6 +33,8 @@ namespace Explorer.Tours.API.Public.Administration
 
 		Result<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints, int page, int pageSize);
 
+		long GetLastTourId(int page, int pageSize);
+
 
 	}
 }

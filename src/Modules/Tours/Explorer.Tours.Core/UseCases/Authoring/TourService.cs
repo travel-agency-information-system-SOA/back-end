@@ -195,6 +195,15 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return MapToDto(filteredPagedResult);
         }
 
+        public long GetLastTourId(int page, int pageSize)
+        {
+			var tours = _repository.GetAll(page, pageSize).Results;
+
+			var lastTourId = tours.OrderByDescending(tour => tour.Id).First().Id;
+
+			return lastTourId;
+
+		}
 
 
 

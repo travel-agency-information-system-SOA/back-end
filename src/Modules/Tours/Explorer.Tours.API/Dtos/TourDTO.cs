@@ -26,9 +26,9 @@ namespace Explorer.Tours.API.Dtos
 
 		public string Status { get; set; }
 
-		public int GuideId { get; set; }
+		
 
-		public int TouristId { get; set; }
+		public int UserId { get; set; }
 
 		public List<TourPointDto> TourPoints { get; set; }
 
