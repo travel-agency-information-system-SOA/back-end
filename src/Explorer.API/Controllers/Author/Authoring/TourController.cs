@@ -30,7 +30,6 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-
         [HttpGet("search/{lat:double}/{lon:double}/{ran:int}")]
         //[AllowAnonymous]
         public ActionResult<PagedResult<TourDTO>> GetByRange(double lat, double lon, int ran, [FromQuery] int page, [FromQuery] int pageSize)
@@ -41,7 +40,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 
         
-        //[Authorize(Policy = "authorPolicy")]
+
 
         [HttpGet("{userId:int}")]
         public ActionResult<PagedResult<TourDTO>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
@@ -50,7 +49,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
         
-        [Authorize(Policy = "authorPolicy")]
+        [Authorize(Policy = "touristAuthorPolicy")]
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
@@ -66,7 +65,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        
+
         [HttpPut("caracteristics/{id:int}")]
         public ActionResult AddCaracteristics(int id, [FromBody] TourCharacteristicDTO tourCharacteristic)
         {
@@ -82,7 +81,7 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
        
-        [Authorize(Policy = "authorPolicy")]
+        [Authorize(Policy = "touristAuthorPolicy")]
         [HttpPut("archive/{id:int}")]
         public ActionResult ArchiveTour(int id)
         {
@@ -90,7 +89,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
        
-        [Authorize(Policy = "authorPolicy")]
+        [Authorize(Policy = "touristAuthorPolicy")]
         [HttpDelete("deleteAggregate/{id:int}")]
         public ActionResult DeleteAggregate(int id)
         {
@@ -107,7 +106,8 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
 
-        //[Authorize(Policy = "touristPolicy")]
+
+       //[Authorize(Policy = "touristPolicy")]
 
         [HttpGet("allTours")]
         public ActionResult<PagedResult<TourReviewDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize) {

@@ -30,10 +30,12 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             _userService = userService;
         }
 
+
         //celi agregat se dobavlja
         public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
+
         {
-            var tours = _repository.GetAll( page, pageSize);
+            var tours = _repository.GetAll(page, pageSize);
             return MapToDto(tours);
 
         }
@@ -89,7 +91,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return distance <= rangeMeters;
         }
 
-       
+
 
         public Result<PagedResult<TourDTO>> GetPublished()
         {
@@ -116,6 +118,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             }
         }
 
+       
 
         public Result Publish(int tourId)
         {
@@ -183,6 +186,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			}
 		}
 
+
         public Result<PagedResult<TourDTO>> GetAllPublishedByAuthor(int id, int page, int pageSize)
         {
             var tours = _repository.GetByUserId(id, page, pageSize);
@@ -208,6 +212,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 					helpingTours.Add(tour);
 				}
 			}
+
 
 			Console.WriteLine($"Number of Public Tour Points: {publicTourPoints.Length}");
 

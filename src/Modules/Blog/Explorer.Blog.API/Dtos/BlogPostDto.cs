@@ -12,6 +12,7 @@ namespace Explorer.Blog.API.Dtos
     {
         public int Id { get; set; }
         public int AuthorId { get; set; }
+        public int TourId { get; set; }
         public string? AuthorUsername { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
