@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos.ShoppingCartDtos;
+using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Marketplace;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,29 +23,21 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
                 return CreateResponse(result);
             }
 
-        [HttpGet("purchasedTours/{touristId}")]
-        public ActionResult<PagedResult<TourDTO>> GetPurchasedTours(int touristId)
-        {
-            try
-            {
-                var purchasedTours = _tourTokenService.GetPurchasedTours(touristId);
-
-                return Ok(purchasedTours);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                return StatusCode(500, "Internal server error");
-            }
-        }
         
-
-            [HttpGet("purchasedTourss/{touristId:int}")]
-            public ActionResult<List<TourDTO>> GetPurchasedTourss([FromRoute] int touristId)
+            /*[HttpGet("purchasedTours/{touristId:int}")]
+            public ActionResult<List<TourDTO>> GetPurchasedTours([FromRoute] int touristId)
             {
-                var result = _tourTokenService.GetPurchasedTours(touristId);
-                return CreateResponse(result);
-            }
+                try 
+                {
+                    var result = _tourTokenService.GetPurchasedTours(touristId);
+                    return CreateResponse(result);
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as needed
+                    return StatusCode(500, "Internal server error");
+                }
+            }*/
     }
     
 }

@@ -1,10 +1,10 @@
 ﻿using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
-using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Explorer.Tours.Core.Domain.Problems;
+using Explorer.Tours.Core.Domain.TourBundle;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -40,11 +40,7 @@ public class ToursContext : DbContext
     public DbSet<TourExecution> TourExecutions { get; set; }
     public DbSet<TourExecutionPosition> TourExecutionPositions { get; set; }
 
-    //ShoppingCart
-    public DbSet<ShoppingCart> ShoppingCarts { get; set; }  
-    public DbSet<TourPurchaseToken> TourPurchaseTokens { get; set; }
-
-
+    public DbSet<TourBundle> TourBundles { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
@@ -56,8 +52,6 @@ public class ToursContext : DbContext
         modelBuilder.Entity<Tour>().Property(item => item.TourCharacteristics).HasColumnType("jsonb");
 
 
-        //ShoppingCart
-        modelBuilder.Entity<ShoppingCart>().Property(item => item.OrderItems).HasColumnType("jsonb");
 
         modelBuilder.Entity<TourExecution>()
             .HasOne(te => te.Position)

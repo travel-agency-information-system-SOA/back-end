@@ -17,6 +17,7 @@ namespace Explorer.Blog.Core.Domain
     public class BlogPost : Entity
     {
         public int AuthorId { get; init; }
+        public int TourId { get; init; }
         public string Title { get; init; }
         public string Description { get; init; }
         public DateTime CreationDate { get; init; }
@@ -25,7 +26,7 @@ namespace Explorer.Blog.Core.Domain
         public List<BlogPostRating>? Ratings { get; init; }
         public BlogPostStatus Status { get; set; }
 
-        public BlogPost(int authorId, string title, string description, DateTime creationDate, List<string>? imageURLs, List<BlogPostComment>? comments, BlogPostStatus status, List<BlogPostRating>? ratings)
+        public BlogPost(int authorId,int tourId, string title, string description, DateTime creationDate, List<string>? imageURLs, List<BlogPostComment>? comments, BlogPostStatus status, List<BlogPostRating>? ratings)
         {
             if (authorId == 0) throw new ArgumentException("Field required");
             if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Invalid Title.");
@@ -35,6 +36,7 @@ namespace Explorer.Blog.Core.Domain
                 throw new ArgumentException("Invalid Post Status");
 
             AuthorId = authorId;
+            TourId = tourId;
             Title = title;
             Description = description;
             CreationDate = creationDate;
