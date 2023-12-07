@@ -73,4 +73,18 @@ public class HiddenLocationEncounterService : CrudService<HiddenLocationEncounte
 
         return null;
     }
+
+    public Result<HiddenLocationEncounterDto> GetHiddenLocationEncounterByEncounterId(int encounterId)
+    {
+        List<HiddenLocationEncounter> encounters = new List<HiddenLocationEncounter>();
+        encounters = CrudRepository.GetPaged(0, 0).Results.ToList();
+        foreach (var encounter in encounters)
+        {
+            if (encounter.EncounterId == encounterId)
+            {
+                return MapToDto(encounter);
+            }
+        }
+            return null;
+    }
 }

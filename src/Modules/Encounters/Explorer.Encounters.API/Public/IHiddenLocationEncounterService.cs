@@ -18,4 +18,5 @@ public interface IHiddenLocationEncounterService
     public long GetId(long encounterId);
     public Boolean CheckHiddenLocationEncounter(int executionId, int encounterId);
     public HiddenLocationEncounterDto GetHiddenLocationEncounterByEncounter(int encounterId);
+    Result<HiddenLocationEncounterDto> GetHiddenLocationEncounterByEncounterId(int encounterId);
 }

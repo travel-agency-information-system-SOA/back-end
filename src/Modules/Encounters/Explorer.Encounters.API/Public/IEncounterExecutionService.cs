@@ -18,6 +18,6 @@ public interface IEncounterExecutionService
     public List<EncounterExecutionDto> GetExecutionsByEncounter(int encounterId);
     public EncounterExecutionDto GetExecution(int encounterId);
     public Result<EncounterExecutionDto> GetExecutionByUser(int userId);
-    public void CompleteEncounter(long userId);
+    public Result<EncounterExecutionDto> CompleteEncounter(long userId);
     public List<EncounterExecutionDto> GetAllExecutionsByEncounter(int encounterId);
 }

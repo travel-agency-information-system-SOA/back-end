@@ -301,4 +301,11 @@ public class EncounterController : BaseApiController
         return CreateResponse(baseEncounter);
     }
 
+    [HttpGet("hiddenLocation/{encounterId:int}")]
+    public ActionResult<PagedResult<HiddenLocationEncounterDto>> GetHiddenLocationEncounterByEncounterId(int encounterId)
+    {
+        var hiddenLocationEncounter = _hiddenLocationEncounterService.GetHiddenLocationEncounterByEncounterId(encounterId);
+        return CreateResponse(hiddenLocationEncounter);
+    }
+
 }

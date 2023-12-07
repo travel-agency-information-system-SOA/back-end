@@ -69,13 +69,14 @@ public class EncounterExecutionService:CrudService<EncounterExecutionDto, Encoun
         return null;
     }
 
-    public void CompleteEncounter(long userId)
+    public Result<EncounterExecutionDto> CompleteEncounter(long userId)
     {
         EncounterExecutionDto execution = GetExecutionByUser(Convert.ToInt32(userId)).Value;
         execution.CompletionTime = DateTime.UtcNow;
         execution.IsCompleted = true;
         
         _encounterExecutionRepository.Update(MapToDomain(execution));
+        return execution;
     }
 
     public List<EncounterExecutionDto> GetAllExecutionsByEncounter(int encounterId)

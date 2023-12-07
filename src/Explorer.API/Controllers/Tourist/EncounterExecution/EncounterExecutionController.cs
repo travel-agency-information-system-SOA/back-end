@@ -73,12 +73,11 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
             return Ok(result);
         }
 
-        [HttpPut("completeExecution/{userId:int}")]
-        public ActionResult<bool> CompleteExecution(int userId)
+        [HttpGet("completeExecution/{userId:int}")]
+        public ActionResult<EncounterExecutionDto> CompleteExecution(int userId)
         {
-            _encounterExecutionService.CompleteEncounter(userId);
-            bool ret = true;
-            return Ok(ret);
+            Result<EncounterExecutionDto> execution = _encounterExecutionService.CompleteEncounter(userId);
+            return CreateResponse(execution);
         }
 
 
