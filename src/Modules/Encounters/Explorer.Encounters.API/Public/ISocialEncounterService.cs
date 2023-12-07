@@ -15,5 +15,6 @@ public interface ISocialEncounterService
     Result<SocialEncounterDto> Create(SocialEncounterDto socialEncounter);
     Result<SocialEncounterDto> Update(SocialEncounterDto socialEncounter);
     Result Delete(int id);
+    public long GetId(long encounterId);
 }
 
