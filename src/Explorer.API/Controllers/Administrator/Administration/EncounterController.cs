@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration;
 
-[Authorize(Policy = "administratorPolicy")]
+//[Authorize(Policy = "administratorPolicy")]
 [Route("api/encounters")]
 public class EncounterController : BaseApiController
 {
@@ -170,5 +170,12 @@ public class EncounterController : BaseApiController
         var baseEncounter = _encounterService.Delete(baseEncounterId);
         var result = _socialEncounterService.Delete(socialEncounterId);
         return CreateResponse(result);
+    }
+
+    [HttpGet("getEncounter/{encounterId:int}")]
+    public ActionResult<PagedResult<EncounterDto>> GetEncounter(int encounterId)
+    {
+        var encounter = _encounterService.GetEncounterById(encounterId);
+        return CreateResponse(encounter);
     }
 }

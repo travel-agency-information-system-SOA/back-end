@@ -2,6 +2,7 @@
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.UseCases;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Tourist.EncounterExecution
@@ -11,10 +12,12 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
     public class EncounterExecutionController:BaseApiController
     {
         private readonly IEncounterExecutionService _encounterExecutionService;
+        private readonly ISocialEncounterService _socialEncounterService;
 
-        public EncounterExecutionController(IEncounterExecutionService service)
+        public EncounterExecutionController(IEncounterExecutionService service, ISocialEncounterService socialEncounterService)
         {
             _encounterExecutionService = service;
+            _socialEncounterService = socialEncounterService;
         }
 
         [HttpGet]
@@ -41,5 +44,25 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
             var result = _encounterExecutionService.Delete(id);
             return CreateResponse(result);
         }
+
+        [HttpGet("checkSocialEncounter/{encounterId:int}")]
+        public PagedResult<EncounterExecutionDto> CheckSocialEncounter(int encounterId)
+        {
+            _socialEncounterService.CheckSocialEncounter(encounterId);
+
+            List<EncounterExecutionDto> result = new List<EncounterExecutionDto>();
+            result = _encounterExecutionService.GetAllExecutionsByEncounter(encounterId);
+
+            return new PagedResult<EncounterExecutionDto>(result, result.Count);
+        }
+
+        [HttpGet("getActive/{userId:int}")]
+        public ActionResult<PagedResult<EncounterExecutionDto>> GetActiveByUser(int userId)
+        {
+            var execution = _encounterExecutionService.GetExecutionByUser(userId);
+            return CreateResponse(execution);
+        }
+
+        
     }
 }

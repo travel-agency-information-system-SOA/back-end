@@ -5,6 +5,9 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -16,9 +19,60 @@ namespace Explorer.Encounters.Core.UseCases
 {
     public class SocialEncounterService : CrudService<SocialEncounterDto, SocialEncounter>, ISocialEncounterService
     {
-        public SocialEncounterService(ICrudRepository<SocialEncounter> crudRepository, IMapper mapper) : base(crudRepository, mapper)
+        private readonly IEncounterExecutionService _encounterExecutionService;
+        private readonly IEncounterService _encounterService;
+        private readonly IUserPositionService _userPositionService;
+        public SocialEncounterService(ICrudRepository<SocialEncounter> crudRepository, IEncounterExecutionService encounterExecutionService, IEncounterService encounterService, IUserPositionService userPositionService, IMapper mapper) : base(crudRepository, mapper)
         {
-
+            _encounterExecutionService = encounterExecutionService;
+            _encounterService = encounterService;
+            _userPositionService = userPositionService;
         }
+
+        public void CheckSocialEncounter(int encounterId)
+        {
+            SocialEncounterDto socialEncounter = GetSocialEncounter(Convert.ToInt32(encounterId));
+            EncounterDto encounterDto = _encounterService.GetEncounter(Convert.ToInt32(encounterId));
+            List<EncounterExecutionDto> executions = _encounterExecutionService.GetExecutionsByEncounter(Convert.ToInt32(encounterDto.Id));
+           
+            int count = 0;
+            List<long> usersInside = new List<long>();
+            foreach(EncounterExecutionDto execution in executions) 
+            {
+                UserPositionDto position = _userPositionService.GetByUserId(Convert.ToInt32(execution.UserId), 0, 0).Value;
+
+                if (_encounterService.CalculateDistance(position.Latitude, position.Longitude, encounterDto.Latitude, encounterDto.Longitude) <= socialEncounter.DistanceTreshold)
+                {
+                    count++;
+                    usersInside.Add(position.UserId);
+                }
+            }
+
+            if(count >= socialEncounter.TouristsRequiredForCompletion) 
+            {
+                foreach(long id in usersInside)
+                {
+                    _encounterExecutionService.CompleteEncounter(Convert.ToInt32(id));
+                }
+            }
+        }
+
+        public SocialEncounterDto GetSocialEncounter(int encounterId) 
+        {
+            List<SocialEncounter> encounters = new List<SocialEncounter>();
+            encounters = CrudRepository.GetPaged(0,0).Results.ToList();
+            foreach(var encounter  in encounters)
+            {
+                if(encounter.EncounterId == encounterId)
+                {
+                    return MapToDto(encounter);
+                }
+            }
+
+            return null;
+        }
+
+
+
     }
 }

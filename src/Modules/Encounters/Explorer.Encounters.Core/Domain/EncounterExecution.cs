@@ -12,8 +12,8 @@ public class EncounterExecution : Entity
 {
     public long UserId { get; init; }
     public long EncounterId { get; init; }
-    public DateTime? CompletionTime { get; init;}
-    public bool IsCompleted { get; init; }
+    public DateTime? CompletionTime { get; set;}
+    public bool IsCompleted { get; set; }
     public EncounterExecution() { }
 
     public EncounterExecution(long userId, long encounterId, DateTime? completionTime, bool isCompleted)
