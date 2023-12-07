@@ -1,4 +1,8 @@
+
+﻿using Explorer.Payments.Core.Domain.BundlePayRecords;
+
 ﻿using Explorer.Payments.Core.Domain;
+
 using Explorer.Payments.Core.Domain.ShoppingCarts;
 //using Explorer.Tours.Core.Domain.TourExecutions;
 //using Explorer.Tours.Core.Domain.Tours;
@@ -13,8 +17,10 @@ namespace Explorer.Payments.Infrastructure.Database
 {
     public class PaymentsContext : DbContext
     {
+        public DbSet<BundlePayRecord> BundlePayRecords { get; set; }    
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<TourPurchaseToken> TourPurchaseTokens { get; set; }
+        public DbSet<TourSale> TourSale { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
 
 

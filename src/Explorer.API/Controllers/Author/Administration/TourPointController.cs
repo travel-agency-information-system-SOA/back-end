@@ -27,7 +27,7 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourPointService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
-        [Authorize(Policy = "authorPolicy")]
+        
         [HttpPost]/*
         public (ActionResult<TourPointDto>, int) Create([FromBody] TourPointDto tourPoint)
         {
