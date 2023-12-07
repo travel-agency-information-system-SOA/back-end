@@ -12,5 +12,6 @@ namespace Explorer.Stakeholders.API.Public
     public interface ITouristXPService
     {
         public Result<TouristXPDto> AddExperience(int TouristId, int ammount);
+        Result<PagedResult<TouristXPDto>> GetByUserId(int userId, int page, int pageSize);
     }
 }

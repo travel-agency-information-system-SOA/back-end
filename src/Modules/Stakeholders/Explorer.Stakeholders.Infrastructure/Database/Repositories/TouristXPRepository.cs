@@ -11,17 +11,17 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {
     public class TouristXPRepository : ITouristXPRepository
     {
-        private readonly DbSet<TouristXP> _touristXP;
+        private readonly DbSet<TouristXP> _touristXPs;
         private readonly StakeholdersContext _context;
         public TouristXPRepository(StakeholdersContext context)
         {
             _context = context;
-            _touristXP = _context.Set<TouristXP>();
+            _touristXPs = _context.Set<TouristXP>();
         }
         public TouristXP AddExperience(int id, int ammount)
         {
             TouristXP touristXP = new TouristXP();
-            foreach(var t in _touristXP) 
+            foreach(var t in _touristXPs) 
             {
                 if(t.TouristId == id) 
                 {
@@ -43,6 +43,5 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             }
             return touristXP;
         }
-
     }
 }

@@ -74,5 +74,23 @@ namespace Explorer.Encounters.Core.UseCases
 
 
 
+
+        public long GetId(long encounterId)
+        {
+            // Assuming EncounterId is a property in your SocialEncounterDto
+            var pagedResult = CrudRepository.GetPaged(1, int.MaxValue);  // Fetch all records
+
+            var socialEncounter = pagedResult.Results.FirstOrDefault(s => s.EncounterId == encounterId);
+
+            if (socialEncounter != null)
+            {
+                return socialEncounter.Id;
+            }
+
+            // Handle the case when EncounterId doesn't match any SocialEncounter
+            // You might want to throw an exception or return a specific value based on your requirements.
+            // For simplicity, let's return -1 indicating not found.
+            return -1;
+        }
     }
 }

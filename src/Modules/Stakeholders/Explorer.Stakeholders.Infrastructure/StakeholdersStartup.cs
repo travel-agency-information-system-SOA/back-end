@@ -44,7 +44,7 @@ public static class StakeholdersStartup
 
         services.AddScoped<IUserPositionService, UserPositionService>();
         services.AddScoped<IInternalUserService, InternalUserService>();
-
+        services.AddScoped<ITouristXPService, TouristXPService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -63,7 +63,8 @@ public static class StakeholdersStartup
 
         services.AddScoped(typeof(ICrudRepository<UserPosition>),typeof(CrudDatabaseRepository<UserPosition,StakeholdersContext>));
         services.AddScoped<IUserPositionRepository, UserPositionRepository>();
-
+        services.AddScoped<ITouristXPRepository, TouristXPRepository>();
+        services.AddScoped(typeof(ICrudRepository<TouristXP>), typeof(CrudDatabaseRepository<TouristXP, StakeholdersContext>));
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

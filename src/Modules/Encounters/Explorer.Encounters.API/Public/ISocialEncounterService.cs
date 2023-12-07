@@ -17,5 +17,6 @@ public interface ISocialEncounterService
     Result Delete(int id);
     public void CheckSocialEncounter(int executionId);
     public SocialEncounterDto GetSocialEncounter(int encounterId);
+    public long GetId(long encounterId);
 }
 
