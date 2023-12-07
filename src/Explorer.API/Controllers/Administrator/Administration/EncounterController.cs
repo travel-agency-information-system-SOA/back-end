@@ -268,6 +268,13 @@ public class EncounterController : BaseApiController
         return CreateResponse(result);
     }
     */
+    [HttpGet("getEncounter/{encounterId:int}")]
+    public ActionResult<PagedResult<EncounterDto>> GetEncounter(int encounterId)
+    {
+        var encounter = _encounterService.GetEncounterById(encounterId);
+        return CreateResponse(encounter);
+    }
+    
     [HttpDelete("{baseEncounterId:int}")]
     public ActionResult DeleteEncounter(int baseEncounterId)
     {
