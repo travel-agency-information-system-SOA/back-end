@@ -21,6 +21,7 @@ namespace Explorer.Payments.Infrastructure.Database
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<TourPurchaseToken> TourPurchaseTokens { get; set; }
         public DbSet<TourSale> TourSale { get; set; }
+        public DbSet<Coupon> Coupons { get; set; }
 
 
         public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }

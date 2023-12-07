@@ -7,6 +7,11 @@ using Explorer.Payments.Infrastructure.Database;
 using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Payments.Core.UseCases.ShoppingCarts;
 using Microsoft.EntityFrameworkCore;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.UseCases;
+using Explorer.Payments.Core.Domain;
+using Explorer.Payments.Core.Domain.RepositoryInterfaces;
+using Explorer.Payments.Infrastructure.Database.Repositories;
 
 using Explorer.Payments.API.Public.BundlePayRecord;
 using Explorer.Payments.Core.UseCases.BundlePayRecords;
@@ -36,6 +41,7 @@ namespace Explorer.Payments.Infrastructure
             services.AddScoped<IShoppingCartService, ShoppingCartService>();   //ShoppingCart
             services.AddScoped<ITourPurchaseTokenService, TourPurchaseTokenService>();  //Token
             services.AddScoped<ITourSaleService, TourSaleService>();
+            services.AddScoped<ICouponService, CouponService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)
@@ -44,6 +50,9 @@ namespace Explorer.Payments.Infrastructure
             services.AddScoped(typeof(ICrudRepository<BundlePayRecord>), typeof(CrudDatabaseRepository<BundlePayRecord, PaymentsContext>));
             services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, PaymentsContext>));
             services.AddScoped(typeof(ICrudRepository<TourPurchaseToken>), typeof(CrudDatabaseRepository<TourPurchaseToken, PaymentsContext>));
+            services.AddScoped(typeof(ICrudRepository<Coupon>), typeof(CrudDatabaseRepository<Coupon, PaymentsContext>));
+            services.AddScoped<ICouponRepository, CouponRepository>();
+
             services.AddScoped(typeof(ICrudRepository<TourSale>), typeof(CrudDatabaseRepository<TourSale, PaymentsContext>));
 
             services.AddDbContext<PaymentsContext>(opt =>
