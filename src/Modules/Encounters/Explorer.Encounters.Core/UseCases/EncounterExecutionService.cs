@@ -76,7 +76,6 @@ public class EncounterExecutionService:CrudService<EncounterExecutionDto, Encoun
         execution.IsCompleted = true;
         
         _encounterExecutionRepository.Update(MapToDomain(execution));
-
     }
 
     public List<EncounterExecutionDto> GetAllExecutionsByEncounter(int encounterId)
