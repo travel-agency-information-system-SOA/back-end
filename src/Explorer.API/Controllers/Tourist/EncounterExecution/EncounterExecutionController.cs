@@ -13,11 +13,13 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
     {
         private readonly IEncounterExecutionService _encounterExecutionService;
         private readonly ISocialEncounterService _socialEncounterService;
+        private readonly IHiddenLocationEncounterService _hiddenLocationEncounterService;
 
-        public EncounterExecutionController(IEncounterExecutionService service, ISocialEncounterService socialEncounterService)
+        public EncounterExecutionController(IEncounterExecutionService service, ISocialEncounterService socialEncounterService, IHiddenLocationEncounterService hiddenLocationEncounterService)
         {
             _encounterExecutionService = service;
             _socialEncounterService = socialEncounterService;
+            _hiddenLocationEncounterService = hiddenLocationEncounterService;
         }
 
         [HttpGet]
@@ -63,6 +65,22 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
             return CreateResponse(execution);
         }
 
-        
+        [HttpGet("checkHidden/{executionId:int}/{encounterId:int}")]
+        public ActionResult<bool> GetBooleanValue(int executionId, int encounterId)
+        {
+            var result = _hiddenLocationEncounterService.CheckHiddenLocationEncounter(executionId, encounterId);
+
+            return Ok(result);
+        }
+
+        [HttpPut("completeExecution/{userId:int}")]
+        public ActionResult<bool> CompleteExecution(int userId)
+        {
+            _encounterExecutionService.CompleteEncounter(userId);
+            bool ret = true;
+            return Ok(ret);
+        }
+
+
     }
 }

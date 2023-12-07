@@ -16,4 +16,6 @@ public interface IHiddenLocationEncounterService
     Result<HiddenLocationEncounterDto> Update(HiddenLocationEncounterDto encounter);
     Result Delete(int id);
     public long GetId(long encounterId);
+    public Boolean CheckHiddenLocationEncounter(int executionId, int encounterId);
+    public HiddenLocationEncounterDto GetHiddenLocationEncounterByEncounter(int encounterId);
 }
