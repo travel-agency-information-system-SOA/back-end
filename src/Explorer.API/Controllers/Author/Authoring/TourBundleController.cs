@@ -54,7 +54,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 
         [HttpGet("publishedTourBundles")]  // dobavljanje svih publish-ovaih bundl-a
-        public ActionResult<PagedResult<BundlePayRecordDto>> GetAllPublishedTourBundles(int page, int pageSize)
+        public ActionResult<PagedResult<BundlePayRecordDto>> GetAllPublishedTourBundles([FromQuery] int page, [FromQuery] int pageSize)
         {
 
             var result = _tourBundleService.GetPublishedBundles(page, pageSize); //da dobavim sve publishovane bundles
