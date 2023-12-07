@@ -23,9 +23,9 @@ namespace Explorer.API.Controllers.Tourist.BundlePayRecord
             _bundlePayRecordService = bundlePaymentRecordService;
         }
 
-      
 
-        [HttpPost]   //vidi u publictourpointrequestController
+
+        [HttpPost("{tourBundleId:int}/{turistId:int}")]   //vidi u publictourpointrequestController
         public ActionResult<BundlePayRecordDto> TourBundlePurchase(int tourBundleId, int touristId)  //da li mi treba povratna vr uopste
         {
             var result = _bundlePayRecordService.BundlePurchase(tourBundleId, touristId);
