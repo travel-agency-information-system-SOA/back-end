@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author
 {
+
     [Route("api/administration/tourequipment")]
     public class TourEquipmentController : BaseApiController
     {
