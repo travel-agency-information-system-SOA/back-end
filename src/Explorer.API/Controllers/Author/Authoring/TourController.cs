@@ -123,7 +123,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [Authorize(Policy = "touristPolicy")]
+        //[Authorize(Policy = "touristPolicy")]
         [HttpGet("filteredTours")]
         public ActionResult<PagedResult<TourDTO>> FilterToursByPublicTourPoints(
         [FromQuery] string publicTourPoints,
