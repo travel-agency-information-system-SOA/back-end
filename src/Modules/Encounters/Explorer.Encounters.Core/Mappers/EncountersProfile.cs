@@ -2,6 +2,8 @@
 using Explorer.Blog.API.Dtos;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +36,6 @@ public class EncountersProfile : Profile
            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude));
 
-
+        CreateMap<TourKeyPointEncounterDto, TourKeyPointEncounter>().ReverseMap();
     }
 }

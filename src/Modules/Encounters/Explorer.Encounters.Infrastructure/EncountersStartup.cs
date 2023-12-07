@@ -27,12 +27,14 @@ public static class EncountersStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IEncounterService, EncounterService>();
+        services.AddScoped<ITourKeyPointEncounterService, TourKeyPointEncounterService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         
         services.AddScoped(typeof(ICrudRepository<Encounter>), typeof(CrudDatabaseRepository<Encounter, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<TourKeyPointEncounter>), typeof(CrudDatabaseRepository<TourKeyPointEncounter, EncountersContext>));
 
         services.AddDbContext<EncountersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),
