@@ -25,5 +25,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             var result = _userRepository.Get(userId);
             return MapToDto(result);
         }
-    }
+
+		public UserRole GetUserRole(int userId)
+		{
+			var result = _userRepository.Get(userId);
+			return result.Role;
+		}
+	}
 }

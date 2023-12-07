@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API;
 using Explorer.Tours.API.Dtos;
@@ -21,20 +22,23 @@ namespace Explorer.Tours.Core.UseCases.Authoring
     {
         private readonly IMapper _mapper;
         private readonly ITourRepository _repository;
-        public TourService(ICrudRepository<Tour> repository, ITourRepository tourRepository, IMapper mapper) : base(repository, mapper)
+		private readonly IUserService _userService;
+		public TourService(ICrudRepository<Tour> repository, ITourRepository tourRepository, IMapper mapper, IUserService userService) : base(repository, mapper)
         {
             _mapper = mapper;
             _repository = tourRepository;
+            _userService = userService;
         }
 
-        //metoda za dobavljanje tura i recenzija
+        //celi agregat se dobavlja
         public Result<PagedResult<TourDTO>> GetAll( int page, int pageSize)
         {
             var tours = _repository.GetAll( page, pageSize);
             return MapToDto(tours);
 
         }
-        public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
+
+		public Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize)
         {
             var tours = _repository.GetByUserId(userId, page, pageSize);
             return MapToDto(tours);
@@ -148,10 +152,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             }
         }
 
-        public Result SetTourCharacteristic(int tourId, int distance, TimeSpan duration, string transposrtType)
-        {
-            throw new NotImplementedException();
-        }
+      
     
 
         public Result ArchiveTour(int tourId)
@@ -182,15 +183,52 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 			}
 		}
 
-        
+        public Result<PagedResult<TourDTO>> GetAllPublishedByAuthor(int id, int page, int pageSize)
+        {
+            var tours = _repository.GetByUserId(id, page, pageSize);
+            var t = MapToDto(tours).Value;
+            var publishedTours = t.Results.Where(tour => tour.Status == TourStatus.Published.ToString()).ToList();
+            var filteredPagedResult = new PagedResult<TourDTO>(publishedTours, publishedTours.Count());
+            return Result.Ok(filteredPagedResult);
+        }
 
-		
-	}
+		public Result<PagedResult<TourDTO>> FilterToursByPublicTourPoints(PublicTourPointDto[] publicTourPoints, int page, int pageSize)
+		{
+			var tours = _repository.GetAll(page, pageSize).Results;
+			var helpingTours = new List<Tour>();
+
+			foreach (var tour in tours)
+			{
+
+				var role = _userService.GetUserRole(tour.UserId);
 
 
+				if (role == Stakeholders.API.Dtos.UserRole.Author)
+				{
+					helpingTours.Add(tour);
+				}
+			}
 
+			Console.WriteLine($"Number of Public Tour Points: {publicTourPoints.Length}");
 
+			var filteredTours = helpingTours
+				.Where(tour => tour.TourPoints.Any(tourPoint =>
+					publicTourPoints.Any(publicTp =>
+						publicTp.Latitude == tourPoint.Latitude && publicTp.Longitude == tourPoint.Longitude)))
+				.ToList();
 
+			var filteredPagedResult = new PagedResult<Tour>(filteredTours.DistinctBy(t => t.Id).ToList(), filteredTours.Count());
+			return MapToDto(filteredPagedResult);
+		}
 
+		public long GetLastTourId(int page, int pageSize)
+        {
+			var tours = _repository.GetAll(page, pageSize).Results;
 
+			var lastTourId = tours.OrderByDescending(tour => tour.Id).First().Id;
+
+			return lastTourId;
+
+		}
+    }
 }
