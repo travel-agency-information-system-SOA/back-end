@@ -15,6 +15,7 @@ public class EncountersContext : DbContext
 
     public DbSet<EncounterExecution> EncounterExecutions { get; set; }
     public DbSet<SocialEncounter> SocialEncounters { get; set; }
+    public DbSet<TourKeyPointEncounter> TourKeyPointEncounters { get; set; }
     public EncountersContext(DbContextOptions<EncountersContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

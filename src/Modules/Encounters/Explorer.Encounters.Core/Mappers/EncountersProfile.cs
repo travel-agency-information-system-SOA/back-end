@@ -71,5 +71,6 @@ public class EncountersProfile : Profile
            .ForMember(dest => dest.TouristIDs, opt => opt.MapFrom(src => src.TouristIDs));
 
 
+        CreateMap<TourKeyPointEncounterDto, TourKeyPointEncounter>().ReverseMap();
     }
 }

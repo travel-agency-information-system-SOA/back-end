@@ -9,6 +9,7 @@ using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.API.Public;
 using FluentResults;
 
 namespace Explorer.Encounters.Core.UseCases;
@@ -16,9 +17,13 @@ namespace Explorer.Encounters.Core.UseCases;
 public class EncounterExecutionService:CrudService<EncounterExecutionDto, EncounterExecution>, IEncounterExecutionService
 {
     private readonly IEncounterExecutionRepository _encounterExecutionRepository;
-    public EncounterExecutionService(ICrudRepository<EncounterExecution> crudRepository, IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper) : base(crudRepository, mapper)
+    private readonly ITouristXPService _touristXPService;
+    private readonly IEncounterService _encounterService;
+    public EncounterExecutionService(ICrudRepository<EncounterExecution> crudRepository, IEncounterService encounterService, IEncounterExecutionRepository encounterExecutionRepository, ITouristXPService touristXPService, IMapper mapper) : base(crudRepository, mapper)
     {
         _encounterExecutionRepository = encounterExecutionRepository;
+        _touristXPService = touristXPService;
+        _encounterService = encounterService;
     }
 
     public List<EncounterExecutionDto> GetExecutionsByEncounter(int encounterId)
@@ -74,7 +79,9 @@ public class EncounterExecutionService:CrudService<EncounterExecutionDto, Encoun
         EncounterExecutionDto execution = GetExecutionByUser(Convert.ToInt32(userId)).Value;
         execution.CompletionTime = DateTime.UtcNow;
         execution.IsCompleted = true;
-        
+        EncounterDto encounterDto = new EncounterDto();
+        encounterDto = _encounterService.GetEncounter(Convert.ToInt32(execution.EncounterId));
+        _touristXPService.AddExperience(Convert.ToInt32(userId), encounterDto.XpPoints);
         _encounterExecutionRepository.Update(MapToDomain(execution));
         return execution;
     }
