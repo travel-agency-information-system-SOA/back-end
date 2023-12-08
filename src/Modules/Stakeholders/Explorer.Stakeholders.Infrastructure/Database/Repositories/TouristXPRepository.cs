@@ -41,6 +41,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
                     }
                 }
             }
+            _context.SaveChanges();
             return touristXP;
         }
     }
