@@ -15,4 +15,7 @@ public interface IEncounterService
     Result<EncounterDto> Create(EncounterDto encounter);
     Result<EncounterDto> Update(EncounterDto encounter);
     Result Delete(int id);
+    public EncounterDto GetEncounter(int encounterId);
+    public double CalculateDistance(double userLat, double userLon, double pointLat, double pointLon);
+    public Result<EncounterDto> GetEncounterById(int encounterId);
 }
