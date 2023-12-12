@@ -39,7 +39,14 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             var result = _shoppingCartService.RemoveOrderItem(cartId, tourId);
             return CreateResponse(result);
         }
-        
+
+        [HttpPut("update")]
+        public ActionResult<ShoppingCartDto> Update([FromBody] ShoppingCartDto shoppingCartDto)
+        {
+            var result = _shoppingCartService.Update(shoppingCartDto);
+            return CreateResponse(result);
+        }
+
 
     }
 }

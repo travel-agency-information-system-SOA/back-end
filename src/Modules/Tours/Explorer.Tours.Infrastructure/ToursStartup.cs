@@ -18,6 +18,7 @@ using Explorer.Tours.Infrastructure.Database;
 using Explorer.Tours.Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Explorer.Tours.Core.Domain.TourBundle;
 
 namespace Explorer.Tours.Infrastructure;
 
@@ -63,7 +64,7 @@ public static class ToursStartup
         services.AddScoped<IProblemMessageService, ProblemMessageService>();
 
         //services.AddScoped<IInternalTourService, TourService>();
-
+        services.AddScoped<ITourBundleService, TourBundleService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -107,7 +108,7 @@ public static class ToursStartup
 
 
         services.AddScoped(typeof(ICrudRepository<ProblemMessage>), typeof(CrudDatabaseRepository<ProblemMessage, ToursContext>));
-
+        services.AddScoped(typeof(ICrudRepository<TourBundle>), typeof(CrudDatabaseRepository<TourBundle, ToursContext>));
 
 
 

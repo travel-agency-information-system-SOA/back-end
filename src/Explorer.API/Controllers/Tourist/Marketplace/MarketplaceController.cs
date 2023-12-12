@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Tourist.Marketplace
 {
 
-    [Authorize(Policy = "touristPolicy")]
+    //[Authorize(Policy = "touristPolicy")]
     [Route("api/marketplace")]
     public class MarketplaceController : BaseApiController
     {
