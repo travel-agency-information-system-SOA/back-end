@@ -24,12 +24,15 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         private readonly ITourExecutionRepository _repository;
         private readonly ITourRepository _tourRepository;
         private readonly IUserMileageService _userMileageService;
-        public TourExecutionService(ICrudRepository<TourExecution> crudRepository, IMapper mapper, ITourExecutionRepository tourExecutionRepository, ITourRepository tourRepository, IUserMileageService userMileageService) : base(crudRepository, mapper)
+        private readonly IUserTourMileageService _userTourMileageService;
+        public TourExecutionService(ICrudRepository<TourExecution> crudRepository, IMapper mapper, ITourExecutionRepository tourExecutionRepository, ITourRepository tourRepository, IUserMileageService userMileageService, IUserTourMileageService userTourMileageService) : base(crudRepository, mapper)
         {
             _mapper = mapper;
             _repository = tourExecutionRepository;
             _tourRepository = tourRepository;
             _userMileageService = userMileageService;
+            _userTourMileageService = userTourMileageService;
+            
         }
 
         public Result<TourExecutionDto> GetById(int tourExecutionId)
@@ -144,7 +147,10 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
 
             if(executionDto.Status != "Completed")
             {
+                
                 _userMileageService.AddMileage(execution.UserId, executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance);
+                _userTourMileageService.CreateInstance(execution.UserId,executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance,DateTime.UtcNow);
+
             }
             UpdateStatus(tourExecutionId, "Completed");
 

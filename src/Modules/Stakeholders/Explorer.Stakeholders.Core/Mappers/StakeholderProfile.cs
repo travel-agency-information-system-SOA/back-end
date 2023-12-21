@@ -24,6 +24,7 @@ public class StakeholderProfile : Profile
 
         CreateMap<TouristXPDto, TouristXP>().ReverseMap();
         CreateMap<UserMileageDto, UserMileage>().ReverseMap();
+        CreateMap<UserTourMileageDto, UserTourMileage>().ReverseMap();
 
     }
 }

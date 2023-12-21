@@ -19,6 +19,7 @@ public class StakeholdersContext : DbContext
 
     public DbSet<TouristXP> TouristXP { get; set; }
     public DbSet<UserMileage> UserMileages { get; set; }
+    public DbSet<UserTourMileage> UserTourMileages { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
