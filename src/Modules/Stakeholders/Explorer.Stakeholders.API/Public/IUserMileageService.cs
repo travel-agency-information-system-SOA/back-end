@@ -14,5 +14,8 @@ namespace Explorer.Stakeholders.API.Public
         public void AddMileage(int userId, double mileage);
         public Result<UserMileageDto> GetMileageByUser(int userId);
         public PagedResult<UserMileageDto> GetAllSorted();
+        public PagedResult<UserMileageDto> GetAllSortedByMonth();
+        public void UpdateMileageByMonth(int userId);
+        public void UpdateAllUserMileages();
     }
 }

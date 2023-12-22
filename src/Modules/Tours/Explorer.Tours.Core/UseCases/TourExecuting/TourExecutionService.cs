@@ -150,6 +150,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
                 
                 _userMileageService.AddMileage(execution.UserId, executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance);
                 _userTourMileageService.CreateInstance(execution.UserId,executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance,DateTime.UtcNow);
+                _userMileageService.UpdateMileageByMonth(execution.UserId);
 
             }
             UpdateStatus(tourExecutionId, "Completed");

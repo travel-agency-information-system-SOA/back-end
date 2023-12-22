@@ -23,6 +23,15 @@ namespace Explorer.API.Controllers.Tourist.Statistics
             return CreateResponse(result);
         }
 
+        [HttpGet("getByUser/{userId:int}")]
+        public ActionResult<PagedResult<UserTourMileageDto>> GetRecentMileageByUser(int userId)
+        {
+            var mileages = _userTourMileageService.GetRecentMileageByUser(userId);
+            return mileages;
+        }
+
+        
+
 
     }
 }

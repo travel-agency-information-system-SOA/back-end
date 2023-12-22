@@ -17,9 +17,13 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class UserMileageService : CrudService<UserMileageDto, UserMileage>, IUserMileageService
     {
         private readonly IUserMileageRepository _userMileageRepository;
-        public UserMileageService(ICrudRepository<UserMileage> crudRepository, IMapper mapper, IUserMileageRepository userMileageRepository) : base(crudRepository, mapper)
+        private readonly IUserTourMileageService _userTourMileageService;
+        private readonly IUserService _userService;
+        public UserMileageService(ICrudRepository<UserMileage> crudRepository, IMapper mapper, IUserMileageRepository userMileageRepository, IUserTourMileageService userTourMileageService, IUserService userService) : base(crudRepository, mapper)
         {
             _userMileageRepository = userMileageRepository;
+            _userTourMileageService = userTourMileageService;
+            _userService = userService; 
         }
 
         public void AddMileage(int userId, double mileage)
@@ -27,9 +31,36 @@ namespace Explorer.Stakeholders.Core.UseCases
             var mileages = CrudRepository.GetPaged(0, 0).Results;
             var userMileage = mileages.Where(m => m.UserId == userId).FirstOrDefault();
             var userMileageDto = MapToDto(userMileage);
-
+            
             userMileageDto.Mileage += mileage;
             _userMileageRepository.Update(MapToDomain(userMileageDto));
+        }
+
+        public void UpdateMileageByMonth(int userId)
+        {
+            double mileage = 0;
+            var mileages = CrudRepository.GetPaged(0, 0).Results;
+            var userMileage = mileages.Where(m => m.UserId == userId).FirstOrDefault();
+            var userMileageDto = MapToDto(userMileage);
+
+            var userTourMileageDtos = _userTourMileageService.GetRecentMileageByUser(userId);
+            foreach(var m in userTourMileageDtos.Results)
+            {
+               mileage+= m.TourMileage;
+            }
+            userMileageDto.MileageByMonth=mileage;
+            _userMileageRepository.Update(MapToDomain(userMileageDto));
+
+
+        }
+
+        public void UpdateAllUserMileages()
+        {
+            var mileages = CrudRepository.GetPaged(0,0).Results;
+            foreach(var mileage in  mileages)
+            {
+                UpdateMileageByMonth(mileage.UserId);
+            }
         }
 
         public Result<UserMileageDto> GetMileageByUser(int userId)
@@ -54,8 +85,23 @@ namespace Explorer.Stakeholders.Core.UseCases
 
 
             return new PagedResult<UserMileageDto>(sortedMileageDtos, sortedMileages.Count());
-        }   
+        }
 
-        
+        public PagedResult<UserMileageDto> GetAllSortedByMonth()
+        {
+            var mileages = CrudRepository.GetPaged(0, 0).Results;
+            var sortedMileages = mileages.OrderByDescending(m => m.MileageByMonth).ToList();
+            List<UserMileageDto> sortedMileageDtos = new List<UserMileageDto>();
+            foreach (var m in sortedMileages)
+            {
+                var mDto = MapToDto(m);
+                sortedMileageDtos.Add(mDto);
+            }
+
+
+            return new PagedResult<UserMileageDto>(sortedMileageDtos, sortedMileages.Count());
+        }
+
+
     }
 }
