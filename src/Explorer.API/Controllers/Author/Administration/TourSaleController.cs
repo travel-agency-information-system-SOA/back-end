@@ -48,7 +48,7 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         //salje turu prima popust
-        [Authorize(Policy = "authorPolicy")]
+        //[Authorize(Policy = "authorPolicy")]
         [HttpGet("tour/{id:int}")]
         public ActionResult<int> GetDiscount(int id)
         {
