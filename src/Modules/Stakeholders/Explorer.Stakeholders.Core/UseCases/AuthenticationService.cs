@@ -4,6 +4,8 @@ using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Explorer.Stakeholders.Core.UseCases;
 
@@ -23,9 +25,8 @@ public class AuthenticationService : IAuthenticationService
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
     {
         var user = _userRepository.GetActiveByName(credentials.Username);
-        if (user == null || credentials.Password != user.Password) return Result.Fail(FailureCode.NotFound);
+        if (user == null || !VerifyPassword(credentials.Password, user.Password)) return Result.Fail(FailureCode.NotFound);
 
-        var userRole = user.Role;
         long personId;
         try
         {
@@ -44,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-            var user = _userRepository.Create(new User(account.Username, account.Password, UserRole.Tourist, true));
+            var user = _userRepository.Create(new User(account.Username, SetPassword(account.Password), UserRole.Tourist, true));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, "", "", ""));
 
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
@@ -53,6 +54,38 @@ public class AuthenticationService : IAuthenticationService
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             // There is a subtle issue here. Can you find it?
+        }
+    }
+
+    private string SetPassword(string password)
+    {
+        if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Password cannot be empty");
+
+        string PasswordHash;
+
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            // Compute hash
+            byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            // Convert to base64 string
+            PasswordHash = Convert.ToBase64String(hashedBytes);
+        }
+
+        return PasswordHash;
+    }
+
+    private bool VerifyPassword(string enteredPassword, string userPassword)
+    {
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            // Compute hash
+            byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(enteredPassword));
+
+            // Convert to base64 string
+            string enteredPasswordHash = Convert.ToBase64String(hashedBytes);
+
+            return enteredPasswordHash == userPassword;
         }
     }
 }
