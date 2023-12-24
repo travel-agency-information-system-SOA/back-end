@@ -45,8 +45,12 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-            var user = _userRepository.Create(new User(account.Username, SetPassword(account.Password), UserRole.Tourist, true));
+            string verificationToken = GenerateUniqueVerificationToken();
+            var user = _userRepository.Create(new User(account.Username, SetPassword(account.Password), UserRole.Tourist, false, verificationToken));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, "", "", ""));
+
+            var emailSender = new EmailSenderService();
+            emailSender.SendVerificationEmail(person.Email, verificationToken);
 
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
         }
@@ -65,10 +69,8 @@ public class AuthenticationService : IAuthenticationService
 
         using (SHA256 sha256 = SHA256.Create())
         {
-            // Compute hash
             byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            // Convert to base64 string
             PasswordHash = Convert.ToBase64String(hashedBytes);
         }
 
@@ -79,13 +81,24 @@ public class AuthenticationService : IAuthenticationService
     {
         using (SHA256 sha256 = SHA256.Create())
         {
-            // Compute hash
             byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(enteredPassword));
 
-            // Convert to base64 string
             string enteredPasswordHash = Convert.ToBase64String(hashedBytes);
 
             return enteredPasswordHash == userPassword;
         }
+    }
+
+    private string GenerateUniqueVerificationToken()
+    {
+        byte[] tokenBytes = new byte[32];
+        using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(tokenBytes);
+        }
+
+        string verificationToken = BitConverter.ToString(tokenBytes).Replace("-", "").ToLower();
+
+        return verificationToken;
     }
 }

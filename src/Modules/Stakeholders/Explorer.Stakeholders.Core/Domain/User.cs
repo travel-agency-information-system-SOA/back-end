@@ -9,13 +9,15 @@ public class User : Entity
     public string Password { get; private set; }
     public UserRole Role { get; private set; }
     public bool IsActive { get; set; }
+    public string VerificationToken { get; private set; }
 
-    public User(string username, string password, UserRole role, bool isActive)
+    public User(string username, string password, UserRole role, bool isActive, string verificationToken)
     {
         Username = username;
         Password = password;
         Role = role;
         IsActive = isActive;
+        VerificationToken = verificationToken;
         Validate();
     }
 

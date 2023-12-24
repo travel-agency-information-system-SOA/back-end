@@ -3,15 +3,18 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+using System;
+using System.Diagnostics;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class UserService : BaseService<UserDto, User>, IUserService
     {
-        private readonly ICrudRepository<User> _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(ICrudRepository<User> userRepository, IMapper mapper) : base(mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper) : base(mapper)
         {
             _userRepository = userRepository;
         }
@@ -19,13 +22,28 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<UserDto> Get(int userId)
         {
             var result = _userRepository.Get(userId);
+            if (result == null)
+            {
+                return Result.Fail("User not found");
+            }
             return MapToDto(result);
         }
 
         public UserRole GetUserRole(int userId)
         {
             var result = _userRepository.Get(userId);
-            return result.Role;
+            return result == null ? throw new Exception("User not found") : result.Role;
+        }
+
+        public Result<UserDto> ConfirmRegistration(string verificationToken)
+        {
+            var user = _userRepository.GetUserByToken(verificationToken);
+            Debug.WriteLine(verificationToken);
+            if (user == null) return Result.Fail(FailureCode.NotFound);
+            user.IsActive = true;
+            Debug.WriteLine(user.IsActive.ToString());
+            var updatedUser = _userRepository.Update(user);
+            return MapToDto(updatedUser);
         }
     }
 }

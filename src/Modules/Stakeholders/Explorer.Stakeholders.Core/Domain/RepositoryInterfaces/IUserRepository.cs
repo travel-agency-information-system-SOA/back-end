@@ -10,4 +10,5 @@ public interface IUserRepository
     User Update(User user);
     long GetPersonId(long userId);
     string GetPersonEmail(long userId);
+    User? GetUserByToken(string verificationToken);
 }
