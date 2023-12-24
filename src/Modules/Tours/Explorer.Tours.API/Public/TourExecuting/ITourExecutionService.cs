@@ -21,5 +21,6 @@ namespace Explorer.Tours.API.Public.TourExecuting
         public Result<TourExecutionDto> Create(int userId, int tourId, double longitude, double latitude);
         public Result<PagedResult<TourExecutionDto>> GetAll(int page, int pageSize);
         public Result<PagedResult<TourPointExecutionDto>> GetPointsByExecution(int executionId);
+        public List<TourExecutionDto> GetExecutionsByUser(int userId);
     }
 }
