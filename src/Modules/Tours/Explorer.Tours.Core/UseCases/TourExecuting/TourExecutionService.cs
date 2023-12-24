@@ -25,14 +25,15 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         private readonly ITourRepository _tourRepository;
         private readonly IUserMileageService _userMileageService;
         private readonly IUserTourMileageService _userTourMileageService;
-        public TourExecutionService(ICrudRepository<TourExecution> crudRepository, IMapper mapper, ITourExecutionRepository tourExecutionRepository, ITourRepository tourRepository, IUserMileageService userMileageService, IUserTourMileageService userTourMileageService) : base(crudRepository, mapper)
+        private readonly ITouristXPService _touristXPService;
+        public TourExecutionService(ICrudRepository<TourExecution> crudRepository, IMapper mapper, ITourExecutionRepository tourExecutionRepository, ITourRepository tourRepository, IUserMileageService userMileageService, IUserTourMileageService userTourMileageService, ITouristXPService touristXPService) : base(crudRepository, mapper)
         {
             _mapper = mapper;
             _repository = tourExecutionRepository;
             _tourRepository = tourRepository;
             _userMileageService = userMileageService;
             _userTourMileageService = userTourMileageService;
-            
+            _touristXPService = touristXPService;
         }
 
         public Result<TourExecutionDto> GetById(int tourExecutionId)
@@ -151,7 +152,8 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
                 _userMileageService.AddMileage(execution.UserId, executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance);
                 _userTourMileageService.CreateInstance(execution.UserId,executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance,DateTime.UtcNow);
                 _userMileageService.UpdateMileageByMonth(execution.UserId);
-
+                int xpAmount = Convert.ToInt32(executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance) * 10;
+                _touristXPService.AddExperience(execution.UserId, xpAmount);
             }
             UpdateStatus(tourExecutionId, "Completed");
 

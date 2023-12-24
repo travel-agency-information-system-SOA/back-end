@@ -69,6 +69,9 @@ namespace Explorer.Stakeholders.Core.UseCases
             var userMileage = mileages.Where(m => m.UserId == userId).FirstOrDefault();
             var userMileageDto = MapToDto(userMileage);
 
+            var user = _userService.Get(userMileage.UserId);
+            userMileageDto.Username = user.Value.Username;
+
             return userMileageDto;
         }
 
@@ -80,6 +83,8 @@ namespace Explorer.Stakeholders.Core.UseCases
             foreach(var m in sortedMileages)
             {
                 var mDto = MapToDto(m);
+                var user = _userService.Get(mDto.UserId);
+                mDto.Username = user.Value.Username;
                 sortedMileageDtos.Add(mDto);
             }
 
@@ -95,6 +100,8 @@ namespace Explorer.Stakeholders.Core.UseCases
             foreach (var m in sortedMileages)
             {
                 var mDto = MapToDto(m);
+                var user = _userService.Get(mDto.UserId);
+                mDto.Username = user.Value.Username;
                 sortedMileageDtos.Add(mDto);
             }
 

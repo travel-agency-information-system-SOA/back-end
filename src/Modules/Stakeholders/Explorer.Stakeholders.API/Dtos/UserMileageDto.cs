@@ -11,6 +11,8 @@ namespace Explorer.Stakeholders.API.Dtos
         public int Id { get; set; }
         public double Mileage { get; set; }
         public double MileageByMonth { get; set; }
+        public int UserId { get; set; }
+        public string Username { get; set; }
 
     }
 }
