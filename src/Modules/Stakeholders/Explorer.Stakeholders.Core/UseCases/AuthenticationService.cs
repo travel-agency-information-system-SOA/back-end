@@ -13,9 +13,9 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
-    private readonly ICrudRepository<Person> _personRepository;
+    private readonly IPersonRepository _personRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator)
+    public AuthenticationService(IUserRepository userRepository, IPersonRepository personRepository, ITokenGenerator tokenGenerator)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
@@ -42,7 +42,7 @@ public class AuthenticationService : IAuthenticationService
     public Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account)
     {
         if(_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
-        // TODO: Check if Email is already in use
+        if(_personRepository.Exists(account.Email)) return Result.Fail("Email already in use");
 
         try
         {
