@@ -39,7 +39,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             var user = _userRepository.GetUserByToken(verificationToken);
             if (user == null) return Result.Fail(FailureCode.NotFound);
-            if (user.IsActive) return Result.Fail(FailureCode.Conflict);
+            if (user.IsActive) return Result.Fail("User is already active");
             user.IsActive = true;
             var updatedUser = _userRepository.Update(user);
             return MapToDto(updatedUser);

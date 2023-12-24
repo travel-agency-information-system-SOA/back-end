@@ -22,12 +22,10 @@ namespace Explorer.API.Controllers
         }
 
         [HttpGet("confirm-account")]
-        public ActionResult<string> ConfirmRegistration(string token)
+        public ActionResult<UserDto> ConfirmRegistration(string token)
         {
             var result = _userService.ConfirmRegistration(token);
-            return (result != null)
-                ? Ok("Success: The registration was confirmed.")
-                : BadRequest("Error: Unable to confirm registration.");
+            return CreateResponse(result);
         }
     }
 }
