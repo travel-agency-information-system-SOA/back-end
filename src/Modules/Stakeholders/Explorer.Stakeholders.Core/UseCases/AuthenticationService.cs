@@ -42,6 +42,7 @@ public class AuthenticationService : IAuthenticationService
     public Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account)
     {
         if(_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
+        // TODO: Check if Email is already in use
 
         try
         {

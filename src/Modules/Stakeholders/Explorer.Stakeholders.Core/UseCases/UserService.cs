@@ -38,10 +38,9 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<UserDto> ConfirmRegistration(string verificationToken)
         {
             var user = _userRepository.GetUserByToken(verificationToken);
-            Debug.WriteLine(verificationToken);
             if (user == null) return Result.Fail(FailureCode.NotFound);
+            if (user.IsActive) return Result.Fail(FailureCode.Conflict);
             user.IsActive = true;
-            Debug.WriteLine(user.IsActive.ToString());
             var updatedUser = _userRepository.Update(user);
             return MapToDto(updatedUser);
         }

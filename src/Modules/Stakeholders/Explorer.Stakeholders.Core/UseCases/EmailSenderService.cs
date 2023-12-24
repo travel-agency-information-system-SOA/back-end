@@ -16,7 +16,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                     smtpClient.Credentials = new NetworkCredential("pswexplorer@gmail.com", "eqvw sehe rgzf nzzp");
 
                     string subject = "Verify Your Email";
-                    string verificationLink = $"http://localhost:4200/api/user/confirm-account?token={verificationToken}";
+                    string verificationLink = $"http://localhost:4200/confirm?token={verificationToken}";
                     string body = $"Click the following link to verify your email: {verificationLink}";
 
                     MailMessage mailMessage = new MailMessage
