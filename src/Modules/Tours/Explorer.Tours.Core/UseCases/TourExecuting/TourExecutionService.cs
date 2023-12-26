@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.API.Public.Administration;
@@ -250,6 +251,34 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             var pointsDtoPagedResult = new PagedResult<TourPointExecutionDto>(pointsDto.ToList(), pointsDto.Count());
 
             return pointsDtoPagedResult;
+        }
+
+        public bool IsTourStarted(int tourId) {
+
+            var executions = CrudRepository.GetPaged(0, 0).Results;
+            List<TourExecutionDto> executionDtos = new List<TourExecutionDto>();
+            foreach (var execution in executions)
+            {
+                if (execution.Status==TourExecutionStatus.InProgress && execution.TourId==tourId)
+                {
+                    return true;
+                }
+               
+            }
+            return false;
+        }
+        public bool IsTourFinished(int tourId) {
+            var executions = CrudRepository.GetPaged(0, 0).Results;
+            List<TourExecutionDto> executionDtos = new List<TourExecutionDto>();
+            foreach (var execution in executions)
+            {
+                if (execution.Status == TourExecutionStatus.Completed && execution.TourId==tourId)
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
     }
 }
