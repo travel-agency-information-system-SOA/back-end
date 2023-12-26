@@ -21,6 +21,8 @@ public class StakeholdersContext : DbContext
     public DbSet<UserMileage> UserMileages { get; set; }
     public DbSet<UserTourMileage> UserTourMileages { get; set; }
 
+    public DbSet<PasswordReset> PasswordResets { get; set; }
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,5 +40,10 @@ public class StakeholdersContext : DbContext
             .HasOne<User>()
             .WithOne()
             .HasForeignKey<Person>(s => s.UserId);
+
+        modelBuilder.Entity<PasswordReset>()
+            .HasOne<User>()
+            .WithOne()
+            .HasForeignKey<PasswordReset>(s => s.UserId);
     }
 }

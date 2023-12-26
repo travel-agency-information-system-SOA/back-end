@@ -54,6 +54,7 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Person>), typeof(CrudDatabaseRepository<Person, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
+        services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped<ITourPointRequestRepository, TourPointRequestRepository>();
         services.AddScoped<ITourObjectRequestRepository, TourObjectRequestRepository>();
         services.AddScoped(typeof(ICrudRepository<AppRating>), typeof(CrudDatabaseRepository<AppRating,StakeholdersContext>));
@@ -71,6 +72,8 @@ public static class StakeholdersStartup
         services.AddScoped<IUserMileageRepository, UserMileageRepository>();
         services.AddScoped(typeof(ICrudRepository<UserTourMileage>), typeof(CrudDatabaseRepository<UserTourMileage, StakeholdersContext>));
 
+
+        services.AddScoped<IPasswordResetRepository, PasswordResetDatabaseRepository>();
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

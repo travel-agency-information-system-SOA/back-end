@@ -20,5 +20,12 @@ namespace Explorer.API.Controllers
             var result = _userService.Get(userId);
             return CreateResponse(result);
         }
+
+        [HttpGet("confirm-account")]
+        public ActionResult<UserDto> ConfirmRegistration(string token)
+        {
+            var result = _userService.ConfirmRegistration(token);
+            return CreateResponse(result);
+        }
     }
 }
