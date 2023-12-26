@@ -11,6 +11,10 @@ namespace Explorer.Tours.API.Public.Administration
 {
     public interface ITourStatisticsService
     {
-        public int GetPurchasedToursByAuthor(int authorId);
+        public int GetNumberOfPurchaseByAuthor(int authorId);
+
+        public int GetNumberOfCompletedByAuthor(int authorId);
+
+        public int GetNumberOfStartedByAuthor(int authorId);
     }
 }

@@ -23,5 +23,21 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
+        [HttpGet("getCompletedNumber")]
+        public int GetNumberOfCompletedByAuthor(int authorId)
+        {
+            var result = _tourStatisticsService.GetNumberOfCompletedByAuthor(authorId);
+
+            return result;
+        }
+
+        [HttpGet("getStartedNumber")]
+        public int GetNumberOfStartedByAuthor(int authorId)
+        {
+            var result = _tourStatisticsService.GetNumberOfStartedByAuthor(authorId);
+
+            return result;
+        }
+
     }
 }
