@@ -18,6 +18,8 @@ public class StakeholdersContext : DbContext
     public DbSet<UserPosition> UserPositions { get; set; }
 
     public DbSet<TouristXP> TouristXP { get; set; }
+    public DbSet<UserMileage> UserMileages { get; set; }
+    public DbSet<UserTourMileage> UserTourMileages { get; set; }
 
     public DbSet<PasswordReset> PasswordResets { get; set; }
 

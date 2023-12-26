@@ -45,6 +45,8 @@ public static class StakeholdersStartup
         services.AddScoped<IUserPositionService, UserPositionService>();
         services.AddScoped<IInternalUserService, InternalUserService>();
         services.AddScoped<ITouristXPService, TouristXPService>();
+        services.AddScoped<IUserMileageService, UserMileageService>();
+        services.AddScoped<IUserTourMileageService, UserTourMileageService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -66,6 +68,10 @@ public static class StakeholdersStartup
         services.AddScoped<IUserPositionRepository, UserPositionRepository>();
         services.AddScoped<ITouristXPRepository, TouristXPRepository>();
         services.AddScoped(typeof(ICrudRepository<TouristXP>), typeof(CrudDatabaseRepository<TouristXP, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<UserMileage>), typeof(CrudDatabaseRepository<UserMileage, StakeholdersContext>));
+        services.AddScoped<IUserMileageRepository, UserMileageRepository>();
+        services.AddScoped(typeof(ICrudRepository<UserTourMileage>), typeof(CrudDatabaseRepository<UserTourMileage, StakeholdersContext>));
+
 
         services.AddScoped<IPasswordResetRepository, PasswordResetDatabaseRepository>();
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourExecutionsDTO;
 using Explorer.Tours.API.Public.Administration;
@@ -22,11 +23,17 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         private readonly IMapper _mapper;
         private readonly ITourExecutionRepository _repository;
         private readonly ITourRepository _tourRepository;
-        public TourExecutionService(ICrudRepository<TourExecution> crudRepository, IMapper mapper, ITourExecutionRepository tourExecutionRepository, ITourRepository tourRepository) : base(crudRepository, mapper)
+        private readonly IUserMileageService _userMileageService;
+        private readonly IUserTourMileageService _userTourMileageService;
+        private readonly ITouristXPService _touristXPService;
+        public TourExecutionService(ICrudRepository<TourExecution> crudRepository, IMapper mapper, ITourExecutionRepository tourExecutionRepository, ITourRepository tourRepository, IUserMileageService userMileageService, IUserTourMileageService userTourMileageService, ITouristXPService touristXPService) : base(crudRepository, mapper)
         {
             _mapper = mapper;
             _repository = tourExecutionRepository;
             _tourRepository = tourRepository;
+            _userMileageService = userMileageService;
+            _userTourMileageService = userTourMileageService;
+            _touristXPService = touristXPService;
         }
 
         public Result<TourExecutionDto> GetById(int tourExecutionId)
@@ -129,6 +136,7 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             var execution = _repository.GetById(tourExecutionId);
 
             TourExecutionDto executionDto = MapToDto(execution);
+            LoadTour(executionDto);
 
             foreach (TourPointExecutionDto point in executionDto.TourPoints)
             {
@@ -138,10 +146,38 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
                 }
             }
 
+            if(executionDto.Status != "Completed")
+            {
+                
+                _userMileageService.AddMileage(execution.UserId, executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance);
+                _userTourMileageService.CreateInstance(execution.UserId,executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance,DateTime.UtcNow);
+                _userMileageService.UpdateMileageByMonth(execution.UserId);
+                int xpAmount = Convert.ToInt32(executionDto.Tour.TourCharacteristics.FirstOrDefault().Distance) * 10;
+                _touristXPService.AddExperience(execution.UserId, xpAmount);
+            }
             UpdateStatus(tourExecutionId, "Completed");
+
 
             return true;
         }
+
+        public List<TourExecutionDto> GetExecutionsByUser(int userId)
+        {
+            var executions = CrudRepository.GetPaged(0, 0).Results;
+            List<TourExecutionDto> executionDtos = new List<TourExecutionDto>();
+            foreach(var execution in executions)
+            {
+                if(execution.UserId == userId)
+                {
+                    var executionDto = MapToDto(execution);
+                    LoadTour(executionDto);
+                    executionDtos.Add(executionDto);
+                }
+            }
+
+            return executionDtos;
+        }
+
 
         public double CalculateDistance(double userLat, double userLon, double pointLat, double pointLon)
         {
