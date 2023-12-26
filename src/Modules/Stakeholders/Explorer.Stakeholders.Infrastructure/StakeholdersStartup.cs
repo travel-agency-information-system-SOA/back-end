@@ -67,6 +67,8 @@ public static class StakeholdersStartup
         services.AddScoped<ITouristXPRepository, TouristXPRepository>();
         services.AddScoped(typeof(ICrudRepository<TouristXP>), typeof(CrudDatabaseRepository<TouristXP, StakeholdersContext>));
 
+        services.AddScoped<IPasswordResetRepository, PasswordResetDatabaseRepository>();
+
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));

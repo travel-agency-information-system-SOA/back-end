@@ -14,12 +14,14 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
     private readonly IPersonRepository _personRepository;
+    private readonly IPasswordResetRepository _passwordResetRepository;
 
-    public AuthenticationService(IUserRepository userRepository, IPersonRepository personRepository, ITokenGenerator tokenGenerator)
+    public AuthenticationService(IUserRepository userRepository, IPersonRepository personRepository, ITokenGenerator tokenGenerator, IPasswordResetRepository passwordResetRepository)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
+        _passwordResetRepository = passwordResetRepository;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -60,6 +62,45 @@ public class AuthenticationService : IAuthenticationService
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             // There is a subtle issue here. Can you find it?
         }
+    }
+
+    public Result<string> RequestPasswordReset(string mail)
+    {
+        var person = _personRepository.GetByEmail(mail);
+        if (person == null) return Result.Fail("Email not found");
+        var user = _userRepository.Get(person.UserId);
+        if (user == null) return Result.Fail("User not found");
+
+        var token = Guid.NewGuid().ToString();
+        var resetEntry = new PasswordReset(user.Id, token, DateTime.UtcNow.AddMinutes(15));
+
+        var oldResetEntry = _passwordResetRepository.GetByUserId(user.Id);
+        if (oldResetEntry != null)
+        {
+            _passwordResetRepository.Delete(oldResetEntry);
+        }
+
+        _passwordResetRepository.Create(resetEntry);
+
+        var emailSender = new EmailSenderService();
+        emailSender.SendPasswordResetEmail(person.Email, token);
+
+        return Result.Ok("Request sent");
+    }
+
+    public Result<string> ResetPassword(PasswordResetDto request)
+    {
+        var resetEntry = _passwordResetRepository.ValidateToken(request.Token);
+        if (resetEntry == null) return Result.Fail("Invalid or expired token");
+
+        var user = _userRepository.Get(resetEntry.UserId);
+        if (user == null) return Result.Fail("User not found");
+        user.Password = SetPassword(request.Password);
+        var savedUser = _userRepository.Update(user);
+
+        _passwordResetRepository.Delete(resetEntry);
+
+        return Result.Ok("Password reset");
     }
 
     private string SetPassword(string password)

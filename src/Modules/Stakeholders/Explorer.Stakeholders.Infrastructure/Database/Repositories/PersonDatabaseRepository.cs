@@ -27,6 +27,11 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             return _dbContext.People.FirstOrDefault(person => person.Id == personId);
         }
 
+        public Person? GetByEmail(string mail)
+        {
+            return _dbContext.People.FirstOrDefault(person => person.Email == mail);
+        }
+
         public Person Create(Person person)
         {
             _dbContext.People.Add(person);
