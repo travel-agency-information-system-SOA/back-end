@@ -16,5 +16,10 @@ namespace Explorer.Tours.API.Public.Administration
         public int GetNumberOfCompletedByAuthor(int authorId);
 
         public int GetNumberOfStartedByAuthor(int authorId);
+
+        public int GetNumberOfPurchaseByTour(int authorId, int tourId);
+
+        public int GetNumberOfStartedByTour(int authorId, int tourId);
+        public int GetNumberOfCompletedByTour(int authorId, int tourId);
     }
 }

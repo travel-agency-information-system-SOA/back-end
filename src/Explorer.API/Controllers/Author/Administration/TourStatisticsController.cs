@@ -15,7 +15,7 @@ namespace Explorer.API.Controllers.Author.Administration
             _tourStatisticsService = tourStatisticsService;
         }
 
-        [HttpGet("getPurchasedNumber")]
+        [HttpGet("getAllPurchasedNumber")]
         public int GetNumberOfPurchaseByAuthor(int authorId)
         {
             var result = _tourStatisticsService.GetNumberOfPurchaseByAuthor(authorId);
@@ -23,7 +23,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
-        [HttpGet("getCompletedNumber")]
+        [HttpGet("getAllCompletedNumber")]
         public int GetNumberOfCompletedByAuthor(int authorId)
         {
             var result = _tourStatisticsService.GetNumberOfCompletedByAuthor(authorId);
@@ -31,10 +31,34 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
-        [HttpGet("getStartedNumber")]
+        [HttpGet("getAllStartedNumber")]
         public int GetNumberOfStartedByAuthor(int authorId)
         {
             var result = _tourStatisticsService.GetNumberOfStartedByAuthor(authorId);
+
+            return result;
+        }
+
+        [HttpGet("getPurchasedNumberByTour")]
+        public int GetNumberOfPurchaseByTour(int authorId, int tourId)
+        {
+            var result = _tourStatisticsService.GetNumberOfPurchaseByTour(authorId, tourId);
+
+            return result;
+        }
+
+        [HttpGet("getStartedNumberByTour")]
+        public int GetNumberOfStartedByTour(int authorId, int tourId)
+        {
+            var result = _tourStatisticsService.GetNumberOfStartedByTour(authorId, tourId);
+
+            return result;
+        }
+
+        [HttpGet("getCompletedNumberByTour")]
+        public int GetNumberOfCompletedByTour(int authorId, int tourId)
+        {
+            var result = _tourStatisticsService.GetNumberOfCompletedByTour(authorId, tourId);
 
             return result;
         }

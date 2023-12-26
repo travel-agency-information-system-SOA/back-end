@@ -68,5 +68,52 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
+        public int GetNumberOfPurchaseByTour(int authorId,int tourId)
+        {
+            int count = 0;
+
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            foreach (TourDTO tour in purchasedTours) {
+                if (tour.Id==tourId) {
+                    count++;
+                }
+            }
+            return count;
+
+        }
+
+        public int GetNumberOfStartedByTour(int authorId,int tourId)
+        {
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            int count = 0;
+            foreach (var tour in purchasedTours)
+            {
+                if (_tourExecutionService.IsTourStarted(tour.Id) && tour.Id==tourId)
+                {
+                    count++;
+                }
+            }
+            return count;
+
+        }
+
+        public int GetNumberOfCompletedByTour(int authorId,int tourId)
+        {
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            int count = 0;
+            foreach (var tour in purchasedTours)
+            {
+                if (_tourExecutionService.IsTourFinished(tour.Id) && tour.Id==tourId)
+                {
+                    count++;
+                }
+            }
+            return count;
+
+        }
+
     }
 }
