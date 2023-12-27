@@ -38,6 +38,12 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
+        [HttpGet("filter/{level}/{price}")]
+        public ActionResult<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetByLevelAndPrice(level, price, page, pageSize);
+            return CreateResponse(result);
+        }
 
 
 

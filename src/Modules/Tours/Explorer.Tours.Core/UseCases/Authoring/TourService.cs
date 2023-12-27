@@ -53,6 +53,27 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return MapToDto(tours);
         }
 
+        public Result<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, int page, int pageSize)
+        {
+            int firstPrice = 0;
+            if (price == 100)
+                firstPrice = 0;
+            else if (price == 200)
+                firstPrice = 101;
+            else
+                firstPrice = 201;
+
+           var tours = _repository.GetAllPublished(page, pageSize);
+           var filteredTours = tours.Results.Where(tour =>
+                                            (level.Equals("None") || tour.DifficultyLevel.ToString() == level) &&
+                                             (price == 0 || (tour.Price >= firstPrice && tour.Price <= price && price != 0)))
+                                             .ToList();
+
+            var totalCount = filteredTours.Count;
+            var pagedResult = new PagedResult<Tour>(filteredTours, totalCount);
+            return MapToDto(pagedResult);
+
+        }
         public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int type, int page, int pageSize)
         {
             var tours = _repository.GetAllPublished(page, pageSize);

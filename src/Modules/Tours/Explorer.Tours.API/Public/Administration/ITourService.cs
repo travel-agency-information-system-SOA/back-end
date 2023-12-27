@@ -20,7 +20,9 @@ namespace Explorer.Tours.API.Public.Administration
 
         Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int type, int page, int pageSize);
 
-		Result<PagedResult<TourDTO>> GetPublished();
+        Result<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, int page, int pageSize);
+
+        Result<PagedResult<TourDTO>> GetPublished();
 
 		Result SetTourCharacteristic(int tourId, double distance, double duration, string transposrtType);
         Result Publish(int tourId);
