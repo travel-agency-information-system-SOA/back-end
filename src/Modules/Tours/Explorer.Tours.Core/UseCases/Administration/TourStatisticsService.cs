@@ -145,7 +145,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             foreach (TourPointDto tourPoint in tourDto.TourPoints)
             {
-                int countVisited = 0;
+                double countVisited = 0;
                 foreach (int id in touristIds)
                 {
                     if (_tourPointExecutionService.isTourPointCompletedByTourist(id,tourPoint.Id)) {
@@ -160,7 +160,75 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return percentagesForTourPoints;
 
         }
-            
+
+
+        public List<int> GetMaxPercentage(int authorId)
+        {
+            //lista za postotke, imace 4 elementa (0-25%....)
+            List<int> numberOfPassedParts = new List<int>();
+            int firstQuarter = 0;
+            int secondQuarter = 0;
+            int thirdQuarter = 0;
+            int lastQuarter = 0;
+
+            //sve kupljene ture ovog autora
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            purchasedTours = purchasedTours.Distinct().ToList();
+
+            int numberOfTourPoints = 0;
+            foreach (TourDTO tourDto in purchasedTours) {
+
+                numberOfTourPoints = tourDto.TourPoints.Count;
+
+                //svi njeni executioni
+                List<TourExecutionDto> tourExecutions = _tourExecutionService.GetAllExecutionsByTour(tourDto.Id);
+                List<int> touristIds = new List<int>();
+                List<long> executionIds = new List<long>();
+                //svi turisti
+                foreach (TourExecutionDto tourExecution in tourExecutions)
+                {
+                    touristIds.Add(tourExecution.UserId);
+                    executionIds.Add((long)tourExecution.Id);
+                    touristIds = touristIds.Distinct().ToList();
+                }
+
+
+                    foreach (int id in touristIds)
+                    {
+                       int maxTourPointId= _tourPointExecutionService.getMaxCompletedTourPointPerTourist(id, executionIds);
+                       int numberOfPassedPoints = maxTourPointId - tourDto.TourPoints[0].Id;
+                       double percentage= ((double)numberOfPassedPoints/(double) numberOfTourPoints)*100;
+                        if (percentage <= 25)
+                        {
+                            firstQuarter++;
+                        }
+                        if (percentage <= 50 && percentage>25)
+                        {
+                            secondQuarter++;
+                        }
+
+                        if (percentage <= 75 && percentage > 50)
+                        {
+                            thirdQuarter++;
+                        }
+                        if (percentage <= 100 && percentage > 75)
+                        {
+                            lastQuarter++;
+                        }
+
+                    }
+            }
+
+            numberOfPassedParts.Add(firstQuarter);
+            numberOfPassedParts.Add(secondQuarter);
+            numberOfPassedParts.Add(thirdQuarter);
+            numberOfPassedParts.Add(lastQuarter);
+
+            return numberOfPassedParts;
+        }
+
+        
 
     }
 }
