@@ -53,11 +53,29 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return MapToDto(tours);
         }
 
-        public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int page, int pageSize)
+        public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int type, int page, int pageSize)
         {
             var tours = _repository.GetAllPublished(page, pageSize);
 
-            var filteredTours = tours.Results.Where(tour => tour.TourPoints.Any(checkpoint => IsWithinRange(lat, lon, checkpoint.Latitude, checkpoint.Longitude, range * 1000))).ToList();
+            var filteredTours = tours.Results
+                .Where(tour =>
+                {
+                    if (type == 1 && tour.TourPoints.Count > 0)
+                    {
+                        var firstCheckpoint = tour.TourPoints.First();
+                        return IsWithinRange(lat, lon, firstCheckpoint.Latitude, firstCheckpoint.Longitude, range * 1000);
+                    }
+                    else if (type == 2 && tour.TourPoints.Count > 0)
+                    {
+                        var lastCheckpoint = tour.TourPoints.Last();
+                        return IsWithinRange(lat, lon, lastCheckpoint.Latitude, lastCheckpoint.Longitude, range * 1000);
+                    }
+                    else
+                    {
+                        return tour.TourPoints.Any(checkpoint => IsWithinRange(lat, lon, checkpoint.Latitude, checkpoint.Longitude, range * 1000));
+                    }
+                })
+                .ToList();
             var totalCount = filteredTours.Count;
 
             foreach (var tour in filteredTours)
