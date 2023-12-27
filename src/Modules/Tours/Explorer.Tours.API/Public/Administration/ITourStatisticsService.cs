@@ -24,5 +24,7 @@ namespace Explorer.Tours.API.Public.Administration
         public int GetNumberOfCompletedByTour(int authorId, int tourId);
 
         public List<double> GetVisitedTourPointPercentage(int tourId);
+
+        public List<double> GetTourPointEncounterPercentage(int tourId);
     }
 }

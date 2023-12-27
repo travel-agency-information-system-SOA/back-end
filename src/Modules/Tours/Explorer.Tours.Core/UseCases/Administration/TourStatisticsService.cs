@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Encounters.API.Public;
 using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourExecutionsDTO;
@@ -24,13 +25,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourExecutionService _tourExecutionService;
         private readonly ITourPointExecutionService _tourPointExecutionService;
         private readonly ITourService _tourService;
+        private readonly IEncounterExecutionService _encounterExecutionService;
 
-        public TourStatisticsService(ITourPurchaseTokenService tourPurchaseTokenService, IMapper mapper, ITourExecutionService tourExecutionService,ITourPointExecutionService tourPointExecutionService ,ITourService tourService) { 
+        public TourStatisticsService(ITourPurchaseTokenService tourPurchaseTokenService, IMapper mapper, ITourExecutionService tourExecutionService,ITourPointExecutionService tourPointExecutionService ,ITourService tourService, IEncounterExecutionService encounterExecutionService) { 
             this._tourPurchaseTokenService = tourPurchaseTokenService;
             this._mapper = mapper;
             this._tourExecutionService = tourExecutionService;
             this._tourPointExecutionService = tourPointExecutionService;
             this._tourService =tourService;
+            this._encounterExecutionService = encounterExecutionService;
 
         }
         
@@ -228,7 +231,41 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return numberOfPassedParts;
         }
 
-        
+        //za encounter
+        public List<double> GetTourPointEncounterPercentage(int tourId)
+        {
+
+            List<double> percentagesForTourPoints = new List<double>();
+
+            TourDTO tourDto = _tourService.GetTourByTourId(tourId).Value;
+            //za jednu turu svaki execution
+            List<TourExecutionDto> tourExecutions = _tourExecutionService.GetAllExecutionsByTour(tourId);
+            List<int> touristIds = new List<int>();
+            foreach (TourExecutionDto tourExecution in tourExecutions)
+            {
+                touristIds.Add(tourExecution.UserId);
+            }
+
+            touristIds = touristIds.Distinct().ToList();
+
+            foreach (TourPointDto tourPoint in tourDto.TourPoints)
+            {
+                double countVisited = 0;
+                foreach (int id in touristIds)
+                {
+                    if (_encounterExecutionService.IsEncounterForTourPointCompleted(id,tourPoint.Id))
+                    {
+                        countVisited++;
+                    }
+                }
+                double percentage = (countVisited / touristIds.Count) * 100;
+
+                percentagesForTourPoints.Add(percentage);
+            }
+
+            return percentagesForTourPoints;
+
+        }
 
     }
 }

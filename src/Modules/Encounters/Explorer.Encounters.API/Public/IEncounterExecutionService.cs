@@ -20,4 +20,6 @@ public interface IEncounterExecutionService
     public Result<EncounterExecutionDto> GetExecutionByUser(int userId);
     public Result<EncounterExecutionDto> CompleteEncounter(long userId);
     public List<EncounterExecutionDto> GetAllExecutionsByEncounter(int encounterId);
+
+    public bool IsEncounterForTourPointCompleted(int touristId, int tourPointId);
 }
