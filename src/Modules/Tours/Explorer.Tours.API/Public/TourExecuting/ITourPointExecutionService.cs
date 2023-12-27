@@ -8,5 +8,6 @@ namespace Explorer.Tours.API.Public.TourExecuting
 {
     public interface ITourPointExecutionService
     {
+        public bool isTourPointCompletedByTourist(int touristId, int tourPointId);
     }
 }

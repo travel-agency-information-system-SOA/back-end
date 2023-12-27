@@ -9,6 +9,7 @@ using Explorer.Tours.Core.Domain.Tours;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,5 +20,17 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
         public TourPointExecutionService(ICrudRepository<TourPointExecution> crudRepository, IMapper mapper) : base(crudRepository, mapper)
         {
         }
+
+        public bool isTourPointCompletedByTourist(int touristId,int tourPointId) {
+            var tourPointExecutions = CrudRepository.GetPaged(0, 0).Results;
+
+            foreach (TourPointExecution tourPointEx in tourPointExecutions ) {
+                if (tourPointEx.ТоurExecution.UserId == touristId && tourPointEx.TourPointId == tourPointId && tourPointEx.Completed==true) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }

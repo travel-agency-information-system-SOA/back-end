@@ -25,5 +25,7 @@ namespace Explorer.Tours.API.Public.TourExecuting
 
         public bool IsTourStarted(int tourId);
         public bool IsTourFinished(int tourId);
+
+        public List<TourExecutionDto> GetAllExecutionsByTour(int tourId);
     }
 }

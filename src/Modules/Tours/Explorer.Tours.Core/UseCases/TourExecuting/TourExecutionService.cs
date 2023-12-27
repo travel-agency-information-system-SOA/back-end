@@ -280,6 +280,20 @@ namespace Explorer.Tours.Core.UseCases.TourExecuting
             }
             return false;
         }
+
+        public List<TourExecutionDto> GetAllExecutionsByTour(int tourId) {
+            var executions = CrudRepository.GetPaged(0, 0).Results;
+            List<TourExecutionDto> executionDtos = new List<TourExecutionDto>();
+            foreach (var execution in executions)
+            {
+                if (execution.TourId==tourId)
+                {
+                    var executionDto = MapToDto(execution);
+                    executionDtos.Add(executionDto);
+                }
+            }
+            return executionDtos;
+        }
     }
 }
 
