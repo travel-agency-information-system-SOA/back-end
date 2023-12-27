@@ -43,6 +43,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return purchasedTours.Count;
 
         }
+        public List<TourDTO> GetPurchasedToursByAuthor(int authorId)
+        {
+
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            return purchasedTours;
+
+        }
 
         public int GetNumberOfCompletedByAuthor(int authorId) {
             List<TourDTO> purchasedTours = new List<TourDTO>();

@@ -15,7 +15,7 @@ namespace Explorer.API.Controllers.Author.Administration
             _tourStatisticsService = tourStatisticsService;
         }
 
-        [HttpGet("getAllPurchasedNumber")]
+        [HttpGet("getAllPurchasedNumber/{authorId:int}")]
         public int GetNumberOfPurchaseByAuthor(int authorId)
         {
             var result = _tourStatisticsService.GetNumberOfPurchaseByAuthor(authorId);
@@ -23,7 +23,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
-        [HttpGet("getAllCompletedNumber")]
+        [HttpGet("getAllCompletedNumber/{authorId:int}")]
         public int GetNumberOfCompletedByAuthor(int authorId)
         {
             var result = _tourStatisticsService.GetNumberOfCompletedByAuthor(authorId);
@@ -31,15 +31,24 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
-        [HttpGet("getAllStartedNumber")]
+        [HttpGet("getAllStartedNumber/{authorId:int}")]
         public int GetNumberOfStartedByAuthor(int authorId)
         {
             var result = _tourStatisticsService.GetNumberOfStartedByAuthor(authorId);
 
             return result;
         }
+        [HttpGet("getPurchasedToursByAuthorId/{authorId:int}")]
+        public List<TourDTO> GetPurchasedToursByAuthor(int authorId)
+        {
+            var result = _tourStatisticsService.GetPurchasedToursByAuthor(authorId);
 
-        [HttpGet("getPurchasedNumberByTour")]
+            return result;
+        }
+
+
+        //---------------------------------------------------------------------------------
+        [HttpGet("getPurchasedNumberByTour/{authorId:int}/{tourId:int}")]
         public int GetNumberOfPurchaseByTour(int authorId, int tourId)
         {
             var result = _tourStatisticsService.GetNumberOfPurchaseByTour(authorId, tourId);
@@ -47,7 +56,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
-        [HttpGet("getStartedNumberByTour")]
+        [HttpGet("getStartedNumberByTour/{authorId:int}/{tourId:int}")]
         public int GetNumberOfStartedByTour(int authorId, int tourId)
         {
             var result = _tourStatisticsService.GetNumberOfStartedByTour(authorId, tourId);
@@ -55,7 +64,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
-        [HttpGet("getCompletedNumberByTour")]
+        [HttpGet("getCompletedNumberByTour/{authorId:int}/{tourId:int}")]
         public int GetNumberOfCompletedByTour(int authorId, int tourId)
         {
             var result = _tourStatisticsService.GetNumberOfCompletedByTour(authorId, tourId);

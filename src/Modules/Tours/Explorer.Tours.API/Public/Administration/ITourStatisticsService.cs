@@ -12,6 +12,7 @@ namespace Explorer.Tours.API.Public.Administration
     public interface ITourStatisticsService
     {
         public int GetNumberOfPurchaseByAuthor(int authorId);
+        public List<TourDTO> GetPurchasedToursByAuthor(int authorId);
 
         public int GetNumberOfCompletedByAuthor(int authorId);
 
