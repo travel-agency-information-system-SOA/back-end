@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Explorer.Tours.Core.Domain.Problems;
 using Explorer.Tours.Core.Domain.TourBundle;
+using Explorer.Tours.Core.Domain.Competitions;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -36,13 +37,20 @@ public class ToursContext : DbContext
     public DbSet<TourEquipment> TourEquipments { get; set; }
 
     public DbSet<Tour> Tours { get; set; }
+
     public DbSet<TourPointExecution> TourPointExecutions { get; set; }
     public DbSet<TourExecution> TourExecutions { get; set; }
     public DbSet<TourExecutionPosition> TourExecutionPositions { get; set; }
 
     public DbSet<TourBundle> TourBundles { get; set; }
 
-    public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
+	public DbSet<Competition> Competitions { get; set; }
+
+	public DbSet<CompetitionApply> CompetitionApplies { get; set; }
+
+	public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
+
+   
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
