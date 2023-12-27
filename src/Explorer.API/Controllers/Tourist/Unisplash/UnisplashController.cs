@@ -10,7 +10,7 @@ namespace Explorer.API.Controllers.Tourist.Unisplash
         private readonly string _unsplashAccessKey = "oeQrSj9gSOv3VdTwc080-RnD7swYcxbMrYPOsLrT30I";
 
         [HttpGet("search")]
-        public async Task<ActionResult> SearchImages(string query)
+        public async Task<ActionResult> SearchImages([FromQuery] string query)
         {
             using (var client = new HttpClient())
             {
