@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Explorer.Tours.Infrastructure.Services
 {
@@ -37,28 +38,57 @@ namespace Explorer.Tours.Infrastructure.Services
 
 		{
 			var competitions = _repository.GetAll(page, pageSize);
-			return MapToDto(competitions);
+            List<Competition> result = new List<Competition>();
+            DateTime today = DateTime.Today.Date;
 
-		}
+            foreach (var competition in competitions.Results)
+            {
+
+                DateTime endDate = competition.StartDate.Value;
+                DateTime finishDate = endDate.AddDays(competition.Duration);
+
+                if (finishDate > today)
+                {
+                    competition.Status = CompetitionStatus.Close;
+                    CrudRepository.Update(competition);
+                }
+                result.Add(competition);
+
+            }
+            var pgResult = new PagedResult<Competition>(result, result.Count);
+            return MapToDto(pgResult);
+
+        }
 
         public Result<PagedResult<CompetitionDto>> GetAllCompetitionAuthorId(int page, int pageSize, int id)
         {
             var competitions = _repository.GetAll(page, pageSize);
-			List<Competition> result = new List<Competition>();
-			foreach ( var competition in competitions.Results)
-			{
+            List<Competition> result = new List<Competition>();
+            DateTime today = DateTime.Today.Date;
+
+            foreach (var competition in competitions.Results)
+            {
+                DateTime endDate = competition.StartDate.Value;
+                DateTime finishDate = endDate.AddDays(competition.Duration);
+
                 int tourIdInt = (int)competition.TourId;
                 TourDTO tour = _tourService.GetTourById(tourIdInt);
 
-				if(tour.UserId == id)
-				{
+                if (tour.UserId == id)
+                {
+                    if (finishDate < today)
+                    {
+                        competition.Status = CompetitionStatus.Close;
+                        CrudRepository.Update(competition); 
+                    }
                     result.Add(competition);
-				}
-				
-			}
+                }
+            }
+
             var pgResult = new PagedResult<Competition>(result, result.Count);
             return MapToDto(pgResult);
         }
+
 
 
     }
