@@ -17,6 +17,13 @@ public class StakeholdersContext : DbContext
 
     public DbSet<UserPosition> UserPositions { get; set; }
 
+    public DbSet<TouristXP> TouristXP { get; set; }
+    public DbSet<UserMileage> UserMileages { get; set; }
+    public DbSet<UserTourMileage> UserTourMileages { get; set; }
+
+    public DbSet<PasswordReset> PasswordResets { get; set; }
+    public DbSet<Follower> Followers { get; set; }
+    public DbSet<FollowerMessage> FollowerMessages { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
@@ -35,5 +42,10 @@ public class StakeholdersContext : DbContext
             .HasOne<User>()
             .WithOne()
             .HasForeignKey<Person>(s => s.UserId);
+
+        modelBuilder.Entity<PasswordReset>()
+            .HasOne<User>()
+            .WithOne()
+            .HasForeignKey<PasswordReset>(s => s.UserId);
     }
 }

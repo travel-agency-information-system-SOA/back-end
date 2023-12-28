@@ -2,9 +2,11 @@
 using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
+using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.Encounters.Core.Mappers;
 using Explorer.Encounters.Core.UseCases;
 using Explorer.Encounters.Infrastructure.Database;
+using Explorer.Encounters.Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,17 +29,27 @@ public static class EncountersStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IEncounterService, EncounterService>();
+        services.AddScoped<IHiddenLocationEncounterService, HiddenLocationEncounterService>();
+        services.AddScoped<IEncounterExecutionService, EncounterExecutionService>();
+        services.AddScoped<ISocialEncounterService, SocialEncounterService>();
+        services.AddScoped<ITourKeyPointEncounterService, TourKeyPointEncounterService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         
         services.AddScoped(typeof(ICrudRepository<Encounter>), typeof(CrudDatabaseRepository<Encounter, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<HiddenLocationEncounter>), typeof(CrudDatabaseRepository<HiddenLocationEncounter, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<EncounterExecution>), typeof(CrudDatabaseRepository<EncounterExecution, EncountersContext>));
+        services.AddScoped(typeof(ICrudRepository<SocialEncounter>), typeof(CrudDatabaseRepository<SocialEncounter, EncountersContext>));
+        services.AddScoped<IEncounterExecutionRepository, EncounterExecutionRepository>();
+        services.AddScoped(typeof(ICrudRepository<TourKeyPointEncounter>), typeof(CrudDatabaseRepository<TourKeyPointEncounter, EncountersContext>));
 
         services.AddDbContext<EncountersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "encounters")));
-    
+
+
     }
 
 }

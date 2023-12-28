@@ -11,7 +11,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 {
     public class TourReview : Entity
     {
-        public int Grade { get; init; }
+        public double Grade { get; init; }
         public string Comment { get; init; }
         public int TouristId { get; init; }
         public DateTime AttendanceDate { get; init; }
@@ -22,7 +22,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public Tour? Tour { get; init; }
 
-        public TourReview(int grade, string comment, int touristId, DateTime attendanceDate, DateTime reviewDate, List<string> images, long tourId)
+        public TourReview(double grade, string comment, int touristId, DateTime attendanceDate, DateTime reviewDate, List<string> images, long tourId)
         {
             Grade = grade;
             Comment = comment;

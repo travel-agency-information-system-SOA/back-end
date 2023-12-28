@@ -44,7 +44,11 @@ public static class StakeholdersStartup
 
         services.AddScoped<IUserPositionService, UserPositionService>();
         services.AddScoped<IInternalUserService, InternalUserService>();
-
+        services.AddScoped<ITouristXPService, TouristXPService>();
+        services.AddScoped<IUserMileageService, UserMileageService>();
+        services.AddScoped<IUserTourMileageService, UserTourMileageService>();
+        services.AddScoped<IFollowerService, FollowerService>();
+        services.AddScoped<IFollowerMessageService, FollowerMessageService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -52,6 +56,7 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Person>), typeof(CrudDatabaseRepository<Person, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
+        services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped<ITourPointRequestRepository, TourPointRequestRepository>();
         services.AddScoped<ITourObjectRequestRepository, TourObjectRequestRepository>();
         services.AddScoped(typeof(ICrudRepository<AppRating>), typeof(CrudDatabaseRepository<AppRating,StakeholdersContext>));
@@ -63,7 +68,18 @@ public static class StakeholdersStartup
 
         services.AddScoped(typeof(ICrudRepository<UserPosition>),typeof(CrudDatabaseRepository<UserPosition,StakeholdersContext>));
         services.AddScoped<IUserPositionRepository, UserPositionRepository>();
+        services.AddScoped<ITouristXPRepository, TouristXPRepository>();
+        services.AddScoped(typeof(ICrudRepository<TouristXP>), typeof(CrudDatabaseRepository<TouristXP, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<UserMileage>), typeof(CrudDatabaseRepository<UserMileage, StakeholdersContext>));
+        services.AddScoped<IUserMileageRepository, UserMileageRepository>();
+        services.AddScoped(typeof(ICrudRepository<UserTourMileage>), typeof(CrudDatabaseRepository<UserTourMileage, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<Follower>), typeof(CrudDatabaseRepository<Follower, StakeholdersContext>));
+        services.AddScoped<IFollowerRepository, FollowerRepository>();
+        services.AddScoped(typeof(ICrudRepository<FollowerMessage>), typeof(CrudDatabaseRepository<FollowerMessage, StakeholdersContext>));
+        services.AddScoped<IFollowerMessageRepository, FollowerMessageRepository>();
 
+
+        services.AddScoped<IPasswordResetRepository, PasswordResetDatabaseRepository>();
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

@@ -11,7 +11,8 @@ namespace Explorer.Payments.Core.Domain.RepositoryInterfaces
 {
     public interface ICouponRepository
     {
-        Coupon GetByCodeAndTourId(string code, int tourId);
+        //Coupon GetByCodeAndTourId(string code, int tourId);
+        Coupon GetByCode(string code);
         Result<List<Coupon>> GetByAuthorId(int authorId);
         Coupon Create(Coupon coupon);
     }

@@ -59,4 +59,10 @@ public class UserDatabaseRepository : IUserRepository
         if (person == null) throw new KeyNotFoundException("Not found.");
         return person.Email;
     }
+
+    public User? GetUserByToken(string verificationToken)
+    {
+        var user = _dbContext.Users.FirstOrDefault(user => user.VerificationToken == verificationToken);
+        return user;
+    }
 }

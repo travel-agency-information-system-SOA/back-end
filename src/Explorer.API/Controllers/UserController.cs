@@ -8,10 +8,12 @@ namespace Explorer.API.Controllers
     public class UserController : BaseApiController
     {
         private readonly IUserService _userService;
+        private readonly IAccountManagementService _accountService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IAccountManagementService accountService)
         {
             _userService = userService;
+            _accountService = accountService;
         }
 
         [HttpGet("getById/{userId}")]
@@ -20,5 +22,13 @@ namespace Explorer.API.Controllers
             var result = _userService.Get(userId);
             return CreateResponse(result);
         }
+
+        [HttpGet("confirm-account")]
+        public ActionResult<UserDto> ConfirmRegistration(string token)
+        {
+            var result = _userService.ConfirmRegistration(token);
+            return CreateResponse(result);
+        }
+
     }
 }

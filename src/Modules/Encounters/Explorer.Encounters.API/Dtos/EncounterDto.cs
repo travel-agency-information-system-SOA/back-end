@@ -8,7 +8,7 @@ namespace Explorer.Encounters.API.Dtos;
 
 public class EncounterDto
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public int XpPoints { get; set; }
@@ -16,4 +16,5 @@ public class EncounterDto
     public string Type { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public bool ShouldBeApproved { get; set; }
 }

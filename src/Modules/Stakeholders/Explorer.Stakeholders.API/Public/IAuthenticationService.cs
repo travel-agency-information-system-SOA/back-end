@@ -7,4 +7,6 @@ public interface IAuthenticationService
 {
     Result<AuthenticationTokensDto> Login(CredentialsDto credentials);
     Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account);
+    Result<string> RequestPasswordReset(string mail);
+    Result<string> ResetPassword(PasswordResetDto request);
 }

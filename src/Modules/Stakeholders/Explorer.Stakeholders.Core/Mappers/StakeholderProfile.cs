@@ -22,5 +22,11 @@ public class StakeholderProfile : Profile
 
         CreateMap<UserPositionDto, UserPosition>().ReverseMap();
 
+        CreateMap<TouristXPDto, TouristXP>().ReverseMap();
+        CreateMap<UserMileageDto, UserMileage>().ReverseMap();
+        CreateMap<UserTourMileageDto, UserTourMileage>().ReverseMap();
+        CreateMap<FollowerDto, Follower>().ReverseMap();
+        CreateMap<FollowerMessageDto, FollowerMessage>().ReverseMap();
+
     }
 }
