@@ -135,11 +135,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
-        public List<double> GetVisitedTourPointPercentage(int tourId) {
+        public List<double> GetVisitedTourPointPercentage(int authorId,int tourId) {
 
             List<double> percentagesForTourPoints = new List<double>();
-           
-            TourDTO tourDto= _tourService.GetTourByTourId(tourId).Value;
+        
+            TourDTO tourDto= new TourDTO();
+
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            foreach (TourDTO tour in purchasedTours)
+            {
+                if (tour.Id == tourId)
+                {
+                    tourDto = tour;
+                }
+            }
+
             //za jednu turu svaki execution
             List<TourExecutionDto> tourExecutions = _tourExecutionService.GetAllExecutionsByTour(tourId);
             List<int> touristIds = new List<int>();
@@ -237,12 +248,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
         }
 
         //za encounter
-        public List<double> GetTourPointEncounterPercentage(int tourId)
+        public List<double> GetTourPointEncounterPercentage(int authorId, int tourId)
         {
 
             List<double> percentagesForTourPoints = new List<double>();
 
-            TourDTO tourDto = _tourService.GetTourByTourId(tourId).Value;
+            TourDTO tourDto = new TourDTO();
+
+            List<TourDTO> purchasedTours = new List<TourDTO>();
+            purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
+            foreach (TourDTO tour in purchasedTours)
+            {
+                if (tour.Id == tourId)
+                {
+                    tourDto = tour;
+                }
+            }
             //za jednu turu svaki execution
             List<TourExecutionDto> tourExecutions = _tourExecutionService.GetAllExecutionsByTour(tourId);
             List<int> touristIds = new List<int>();
