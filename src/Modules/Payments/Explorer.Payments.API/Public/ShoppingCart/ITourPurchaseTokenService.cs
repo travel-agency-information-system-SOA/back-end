@@ -11,7 +11,7 @@ namespace Explorer.Payments.API.Public.ShoppingCart
 {
     public interface ITourPurchaseTokenService
     {
-        //Result<List<TourDTO>> GetPurchasedTours(int touristId);
+        //Result<PagedResult<TourPurchaseTokenDto>> GetPurchasedTours(int touristId, int page, int pageSiz);
         Result<PagedResult<TourPurchaseTokenDto>> GetPaged(int page, int pageSize);
     }
 }
