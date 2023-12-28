@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Tours.API.Dtos;
@@ -28,12 +29,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly IEncounterExecutionService _encounterExecutionService;
 
         public TourStatisticsService(ITourPurchaseTokenService tourPurchaseTokenService, IMapper mapper, ITourExecutionService tourExecutionService,ITourPointExecutionService tourPointExecutionService ,ITourService tourService, IEncounterExecutionService encounterExecutionService) { 
+
             this._tourPurchaseTokenService = tourPurchaseTokenService;
             this._mapper = mapper;
             this._tourExecutionService = tourExecutionService;
             this._tourPointExecutionService = tourPointExecutionService;
             this._tourService =tourService;
             this._encounterExecutionService = encounterExecutionService;
+
 
         }
         
@@ -163,6 +166,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return percentagesForTourPoints;
 
         }
+
+        
 
 
         public List<int> GetMaxPercentage(int authorId)

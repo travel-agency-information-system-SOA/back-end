@@ -72,5 +72,29 @@ namespace Explorer.API.Controllers.Author.Administration
             return result;
         }
 
+        [HttpGet("getMaxPercentage/{authorId:int}")]
+        public List<int> GetMaxPercentage(int authorId)
+        {
+            var result = _tourStatisticsService.GetMaxPercentage(authorId);
+
+            return result;
+        }
+
+        [HttpGet("getTourPointEncounterPercentage/{authorId:int}")]
+        public List<double> GetTourPointEncounterPercentage(int tourId)
+        {
+            var result = _tourStatisticsService.GetTourPointEncounterPercentage(tourId);
+
+            return result;
+        }
+
+        [HttpGet("getVisitedTourPointPercentage/{authorId:int}")]
+         public List<double> GetVisitedTourPointPercentage(int tourId)
+        {
+            var result = _tourStatisticsService.GetVisitedTourPointPercentage(tourId);
+
+            return result;
+        }
+
     }
 }

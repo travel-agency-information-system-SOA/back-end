@@ -18,4 +18,5 @@ public interface IEncounterService
     public EncounterDto GetEncounter(int encounterId);
     public double CalculateDistance(double userLat, double userLon, double pointLat, double pointLon);
     public Result<EncounterDto> GetEncounterById(int encounterId);
+    public Result<List<EncounterDto>> GetAll();
 }
