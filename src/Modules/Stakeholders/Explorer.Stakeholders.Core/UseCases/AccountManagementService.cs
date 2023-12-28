@@ -23,7 +23,7 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<List<AccountDto>> GetAllAccounts()
         {
-            
+
             var users = _userRepository.GetAll();
             var accounts = CreateAccountDtos(users);
 
@@ -46,7 +46,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 };
                 accounts.Add(accountDto);
             }
-            
+
             return accounts;
         }
 
@@ -63,8 +63,8 @@ namespace Explorer.Stakeholders.Core.UseCases
                 else
                 {
                     user.IsActive = true;
-                }           
-            
+                }
+
                 _userRepository.Update(user);
                 account.IsActive = user.IsActive;
                 return account;
@@ -79,7 +79,9 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
 
         }
-
-      
+        
     }
+
+
+
 }
