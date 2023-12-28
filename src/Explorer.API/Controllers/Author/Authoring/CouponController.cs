@@ -46,16 +46,23 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [HttpGet("getByCode")]
+        /*[HttpGet("getByCode")]
         public ActionResult<CouponDto> GetByCodeAndTourId([FromQuery] int tourId, [FromQuery] string code)
         {
             var result = _couponService.GetByCodeAndTourId(code, tourId);
+            return CreateResponse(result);
+        }*/
+
+        [HttpGet("getByCode")]
+        public ActionResult<CouponDto> GetByCode([FromQuery] string code)
+        {
+            var result = _couponService.GetByCode(code);
             return CreateResponse(result);
         }
 
         [Authorize(Policy = "authorPolicy")]
         [HttpGet("{authorId:int}")]
-        public ActionResult<CouponDto> GetByAuthorId(int authorId)
+        public ActionResult<List<CouponDto>> GetByAuthorId(int authorId)
         {
             var result = _couponService.GetByAuthorId(authorId);
             return CreateResponse(result);

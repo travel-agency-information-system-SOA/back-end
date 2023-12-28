@@ -23,12 +23,19 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
             _context = context;
             _coupons = context.Coupons;
         }
-        public Coupon GetByCodeAndTourId(string code, int tourId)
+        /*public Coupon GetByCodeAndTourId(string code, int tourId)
         {
             var task = _coupons.GetPagedById(1, int.MaxValue).Result.Results.FirstOrDefault(c => c.Code.Equals(code) && c.TourId == tourId && !c.IsExpired());
             return task;
+        }*/
+
+        public Coupon GetByCode(string code)
+        {
+            var task = _coupons.GetPagedById(1, int.MaxValue).Result.Results.FirstOrDefault(c => c.Code.Equals(code) && !c.IsExpired());
+            return task;
         }
-        
+
+
         public Result<List<Coupon>> GetByAuthorId(int authorId)
         {
             var task = _coupons.GetPagedById(1, int.MaxValue).Result.Results.Where(c => c.AuthorId == authorId).ToList();

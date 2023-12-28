@@ -74,7 +74,7 @@ public static class ToursStartup
 
 		services.AddScoped<ICompetitionApplyService, CompetitionApplyService>();
 
-	}
+	
 
         services.AddScoped<ITourStatisticsService, TourStatisticsService>();
     }

@@ -22,6 +22,8 @@ public class StakeholdersContext : DbContext
     public DbSet<UserTourMileage> UserTourMileages { get; set; }
 
     public DbSet<PasswordReset> PasswordResets { get; set; }
+    public DbSet<Follower> Followers { get; set; }
+    public DbSet<FollowerMessage> FollowerMessages { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
