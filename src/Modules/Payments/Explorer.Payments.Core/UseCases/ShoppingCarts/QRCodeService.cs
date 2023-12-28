@@ -30,7 +30,7 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
         {
             string email;
             int userID = shoppingCart.TouristId;
-            if(userID == 1)
+            if(userID == 300)
             {
                 email = "lukazelovic@gmail.com";
             }
@@ -74,6 +74,7 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
 
         public string GenerateShoppingCartInfoString(ShoppingCart shoppingCart)
         {
+            double totalPrice = 0;
             if (shoppingCart == null)
             {
                 throw new ArgumentNullException(nameof(shoppingCart));
@@ -82,13 +83,16 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
             StringBuilder infoStringBuilder = new StringBuilder();
 
             infoStringBuilder.AppendLine($"Tourist ID: {shoppingCart.TouristId}");
-            infoStringBuilder.AppendLine($"Total: {shoppingCart.Total}");
+            
             infoStringBuilder.AppendLine($"Order Items:");
 
             foreach (var orderItem in shoppingCart.OrderItems)
             {
                 infoStringBuilder.AppendLine($"- Tour: {orderItem.TourName}, Price: {orderItem.Price}, IdTour: {orderItem.IdTour}");
+                totalPrice += orderItem.Price;
             }
+
+            infoStringBuilder.AppendLine($"Total: {totalPrice}");
 
             return infoStringBuilder.ToString();
         }

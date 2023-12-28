@@ -54,7 +54,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             List<TourDTO> purchasedTours = new List<TourDTO>();
             purchasedTours = _tourPurchaseTokenService.GetAllPurchasedToursByAuthor(authorId);
-            return purchasedTours;
+            return purchasedTours.Distinct().ToList();
 
         }
 
