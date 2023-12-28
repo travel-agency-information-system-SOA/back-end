@@ -14,5 +14,7 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 		Result<CompetitionDto> Create(CompetitionDto competitionDto);
 
 		Result<PagedResult<CompetitionDto>> GetAll(int page, int pageSize);
-	}
+
+        Result<PagedResult<CompetitionDto>> GetAllCompetitionAuthorId(int page, int pageSize, int id);
+    }
 }

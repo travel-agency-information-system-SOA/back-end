@@ -12,13 +12,13 @@ namespace Explorer.Tours.Core.Domain.Competitions
 	{
         public long TourId { get; private set; }
 
-		public DateTime? StartDate {  get; private set; }
+		public DateTime? StartDate {  get; set; }
 
 		public int Duration { get; private set; }
 
 		public ICollection<CompetitionApply> CompetitionApplies { get; } = new List<CompetitionApply>();
 
-		public CompetitionStatus Status { get; private set; }
+		public CompetitionStatus Status { get; set; }
 
 		public Competition() { }
 
