@@ -43,16 +43,18 @@ namespace Explorer.Tours.Infrastructure.Services
 
             foreach (var competition in competitions.Results)
             {
-
-                DateTime endDate = competition.StartDate.Value;
-                DateTime finishDate = endDate.AddDays(competition.Duration);
-
-                if (finishDate > today)
+                if (competition.StartDate.HasValue)  
                 {
-                    competition.Status = CompetitionStatus.Close;
-                    CrudRepository.Update(competition);
+                    DateTime endDate = competition.StartDate.Value;
+                    DateTime finishDate = endDate.AddDays(competition.Duration);
+
+                    if (finishDate < today)
+                    {
+                        competition.Status = CompetitionStatus.Close;
+                        CrudRepository.Update(competition);
+                    }
+                    result.Add(competition);
                 }
-                result.Add(competition);
 
             }
             var pgResult = new PagedResult<Competition>(result, result.Count);
@@ -68,26 +70,30 @@ namespace Explorer.Tours.Infrastructure.Services
 
             foreach (var competition in competitions.Results)
             {
-                DateTime endDate = competition.StartDate.Value;
-                DateTime finishDate = endDate.AddDays(competition.Duration);
-
-                int tourIdInt = (int)competition.TourId;
-                TourDTO tour = _tourService.GetTourById(tourIdInt);
-
-                if (tour.UserId == id)
+                if (competition.StartDate.HasValue)  // Check if StartDate has a value
                 {
-                    if (finishDate < today)
+                    DateTime endDate = competition.StartDate.Value;
+                    DateTime finishDate = endDate.AddDays(competition.Duration);
+
+                    int tourIdInt = (int)competition.TourId;
+                    TourDTO tour = _tourService.GetTourById(tourIdInt);
+
+                    if (tour.UserId == id)
                     {
-                        competition.Status = CompetitionStatus.Close;
-                        CrudRepository.Update(competition); 
+                        if (finishDate < today)
+                        {
+                            competition.Status = CompetitionStatus.Close;
+                            CrudRepository.Update(competition);
+                        }
+                        result.Add(competition);
                     }
-                    result.Add(competition);
                 }
             }
 
             var pgResult = new PagedResult<Competition>(result, result.Count);
             return MapToDto(pgResult);
         }
+
 
 
 

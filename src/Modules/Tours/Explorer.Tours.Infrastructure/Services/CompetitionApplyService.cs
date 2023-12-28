@@ -29,5 +29,45 @@ namespace Explorer.Tours.Infrastructure.Services
             var filteredPagedResult = new PagedResult<CompetitionApply>(filteredApplies.ToList(), filteredApplies.Count());
             return MapToDto(filteredPagedResult);
         }
+
+
+
+        public Result<PagedResult<CompetitionApplyDto>> GetWinnerByCompId(int comId)
+        {
+            var winnerApply = new List<CompetitionApply>();
+            var allApplies = CrudRepository.GetPaged(1, int.MaxValue);
+
+            var filteredApplies = allApplies.Results.Where(apply => apply.CompetitionId == comId).ToList();
+
+            // Sort the filteredApplies in descending order based on NumLikes
+            filteredApplies.Sort((a1, a2) => a2.NumLikes.CompareTo(a1.NumLikes));
+
+            int n = filteredApplies.Count;
+
+            if (n > 0)
+            {
+                // Add the entry with the maximum number of likes to the winnerApply list
+                winnerApply.Add(filteredApplies[0]);
+
+                // Iterate through the sorted list to find and add entries with the same maximum number of likes
+                for (int i = 1; i < n; i++)
+                {
+                    if (filteredApplies[i].NumLikes == filteredApplies[0].NumLikes)
+                    {
+                        winnerApply.Add(filteredApplies[i]);
+                    }
+                    else
+                    {
+                        // Break the loop if a different number of likes is encountered (as the list is sorted)
+                        break;
+                    }
+                }
+            }
+
+            var filteredPagedResult = new PagedResult<CompetitionApply>(winnerApply, winnerApply.Count);
+            return MapToDto(filteredPagedResult);
+        }
+
+
     }
 }

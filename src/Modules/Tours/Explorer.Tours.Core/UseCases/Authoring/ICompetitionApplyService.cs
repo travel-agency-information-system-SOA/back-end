@@ -14,5 +14,9 @@ namespace Explorer.Tours.Core.UseCases.Authoring
 		Result<CompetitionApplyDto> Create(CompetitionApplyDto competitionApplyDto);
 
         Result<PagedResult<CompetitionApplyDto>> GetAppliesByCompId(int tourId);
+
+        Result<PagedResult<CompetitionApplyDto>> GetWinnerByCompId(int comId);
+
+        Result<CompetitionApplyDto> Update(CompetitionApplyDto apply);
     }
 }
