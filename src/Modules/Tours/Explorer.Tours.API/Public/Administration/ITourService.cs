@@ -17,11 +17,15 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourDTO> GetTourByTourId(int id);
        
 
+        TourDTO GetTourById(int id);
+
         Result<TourDTO> Update(TourDTO tourDto);
 
-        Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int page, int pageSize);
+        Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int type, int page, int pageSize);
 
-		Result<PagedResult<TourDTO>> GetPublished();
+        Result<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, int page, int pageSize);
+
+        Result<PagedResult<TourDTO>> GetPublished();
 
 		Result SetTourCharacteristic(int tourId, double distance, double duration, string transposrtType);
         Result Publish(int tourId);

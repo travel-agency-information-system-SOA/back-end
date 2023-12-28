@@ -30,16 +30,22 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [HttpGet("search/{lat:double}/{lon:double}/{ran:int}")]
+        [HttpGet("search/{lat:double}/{lon:double}/{ran:int}/{type:int}")]
         //[AllowAnonymous]
-        public ActionResult<PagedResult<TourDTO>> GetByRange(double lat, double lon, int ran, [FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<TourDTO>> GetByRange(double lat, double lon, int ran, int type, [FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourService.GetByRange(lat, lon, ran, page, pageSize);
+            var result = _tourService.GetByRange(lat, lon, ran, type, page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("filter/{level}/{price}")]
+        public ActionResult<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetByLevelAndPrice(level, price, page, pageSize);
             return CreateResponse(result);
         }
 
 
-        
 
 
         [HttpGet("{userId:int}")]

@@ -23,5 +23,26 @@ namespace Explorer.API.Controllers
 
 			return CreateResponse(result);
 		}
-	}
+
+        [HttpGet("getApplies/{comId}")]
+        public ActionResult<List<CompetitionApplyDto>> GetAppliesByCompId(int comId)
+        {
+            var result = _competitionApplyService.GetAppliesByCompId(comId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("getWinner/{comId}")]
+        public ActionResult<List<CompetitionApplyDto>> GetWinnerByCompId(int comId)
+        {
+            var result = _competitionApplyService.GetWinnerByCompId(comId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<CompetitionApplyDto> Update([FromBody] CompetitionApplyDto apply)
+        {
+            var result = _competitionApplyService.Update(apply);
+            return CreateResponse(result);
+        }
+    }
 }
