@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
-    [Authorize(Policy = "administratorPolicy")]
+    //[Authorize(Policy = "administratorPolicy")]
     [Route("api/administration/accounts")]
     public class AccountManagementController : BaseApiController
     {
