@@ -63,6 +63,7 @@ public class EncounterController : BaseApiController
         encounterDto.Type = wholeEncounter.Type;
         encounterDto.Longitude = wholeEncounter.Longitude;
         encounterDto.Latitude = wholeEncounter.Latitude;
+        encounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
         var baseEncounter = _encounterService.Create(encounterDto);
         if (!baseEncounter.IsSuccess)
         {
@@ -96,6 +97,7 @@ public class EncounterController : BaseApiController
         wholeHiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
         wholeHiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
         wholeHiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
+        wholeHiddenLocationEncounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
         return StatusCode((int)HttpStatusCode.Created, wholeHiddenLocationEncounterDto);
     
     }
@@ -110,6 +112,7 @@ public class EncounterController : BaseApiController
         encounterDto.Type = socialEncounter.Type;
         encounterDto.Longitude = socialEncounter.Longitude;
         encounterDto.Latitude = socialEncounter.Latitude;
+        encounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
         var baseEncounter = _encounterService.Create(encounterDto);
         if (!baseEncounter.IsSuccess)
         {
@@ -139,6 +142,7 @@ public class EncounterController : BaseApiController
         wholeSocialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
         wholeSocialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
         wholeSocialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
+        wholeSocialEncounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
 
         return StatusCode((int)HttpStatusCode.Created, wholeSocialEncounterDto);
     }
@@ -161,6 +165,7 @@ public class EncounterController : BaseApiController
         encounterDto.Type = wholeEncounter.Type;
         encounterDto.Longitude = wholeEncounter.Longitude;
         encounterDto.Latitude = wholeEncounter.Latitude;
+        encounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
         var baseEncounter = _encounterService.Update(encounterDto);
         if (!baseEncounter.IsSuccess)
         {
@@ -194,6 +199,7 @@ public class EncounterController : BaseApiController
         wholeHiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
         wholeHiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
         wholeHiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
+        wholeHiddenLocationEncounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
 
         return StatusCode((int)HttpStatusCode.NoContent, wholeHiddenLocationEncounterDto);
     }
@@ -210,6 +216,7 @@ public class EncounterController : BaseApiController
         encounterDto.Type = socialEncounter.Type;
         encounterDto.Longitude = socialEncounter.Longitude;
         encounterDto.Latitude = socialEncounter.Latitude;
+        encounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
         var baseEncounter = _encounterService.Update(encounterDto);
         if (!baseEncounter.IsSuccess)
         {
@@ -240,7 +247,7 @@ public class EncounterController : BaseApiController
         wholeSocialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
         wholeSocialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
         wholeSocialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
-
+        wholeSocialEncounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
 
         return StatusCode((int)HttpStatusCode.NoContent, wholeSocialEncounterDto);
     }
