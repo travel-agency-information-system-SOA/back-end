@@ -19,8 +19,9 @@ public class Encounter : Entity
     public EncounterType Type { get; init; }
     public double Latitude { get; init; }
     public double Longitude { get; init; }
+    public bool ShouldBeApproved { get; init; }
 
-    public Encounter(string name, string description, int xpPoints, EncounterStatus status, EncounterType type, double latitude, double longitude)
+    public Encounter(string name, string description, int xpPoints, EncounterStatus status, EncounterType type, double latitude, double longitude, bool shouldBeApproved)
     {
         Name = name;
         Description = description;
@@ -29,19 +30,8 @@ public class Encounter : Entity
         Type = type;
         Latitude = latitude;
         Longitude = longitude;
+        ShouldBeApproved = shouldBeApproved;
     }
 
-    public void AddEncounter()
-    {
-
-    }
-    public void DeleteEncounter()
-    {
-
-    }
-    public void UpdateEncounter()
-    {
-
-    }
 
 }

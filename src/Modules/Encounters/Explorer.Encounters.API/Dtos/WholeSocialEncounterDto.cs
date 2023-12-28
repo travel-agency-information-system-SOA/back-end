@@ -21,5 +21,6 @@ namespace Explorer.Encounters.API.Dtos
         public int TouristsRequiredForCompletion { get; set; }
         public double DistanceTreshold { get; set; }
         public List<long> TouristIDs { get; set; }
+        public bool ShouldBeApproved { get; set; }
     }
 }
