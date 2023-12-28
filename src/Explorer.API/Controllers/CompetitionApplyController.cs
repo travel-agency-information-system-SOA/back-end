@@ -23,5 +23,12 @@ namespace Explorer.API.Controllers
 
 			return CreateResponse(result);
 		}
-	}
+
+        [HttpGet("getApplies/{comId}")]
+        public ActionResult<List<CompetitionApplyDto>> GetAppliesByCompId(int comId)
+        {
+            var result = _competitionApplyService.GetAppliesByCompId(comId);
+            return CreateResponse(result);
+        }
+    }
 }

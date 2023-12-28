@@ -59,11 +59,50 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return MapToDto(tour);
         }
 
-        public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int page, int pageSize)
+        public Result<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, int page, int pageSize)
+        {
+            int firstPrice = 0;
+            if (price == 100)
+                firstPrice = 0;
+            else if (price == 200)
+                firstPrice = 101;
+            else
+                firstPrice = 201;
+
+           var tours = _repository.GetAllPublished(page, pageSize);
+           var filteredTours = tours.Results.Where(tour =>
+                                            (level.Equals("None") || tour.DifficultyLevel.ToString() == level) &&
+                                             (price == 0 || (tour.Price >= firstPrice && tour.Price <= price && price != 0)))
+                                             .ToList();
+
+            var totalCount = filteredTours.Count;
+            var pagedResult = new PagedResult<Tour>(filteredTours, totalCount);
+            return MapToDto(pagedResult);
+
+        }
+        public Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int type, int page, int pageSize)
         {
             var tours = _repository.GetAllPublished(page, pageSize);
 
-            var filteredTours = tours.Results.Where(tour => tour.TourPoints.Any(checkpoint => IsWithinRange(lat, lon, checkpoint.Latitude, checkpoint.Longitude, range * 1000))).ToList();
+            var filteredTours = tours.Results
+                .Where(tour =>
+                {
+                    if (type == 1 && tour.TourPoints.Count > 0)
+                    {
+                        var firstCheckpoint = tour.TourPoints.First();
+                        return IsWithinRange(lat, lon, firstCheckpoint.Latitude, firstCheckpoint.Longitude, range * 1000);
+                    }
+                    else if (type == 2 && tour.TourPoints.Count > 0)
+                    {
+                        var lastCheckpoint = tour.TourPoints.Last();
+                        return IsWithinRange(lat, lon, lastCheckpoint.Latitude, lastCheckpoint.Longitude, range * 1000);
+                    }
+                    else
+                    {
+                        return tour.TourPoints.Any(checkpoint => IsWithinRange(lat, lon, checkpoint.Latitude, checkpoint.Longitude, range * 1000));
+                    }
+                })
+                .ToList();
             var totalCount = filteredTours.Count;
 
             foreach (var tour in filteredTours)
