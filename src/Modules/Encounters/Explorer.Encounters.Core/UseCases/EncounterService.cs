@@ -51,6 +51,14 @@ public class EncounterService : CrudService<EncounterDto, Encounter>, IEncounter
         }
         return null;
     }
+    public Result<List<EncounterDto>> GetAll()
+    {
+        List<Encounter> encounters = new List<Encounter>();
+        encounters = CrudRepository.GetPaged(0, 0).Results.ToList();
+
+        
+        return MapToDto(encounters);
+    }
 
     public double CalculateDistance(double userLat, double userLon, double pointLat, double pointLon)
     {

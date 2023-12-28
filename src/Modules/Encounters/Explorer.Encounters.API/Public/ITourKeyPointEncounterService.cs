@@ -15,5 +15,7 @@ namespace Explorer.Encounters.API.Public
         Result<TourKeyPointEncounterDto> Create(TourKeyPointEncounterDto tourKeyPointEncounter);
         Result<TourKeyPointEncounterDto> Update(TourKeyPointEncounterDto tourKeyPointEncounter);
         Result Delete(int id);
+
+        public int GetEncounterIdByTourPoint(int tourPointId);
     }
 }
