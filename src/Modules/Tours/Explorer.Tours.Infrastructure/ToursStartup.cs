@@ -19,6 +19,8 @@ using Explorer.Tours.Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Explorer.Tours.Core.Domain.TourBundle;
+using Explorer.Tours.Core.Domain.Competitions;
+using Explorer.Tours.Infrastructure.Services;
 
 namespace Explorer.Tours.Infrastructure;
 
@@ -65,8 +67,18 @@ public static class ToursStartup
 
         //services.AddScoped<IInternalTourService, TourService>();
         services.AddScoped<ITourBundleService, TourBundleService>();
+
+
+        services.AddScoped<ICompetitionService, CompetitionService>();
+
+
+		services.AddScoped<ICompetitionApplyService, CompetitionApplyService>();
+
+	}
+
         services.AddScoped<ITourStatisticsService, TourStatisticsService>();
     }
+
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
@@ -110,10 +122,11 @@ public static class ToursStartup
 
         services.AddScoped(typeof(ICrudRepository<ProblemMessage>), typeof(CrudDatabaseRepository<ProblemMessage, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourBundle>), typeof(CrudDatabaseRepository<TourBundle, ToursContext>));
+		services.AddScoped(typeof(ICrudRepository<Competition>), typeof(CrudDatabaseRepository<Competition, ToursContext>));
+		services.AddScoped(typeof(ICrudRepository<CompetitionApply>), typeof(CrudDatabaseRepository<CompetitionApply, ToursContext>));
+		services.AddScoped<ICompetitionRepository, CompetitionRepository>();
 
-
-
-        services.AddDbContext<ToursContext>(opt =>
+		services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "tours")));
     }
