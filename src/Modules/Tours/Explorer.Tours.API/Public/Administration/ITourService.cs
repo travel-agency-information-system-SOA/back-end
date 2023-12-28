@@ -16,6 +16,8 @@ namespace Explorer.Tours.API.Public.Administration
 		Result<PagedResult<TourDTO>> GetByUserId(int userId, int page, int pageSize);
         Result<TourDTO> GetTourByTourId(int id);
 
+        TourDTO GetTourById(int id);
+
         Result<TourDTO> Update(TourDTO tourDto);
 
         Result<PagedResult<TourDTO>> GetByRange(double lat, double lon, int range, int type, int page, int pageSize);

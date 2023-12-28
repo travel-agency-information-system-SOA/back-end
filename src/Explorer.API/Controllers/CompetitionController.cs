@@ -34,5 +34,12 @@ namespace Explorer.API.Controllers
 			var result = _competitionService.GetAll(page, pageSize);
 			return CreateResponse(result);
 		}
-	}
+
+        [HttpGet("getAllCompetitionAuthorId/{id}")]
+        public ActionResult<PagedResult<CompetitionDto>> GetAllCompetitionAuthorId(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _competitionService.GetAllCompetitionAuthorId(page, pageSize, id);
+            return CreateResponse(result);
+        }
+    }
 }

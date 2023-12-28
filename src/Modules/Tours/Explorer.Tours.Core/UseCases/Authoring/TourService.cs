@@ -53,6 +53,12 @@ namespace Explorer.Tours.Core.UseCases.Authoring
             return MapToDto(tours);
         }
 
+        public TourDTO GetTourById(int id)
+        {
+            var tour = _repository.GetById(id);
+            return MapToDto(tour);
+        }
+
         public Result<PagedResult<TourDTO>> GetByLevelAndPrice(string level, int price, int page, int pageSize)
         {
             int firstPrice = 0;
