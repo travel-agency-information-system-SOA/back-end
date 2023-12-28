@@ -3,6 +3,8 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos.ShoppingCartDtos;
 using Explorer.Payments.API.Public.ShoppingCart;
 using Explorer.Payments.Core.Domain.ShoppingCarts;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.UseCases;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -16,12 +18,15 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
     {
         private readonly ICrudRepository<TourPurchaseToken> _tourPurhcaseTokenRepository;
         private readonly ICrudRepository<ShoppingCart> _shoppingCartRepository;
+        //private readonly QRCodeService _qrCodeService;
+        
 
-
-        public ShoppingCartService(ICrudRepository<ShoppingCart> repository, ICrudRepository<TourPurchaseToken> tokenRepo, IMapper mapper) : base(repository, mapper)
+        public ShoppingCartService(ICrudRepository<ShoppingCart> repository, ICrudRepository<TourPurchaseToken> tokenRepo, IMapper mapper/*, QRCodeService qrCodeService*/) : base(repository, mapper)
         {
             _shoppingCartRepository = repository;
             _tourPurhcaseTokenRepository = tokenRepo;
+            
+            
         }
 
 
@@ -39,7 +44,11 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
 
         public Result<ShoppingCartDto> Purchase(int cartId)
         {
+
+            //var accountManagementService = new AccountManagementService(_userRepository);
+            var qrCodeService = new QRCodeService();
             var cart = _shoppingCartRepository.Get(cartId);
+            qrCodeService.SendReceiptViaEmail(cart);
             var orderItems = new List<OrderItem>(cart.OrderItems);
 
             foreach (OrderItem item in orderItems)

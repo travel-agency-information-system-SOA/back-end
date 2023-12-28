@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Explorer.Payments.API.Dtos.ShoppingCartDtos;
 using Explorer.Payments.API.Public.ShoppingCart;
+using System.Drawing.Printing;
+using Explorer.Blog.API.Dtos;
 
 namespace Explorer.API.Controllers.Tourist.Marketplace
 {
@@ -31,8 +33,20 @@ namespace Explorer.API.Controllers.Tourist.Marketplace
             var result = _shoppingCartService.Purchase(cartId);
             return CreateResponse(result);
         }
+        
+        
+        
+        [HttpDelete("/receipt/{cartId:int}/{email}")]
+        public ActionResult PurchaseWithReceipt(int cartId, string email)
+        {
+            var result = _shoppingCartService.Purchase(cartId);
+            return CreateResponse(result);
+        }
+        
 
         
+        
+
         [HttpPut("{cartId:long}/{tourId:int}")]
         public ActionResult<ShoppingCartDto> RemoveOrderItem(long cartId, int tourId )
         {

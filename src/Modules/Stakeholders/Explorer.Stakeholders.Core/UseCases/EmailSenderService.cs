@@ -69,5 +69,37 @@ namespace Explorer.Stakeholders.Core.UseCases
                 Console.WriteLine($"Error sending email: {ex.Message}");
             }
         }
+
+        public void SendEmailWithAttachment(string to, string subject, string body, byte[] attachment, string attachmentName)
+        {
+            try
+            {
+                using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new NetworkCredential("pswexplorer@gmail.com", "eqvw sehe rgzf nzzp");
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("pswexplorer@gmail.com"),
+                        Subject = subject,
+                        Body = body,
+                        IsBodyHtml = true
+                    };
+
+                    mailMessage.To.Add(to);
+
+                    // Attach the file to the email
+                    Attachment attachmentFile = new Attachment(new MemoryStream(attachment), attachmentName);
+                    mailMessage.Attachments.Add(attachmentFile);
+
+                    smtpClient.Send(mailMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending email with attachment: {ex.Message}");
+            }
+        }
     }
 }
