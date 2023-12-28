@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain;
 using FluentResults;
 
 namespace Explorer.Encounters.Core.UseCases;
@@ -19,11 +21,13 @@ public class EncounterExecutionService:CrudService<EncounterExecutionDto, Encoun
     private readonly IEncounterExecutionRepository _encounterExecutionRepository;
     private readonly ITouristXPService _touristXPService;
     private readonly IEncounterService _encounterService;
-    public EncounterExecutionService(ICrudRepository<EncounterExecution> crudRepository, IEncounterService encounterService, IEncounterExecutionRepository encounterExecutionRepository, ITouristXPService touristXPService, IMapper mapper) : base(crudRepository, mapper)
+    private readonly ITourKeyPointEncounterService _keyPointEncounterService;
+    public EncounterExecutionService(ICrudRepository<EncounterExecution> crudRepository, IEncounterService encounterService, IEncounterExecutionRepository encounterExecutionRepository, ITouristXPService touristXPService, IMapper mapper,ITourKeyPointEncounterService keyPointEncounterService) : base(crudRepository, mapper)
     {
         _encounterExecutionRepository = encounterExecutionRepository;
         _touristXPService = touristXPService;
         _encounterService = encounterService;
+        _keyPointEncounterService = keyPointEncounterService;
     }
 
     public List<EncounterExecutionDto> GetExecutionsByEncounter(int encounterId)
@@ -104,4 +108,28 @@ public class EncounterExecutionService:CrudService<EncounterExecutionDto, Encoun
         return executionsDto;
     }
 
+    //za statistiku dodato
+
+    public bool IsEncounterForTourPointCompleted(int touristId, int tourPointId) {
+
+        //valja svaki tourPoint ima samo jedan encounter...trebalo bi
+        var encounterIdForTourPoint = _keyPointEncounterService.GetEncounterIdByTourPoint(tourPointId);
+       List<EncounterExecution> completedEncounters = new List<EncounterExecution>();
+        var executions = CrudRepository.GetPaged(0, 0).Results.ToList();
+
+        foreach (var execution in executions)
+        {
+            if (execution.UserId == touristId && execution.IsCompleted == true)
+            {
+                completedEncounters.Add(execution);
+            }
+        }
+
+        foreach (var execution in completedEncounters) {
+            if (execution.Id == encounterIdForTourPoint) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

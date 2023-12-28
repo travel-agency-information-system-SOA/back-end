@@ -7,6 +7,8 @@ using Explorer.Payments.Core.Domain.ShoppingCarts;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.UseCases.Authoring;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public.Administration;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -18,12 +20,10 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
 {
     public class TourPurchaseTokenService : CrudService<TourPurchaseTokenDto, TourPurchaseToken>, ITourPurchaseTokenService
     {
-        private readonly TourService _tourService;
-        private readonly ITourPurchaseTokenRepository _tourPurchaseTokeRepository;
-
-        public TourPurchaseTokenService(ICrudRepository<TourPurchaseToken> crudRepository, IMapper mapper) : base(crudRepository, mapper)
+        private readonly ITourService _tourService;
+        public TourPurchaseTokenService(ICrudRepository<TourPurchaseToken> crudRepository, IMapper mapper,ITourService tourService) : base(crudRepository, mapper)
         {
-           // _tourPurchaseTokeRepository = crudRepository;
+            this._tourService = tourService;
         }
 
         /*
@@ -60,6 +60,26 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
             return purchacedTours;
 
         }*/
+
+        //added for tourStatistics
+        public List<TourDTO> GetAllPurchasedToursByAuthor(int authorId)
+       {
+           
+           var tokens = CrudRepository.GetPaged(1, int.MaxValue).Results;
+           
+           var purchacedTours = new List<TourDTO>();
+           foreach (var token in tokens)
+           {
+               TourDTO tourDto = _tourService.GetTourByTourId(token.IdTour).Value;
+                if (tourDto.UserId==authorId) {
+                    purchacedTours.Add(tourDto);
+                }
+           }
+
+           return purchacedTours;
+
+       }
+
 
     }
 

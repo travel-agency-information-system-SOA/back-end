@@ -21,7 +21,7 @@ using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.UseCases;
 using Explorer.Payments.Core.Domain;
-
+using Explorer.Stakeholders.Core.UseCases;
 
 namespace Explorer.Payments.Infrastructure
 {
@@ -42,6 +42,8 @@ namespace Explorer.Payments.Infrastructure
             services.AddScoped<ITourPurchaseTokenService, TourPurchaseTokenService>();  //Token
             services.AddScoped<ITourSaleService, TourSaleService>();
             services.AddScoped<ICouponService, CouponService>();
+            services.AddScoped<QRCodeService>();
+            services.AddScoped<EmailSenderService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)

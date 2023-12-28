@@ -21,11 +21,28 @@ namespace Explorer.Payments.Core.UseCases
             _repository = couponRepository;
         }
 
-        public Result<CouponDto> GetByCodeAndTourId(string code, int tourId)
+        /*public Result<CouponDto> GetByCodeAndTourId(string code, int tourId)
         {
             try
             {
                 var result = _repository.GetByCodeAndTourId(code, tourId);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }*/
+
+        public Result<CouponDto> GetByCode(string code)
+        {
+            try
+            {
+                var result = _repository.GetByCode(code);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)

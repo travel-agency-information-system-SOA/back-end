@@ -21,4 +21,5 @@ public class WholeHiddenLocationEncounterDto
     public double ImageLatitude { get; set; }
     public double ImageLongitude { get; set; }
     public double DistanceTreshold { get; set; }
+    public bool ShouldBeApproved { get; set; }
 }
