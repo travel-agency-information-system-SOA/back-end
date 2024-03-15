@@ -5,6 +5,8 @@ using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using System.Text;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
@@ -12,22 +14,55 @@ namespace Explorer.API.Controllers.Author.Authoring
     public class TourController : BaseApiController
     {
         private readonly ITourService _tourService;
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public TourController(ITourService tourService)
         {
             _tourService = tourService;
+           
         }
 
 
         [HttpPost]
-        public ActionResult<TourDTO> Create([FromBody] TourDTO tour)
+        public async Task<ActionResult<TourDTO>> Create([FromBody] TourDTO tour)
         {
             tour.Status = "Draft";
             tour.Price = 0;
+            // var result = _tourService.Create(tour);
+            //return CreateResponse(result);
 
-            var result = _tourService.Create(tour);
+            // Serijalizujemo objekat u JSON
+            string json = JsonConvert.SerializeObject(tour);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                // Šaljemo POST zahtev na mikroservis
+                HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:3000/tours/create", content);
 
-            return CreateResponse(result);
+                // Proveravamo status odgovora
+                if (response.IsSuccessStatusCode)
+                {
+                    // Ako je odgovor uspešan, čitamo sadržaj odgovora
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Deserijalizujemo JSON odgovor u TourDTO objekat
+                    TourDTO createdTour = JsonConvert.DeserializeObject<TourDTO>(responseContent);
+
+                    // Vraćamo OK rezultat sa kreiranim turizmom
+                    return Ok(createdTour);
+                }
+                else
+                {
+                    // Ako je došlo do greške, vraćamo odgovarajući HTTP status
+                    return StatusCode((int)response.StatusCode, "Error occurred while creating tour.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Uhvatamo eventualne greške prilikom slanja zahteva
+                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+            }
+
         }
 
         [HttpGet("search/{lat:double}/{lon:double}/{ran:int}/{type:int}")]
