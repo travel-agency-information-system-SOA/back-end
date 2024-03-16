@@ -22,6 +22,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public TourPoint(int idTour, string name, string? description, double latitude, double longitude, string imageUrl, string secret)
         {
+
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             TourId = idTour;
             Name = name;
