@@ -115,16 +115,51 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 
 
-        [Authorize(Policy = "touristAuthorPolicy")]
+		/*[Authorize(Policy = "touristAuthorPolicy")]
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
             var result = _tourService.Delete(id);
             return CreateResponse(result);
-        }
-       
-        //[Authorize(Policy = "authorPolicy")] ostaviti ovako, jer i administrator updatuje turu
-        [HttpPut("{id:int}")]
+        }*/
+
+		[HttpDelete("{id:int}")]
+		public async Task<ActionResult> Delete(int id)
+		{
+			try
+			{
+				// Serijalizujemo objekat u JSON
+				string json = JsonConvert.SerializeObject(id);
+				HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+				// Šaljemo DELETE zahtev na Go aplikaciju
+				HttpResponseMessage response = await _httpClient.DeleteAsync("http://localhost:3000/tours/delete/" + id);
+
+				// Proveravamo status odgovora
+				if (response.IsSuccessStatusCode)
+				{
+					// Ako je odgovor uspešan, čitamo sadržaj odgovora
+					string responseContent = await response.Content.ReadAsStringAsync();
+
+					// Vraćamo OK rezultat
+					return Ok(responseContent);
+				}
+				else
+				{
+					// Ako je došlo do greške, vraćamo odgovarajući HTTP status
+					return StatusCode((int)response.StatusCode, "Error occurred while deleting tour.");
+				}
+			}
+			catch (HttpRequestException ex)
+			{
+				// Uhvatamo eventualne greške prilikom slanja zahteva
+				return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+			}
+		}
+
+
+		//[Authorize(Policy = "authorPolicy")] ostaviti ovako, jer i administrator updatuje turu
+		[HttpPut("{id:int}")]
         public ActionResult<TourDTO> Update([FromBody] TourDTO tourDto)
         {
             var result = _tourService.Update(tourDto);
