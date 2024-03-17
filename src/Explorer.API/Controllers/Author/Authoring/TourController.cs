@@ -80,35 +80,6 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-      /*  [HttpGet("{userId:int}")]
-        public async Task<ActionResult<PagedResult<TourDTO>>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
-        {
-            try
-            {
-                string url = $"http://localhost:3000/tours/getByAuthor/{userId}?page={page}&pageSize={pageSize}";
-                HttpResponseMessage response = await _httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    // Deserializujete odgovor u List<TourDTO>
-                    PagedResult<TourDTO> pagedResult = JsonConvert.DeserializeObject<PagedResult<TourDTO>>(responseContent);
-                    // Vratite PagedResult<TourDTO> kao rezultat akcije.
-                    return Ok(pagedResult);
-                }
-                else
-                {
-                    // Ako je došlo do greške, vratite odgovarajući HTTP status
-                    return StatusCode((int)response.StatusCode, "Error occurred while fetching tours.");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                // Uhvatite eventualne greške prilikom slanja zahteva
-                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
-            }
-        }*/
 
         [HttpGet("{userId:int}")]
         public async Task<ActionResult<PagedResult<TourDTO>>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
