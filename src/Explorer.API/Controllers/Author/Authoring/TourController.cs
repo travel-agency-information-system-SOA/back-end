@@ -139,23 +139,93 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [HttpPut("publish/{tourId:int}")]
+		/*[HttpPut("publish/{tourId:int}")]
         public ActionResult Publish(int tourId)
         {
             var result = _tourService.Publish(tourId);
             return CreateResponse(result);
-        }
+        }*/
 
-       
-        [Authorize(Policy = "touristAuthorPolicy")]
+		[HttpPut("publish/{tourId:int}")]
+		public async Task<ActionResult> Publish(int tourId)
+		{
+			try
+			{
+				// Serijalizujemo objekat u JSON
+				string json = JsonConvert.SerializeObject(tourId);
+				HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+				// Šaljemo POST zahtev na Go aplikaciju
+				HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:3000/tours/publish/" + tourId, content);
+
+				// Proveravamo status odgovora
+				if (response.IsSuccessStatusCode)
+				{
+					// Ako je odgovor uspešan, čitamo sadržaj odgovora
+					string responseContent = await response.Content.ReadAsStringAsync();
+
+					// Vraćamo OK rezultat
+					return Ok(responseContent);
+				}
+				else
+				{
+					// Ako je došlo do greške, vraćamo odgovarajući HTTP status
+					return StatusCode((int)response.StatusCode, "Error occurred while publishing tour.");
+				}
+			}
+			catch (HttpRequestException ex)
+			{
+				// Uhvatamo eventualne greške prilikom slanja zahteva
+				return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+			}
+		}
+
+
+
+
+		/*[Authorize(Policy = "touristAuthorPolicy")]
         [HttpPut("archive/{id:int}")]
         public ActionResult ArchiveTour(int id)
         {
             var result = _tourService.ArchiveTour(id);
             return CreateResponse(result);
-        }
-       
-        [Authorize(Policy = "touristAuthorPolicy")]
+        }*/
+
+		[HttpPut("archive/{id:int}")]
+		public async Task<ActionResult> Archive(int id)
+		{
+			try
+			{
+				// Serijalizujemo objekat u JSON
+				string json = JsonConvert.SerializeObject(id);
+				HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+				// Šaljemo POST zahtev na Go aplikaciju
+				HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:3000/tours/archive/" + id, content);
+
+				// Proveravamo status odgovora
+				if (response.IsSuccessStatusCode)
+				{
+					// Ako je odgovor uspešan, čitamo sadržaj odgovora
+					string responseContent = await response.Content.ReadAsStringAsync();
+
+					// Vraćamo OK rezultat
+					return Ok(responseContent);
+				}
+				else
+				{
+					// Ako je došlo do greške, vraćamo odgovarajući HTTP status
+					return StatusCode((int)response.StatusCode, "Error occurred while archiving tour.");
+				}
+			}
+			catch (HttpRequestException ex)
+			{
+				// Uhvatamo eventualne greške prilikom slanja zahteva
+				return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+			}
+		}
+
+		[Authorize(Policy = "touristAuthorPolicy")]
         [HttpDelete("deleteAggregate/{id:int}")]
         public ActionResult DeleteAggregate(int id)
         {
