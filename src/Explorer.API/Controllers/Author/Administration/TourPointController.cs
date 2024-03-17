@@ -1,10 +1,13 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.UseCases.Administration;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
@@ -15,6 +18,7 @@ namespace Explorer.API.Controllers.Author.Administration
     public class TourPointController : BaseApiController
     {
         private readonly ITourPointService _tourPointService;
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public TourPointController(ITourPointService tourPointService)
         {
@@ -27,22 +31,35 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourPointService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
-        
-        [HttpPost]/*
-        public (ActionResult<TourPointDto>, int) Create([FromBody] TourPointDto tourPoint)
-        {
-            var result = _tourPointService.Create(tourPoint);
-            Console.WriteLine("rezultat id:" + result.Value.Id);
 
-            return (CreateResponse(result), result.Value.Id);
-        }*/
-        
-        public ActionResult<PagedResult<TourPointDto>> Create([FromBody] TourPointDto tourPoint)
+        [HttpPost]  //ovo je za dovanje kljucne tacke
+        public async Task<ActionResult<PagedResult<TourPointDto>>> Create([FromBody] TourPointDto tourPoint)
         {
-            var result = _tourPointService.Create(tourPoint);
+            /*var result = _tourPointService.Create(tourPoint);
             Console.WriteLine("rezultat id:" + result.Value.Id);
-            
-            return CreateResponse(result);
+            return CreateResponse(result);*/
+  
+            string json = JsonConvert.SerializeObject(tourPoint);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:3000/tourPoint/create", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    TourPointDto createdTourPoint = JsonConvert.DeserializeObject<TourPointDto>(responseContent);
+                    return Ok(createdTourPoint);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occurred while creating tour point.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+            }
         }
 
         [Authorize(Policy = "authorPolicy")]

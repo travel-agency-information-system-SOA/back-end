@@ -131,12 +131,33 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-
         [HttpPut("caracteristics/{id:int}")]
-        public ActionResult AddCaracteristics(int id, [FromBody] TourCharacteristicDTO tourCharacteristic)
+        public async Task<ActionResult<TourDTO>> AddCaracteristics(int id, [FromBody] TourCharacteristicDTO tourCharacteristic)
         {
-            var result = _tourService.SetTourCharacteristic(id, tourCharacteristic.Distance, tourCharacteristic.Duration, tourCharacteristic.TransportType);
-            return CreateResponse(result);
+            //var result = _tourService.SetTourCharacteristic(id, tourCharacteristic.Distance, tourCharacteristic.Duration, tourCharacteristic.TransportType);
+            // return CreateResponse(result);
+            try
+            {
+                string url = $"http://localhost:3000/tours/setCaracteristics/{id}";
+                var json = JsonConvert.SerializeObject(tourCharacteristic);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PutAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    TourDTO tourDto = JsonConvert.DeserializeObject<TourDTO>(responseContent);
+                    return Ok(tourDto);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occurred while adding characteristics.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+            }
         }
 
         [HttpPut("publish/{tourId:int}")]
