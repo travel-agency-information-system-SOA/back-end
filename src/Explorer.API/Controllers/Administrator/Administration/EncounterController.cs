@@ -5,9 +5,15 @@ using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.UseCases;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Diagnostics.Metrics;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 
 namespace Explorer.API.Controllers.Administrator.Administration;
 
@@ -19,6 +25,8 @@ public class EncounterController : BaseApiController
     private readonly IHiddenLocationEncounterService _hiddenLocationEncounterService;
 
     private readonly ISocialEncounterService _socialEncounterService;
+
+    private readonly HttpClient _httpClient = new HttpClient();
     public EncounterController(IEncounterService encounterService, ISocialEncounterService socialEncounterService, IHiddenLocationEncounterService hiddenLocationEncounterService)
     {
         _encounterService = encounterService;
@@ -46,106 +54,219 @@ public class EncounterController : BaseApiController
         var result = _hiddenLocationEncounterService.GetPaged(page, pageSize);
         return CreateResponse(result);
     }
+
+    //mikroservisi
     [HttpPost]
-    public ActionResult<EncounterDto> Create([FromBody] EncounterDto encounter)
+    public async Task<ActionResult<EncounterDto>> Create([FromBody] EncounterDto encounter)
     {
-        var result = _encounterService.Create(encounter);
-        return CreateResponse(result);
+        //var result = _encounterService.Create(encounter);
+        //return CreateResponse(result);
+
+        // Serijalizujemo objekat u JSON
+        string json = JsonConvert.SerializeObject(encounter);
+        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        try
+        {
+            // Šaljemo POST zahtev na mikroservis
+            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/create", content);
+
+            // Proveravamo status odgovora
+            if (response.IsSuccessStatusCode)
+            {
+                // Ako je odgovor uspešan, čitamo sadržaj odgovora
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Deserijalizujemo JSON odgovor u TourDTO objekat
+                EncounterDto createdEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
+
+                // Vraćamo OK rezultat sa kreiranim turizmom
+                return Ok(createdEncounter);
+            }
+            else
+            {
+                // Ako je došlo do greške, vraćamo odgovarajući HTTP status
+                return StatusCode((int)response.StatusCode, "Error occurred while creating encounter.");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            // Uhvatamo eventualne greške prilikom slanja zahteva
+            return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+        }
     }
+
+    //HIDDEN LOCATION ENCOUNTER
+
     [HttpPost("hiddenLocation")]
-    public ActionResult<HiddenLocationEncounterDto> Create([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
+    public async Task<ActionResult<WholeHiddenLocationEncounterDto>> Create([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
     {
-        EncounterDto encounterDto = new EncounterDto();
-        encounterDto.Name = wholeEncounter.Name;
-        encounterDto.Description = wholeEncounter.Description;
-        encounterDto.XpPoints = wholeEncounter.XpPoints;
-        encounterDto.Status = wholeEncounter.Status;
-        encounterDto.Type = wholeEncounter.Type;
-        encounterDto.Longitude = wholeEncounter.Longitude;
-        encounterDto.Latitude = wholeEncounter.Latitude;
-        encounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
-        var baseEncounter = _encounterService.Create(encounterDto);
-        if (!baseEncounter.IsSuccess)
+        // Kreiranje susreta
+        var encounterDto = new EncounterDto
         {
-            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
+            Name = wholeEncounter.Name,
+            Description = wholeEncounter.Description,
+            XpPoints = wholeEncounter.XpPoints,
+            Status = wholeEncounter.Status,
+            Type = wholeEncounter.Type,
+            Longitude = wholeEncounter.Longitude,
+            Latitude = wholeEncounter.Latitude,
+            ShouldBeApproved = wholeEncounter.ShouldBeApproved
+        };
+
+        // Slanje POST zahteva za kreiranje susreta
+        var baseEncounterResponse = await _httpClient.PostAsJsonAsync("http://localhost:4000/encounters/create", encounterDto);
+
+        if (!baseEncounterResponse.IsSuccessStatusCode)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating encounter.");
         }
 
-        HiddenLocationEncounterDto hiddenLocationEncounterDto = new HiddenLocationEncounterDto();
-        hiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
-        hiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
-        hiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
-        hiddenLocationEncounterDto.ImageURL = wholeEncounter.ImageURL;
-        hiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
+        // Deserijalizacija odgovora u EncounterDto
+        var createdEncounter = await baseEncounterResponse.Content.ReadFromJsonAsync<EncounterDto>();
 
-        var result = _hiddenLocationEncounterService.Create(hiddenLocationEncounterDto);
-        if (!result.IsSuccess)
+        // Kreiranje skrivenog susreta
+        var hiddenLocationEncounterDto = new HiddenLocationEncounterDto
         {
-            return StatusCode((int)HttpStatusCode.BadRequest, result);
+            EncounterId = createdEncounter.Id,
+            ImageLatitude = wholeEncounter.ImageLatitude,
+            ImageLongitude = wholeEncounter.ImageLongitude,
+            ImageURL = wholeEncounter.ImageURL,
+            DistanceTreshold = wholeEncounter.DistanceTreshold
+        };
+
+        // Slanje POST zahteva za kreiranje skrivenog susreta
+        var hiddenLocationEncounterResponse = await _httpClient.PostAsJsonAsync("http://localhost:4000/encounters/createHiddenLocationEncounter", hiddenLocationEncounterDto);
+
+        if (!hiddenLocationEncounterResponse.IsSuccessStatusCode)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating hidden location encounter.");
         }
 
-        var wholeHiddenLocationEncounterDto = new WholeHiddenLocationEncounterDto();
-        wholeHiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
-        wholeHiddenLocationEncounterDto.Name = wholeEncounter.Name;
-        wholeHiddenLocationEncounterDto.Description = wholeEncounter.Description;
-        wholeHiddenLocationEncounterDto.XpPoints = wholeEncounter.XpPoints;
-        wholeHiddenLocationEncounterDto.Status = wholeEncounter.Status;
-        wholeHiddenLocationEncounterDto.Type = wholeEncounter.Type;
-        wholeHiddenLocationEncounterDto.Latitude = wholeEncounter.Latitude;
-        wholeHiddenLocationEncounterDto.Longitude = wholeEncounter.Longitude;
-        wholeHiddenLocationEncounterDto.Id = result.Value.Id;
-        wholeHiddenLocationEncounterDto.ImageURL = wholeEncounter.ImageURL;
-        wholeHiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
-        wholeHiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
-        wholeHiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
-        wholeHiddenLocationEncounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
-        return StatusCode((int)HttpStatusCode.Created, wholeHiddenLocationEncounterDto);
-    
+        // Deserijalizacija odgovora u WholeHiddenLocationEncounterDto
+        var createdHiddenLocationEncounter = await hiddenLocationEncounterResponse.Content.ReadFromJsonAsync<WholeHiddenLocationEncounterDto>();
+
+        return StatusCode((int)HttpStatusCode.Created, createdHiddenLocationEncounter);
     }
-    [HttpPost("social")]
-    public ActionResult<WholeSocialEncounterDto> Create([FromBody] WholeSocialEncounterDto socialEncounter)
-    {
-        EncounterDto encounterDto = new EncounterDto();
-        encounterDto.Name = socialEncounter.Name;
-        encounterDto.Description = socialEncounter.Description;
-        encounterDto.XpPoints = socialEncounter.XpPoints;
-        encounterDto.Status = socialEncounter.Status;
-        encounterDto.Type = socialEncounter.Type;
-        encounterDto.Longitude = socialEncounter.Longitude;
-        encounterDto.Latitude = socialEncounter.Latitude;
-        encounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
-        var baseEncounter = _encounterService.Create(encounterDto);
-        if (!baseEncounter.IsSuccess)
-        {
-            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
-        }
-        SocialEncounterDto socialEncounterDto = new SocialEncounterDto();
-        socialEncounterDto.EncounterId = baseEncounter.Value.Id;
-        socialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
-        socialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
-        socialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
-        var result = _socialEncounterService.Create(socialEncounterDto);
-        if (!result.IsSuccess)
-        {
-            return StatusCode((int)HttpStatusCode.BadRequest, result);
-        }
 
-        var wholeSocialEncounterDto = new WholeSocialEncounterDto();
-        wholeSocialEncounterDto.EncounterId = baseEncounter.Value.Id;
-        wholeSocialEncounterDto.Name = socialEncounter.Name;
-        wholeSocialEncounterDto.Description = socialEncounter.Description;
-        wholeSocialEncounterDto.XpPoints = socialEncounter.XpPoints;
-        wholeSocialEncounterDto.Status = socialEncounter.Status;
-        wholeSocialEncounterDto.Type = socialEncounter.Type;
-        wholeSocialEncounterDto.Latitude = socialEncounter.Latitude;
-        wholeSocialEncounterDto.Longitude = socialEncounter.Longitude;
-        wholeSocialEncounterDto.Id = result.Value.Id;
-        wholeSocialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
-        wholeSocialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
-        wholeSocialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
-        wholeSocialEncounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
+
+    //ENCOUNTER
+    private async Task<ActionResult<EncounterDto>> CreateBaseEncounterAsync(EncounterDto encounterDto)
+    {
+        string json = JsonConvert.SerializeObject(encounterDto);
+        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        try
+        {
+            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/create", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                EncounterDto createdEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
+                return Ok(createdEncounter);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error occurred while creating encounter.");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+        }
+    }
+     
+    //SOCIAL ENCOUNTER CEO
+    [HttpPost("social")]
+    public async Task<ActionResult<WholeSocialEncounterDto>> CreateSocialEncounter([FromBody] WholeSocialEncounterDto socialEncounter)
+    {
+        EncounterDto encounterDto = new EncounterDto
+        {
+            Name = socialEncounter.Name,
+            Description = socialEncounter.Description,
+            XpPoints = socialEncounter.XpPoints,
+            Status = socialEncounter.Status,
+            Type = socialEncounter.Type,
+            Longitude = socialEncounter.Longitude,
+            Latitude = socialEncounter.Latitude,
+            ShouldBeApproved = socialEncounter.ShouldBeApproved
+        };
+
+        var baseEncounterResponse = await CreateBaseEncounterAsync(encounterDto); // Pozivamo metodu za kreiranje osnovnog sastanka
+
+        /*
+        if (baseEncounterResponse.Value == null)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating encounter."); // Vraćamo BadRequest ako je rezultat null
+        }
+        */
+
+        var baseEncounter = (OkObjectResult)baseEncounterResponse.Result;
+        var createdEncounter = (EncounterDto)baseEncounter.Value;
+
+        SocialEncounterDto socialEncounterDto = new SocialEncounterDto
+        {
+            EncounterId = createdEncounter.Id,
+            TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion,
+            DistanceTreshold = socialEncounter.DistanceTreshold,
+            TouristIDs = socialEncounter.TouristIDs
+        };
+
+        // Pozivamo mikroservis za kreiranje socijalnog sastanka (SocialEncounter)
+        var result = await CreateSocialEncounterAsync(socialEncounterDto);
+
+        /*
+        if (result.Value == null)
+        {
+            return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating social encounter."); // Vraćamo BadRequest ako je rezultat null
+        }
+        */
+
+        var wholeSocialEncounterDto = new WholeSocialEncounterDto
+        {
+            EncounterId = createdEncounter.Id,
+            Name = socialEncounter.Name,
+            Description = socialEncounter.Description,
+            XpPoints = socialEncounter.XpPoints,
+            Status = socialEncounter.Status,
+            Type = socialEncounter.Type,
+            Latitude = socialEncounter.Latitude,
+            Longitude = socialEncounter.Longitude,
+            //Id = result.Value.Id,
+            TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion,
+            DistanceTreshold = socialEncounter.DistanceTreshold,
+            TouristIDs = socialEncounter.TouristIDs,
+            ShouldBeApproved = socialEncounter.ShouldBeApproved
+        };
 
         return StatusCode((int)HttpStatusCode.Created, wholeSocialEncounterDto);
     }
+
+    //SOCIAL ENCOUNTER
+    private async Task<ActionResult<SocialEncounterDto>> CreateSocialEncounterAsync(SocialEncounterDto socialEncounterDto)
+    {
+        string json = JsonConvert.SerializeObject(socialEncounterDto);
+        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        try
+        {
+            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/createSocialEncounter", content); // Promeniti URL na odgovarajući za kreiranje socijalnog sastanka
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                SocialEncounterDto createdSocialEncounter = JsonConvert.DeserializeObject<SocialEncounterDto>(responseContent);
+                return Ok(createdSocialEncounter);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error occurred while creating social encounter.");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+        }
+    }
+
     [HttpPut]
     public ActionResult<EncounterDto> Update([FromBody] EncounterDto encounter)
     {
@@ -153,6 +274,7 @@ public class EncounterController : BaseApiController
         var result = _encounterService.Update(encounter);
         return CreateResponse(result);
     }
+
     [HttpPut("hiddenLocation")]
     public ActionResult<HiddenLocationEncounterDto> Update([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
     {
