@@ -4,6 +4,7 @@ using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.UseCases;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Tourist.EncounterExecution
 {
@@ -14,6 +15,8 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         private readonly IEncounterExecutionService _encounterExecutionService;
         private readonly ISocialEncounterService _socialEncounterService;
         private readonly IHiddenLocationEncounterService _hiddenLocationEncounterService;
+
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public EncounterExecutionController(IEncounterExecutionService service, ISocialEncounterService socialEncounterService, IHiddenLocationEncounterService hiddenLocationEncounterService)
         {
@@ -59,10 +62,29 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpGet("getActive/{userId:int}")]
-        public ActionResult<PagedResult<EncounterExecutionDto>> GetActiveByUser(int userId)
+        public async Task<ActionResult<EncounterExecutionDto>> GetActiveByUser(int userId)
         {
-            var execution = _encounterExecutionService.GetExecutionByUser(userId);
-            return CreateResponse(execution);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution/getActive/{userId}";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    EncounterExecutionDto result = JsonConvert.DeserializeObject<EncounterExecutionDto>(responseContent);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while fetching data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
 
         [HttpGet("checkHidden/{executionId:int}/{encounterId:int}")]
