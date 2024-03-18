@@ -96,12 +96,29 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpGet("completeExecution/{userId:int}")]
-        public ActionResult<EncounterExecutionDto> CompleteExecution(int userId)
+        public async Task<ActionResult<EncounterExecutionDto>> CompleteExecution(int userId)
         {
-            Result<EncounterExecutionDto> execution = _encounterExecutionService.CompleteEncounter(userId);
-            return CreateResponse(execution);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution/completeExecution/{userId}";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    EncounterExecutionDto result = JsonConvert.DeserializeObject<EncounterExecutionDto>(responseContent);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while fetching data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
-
-
     }
 }
