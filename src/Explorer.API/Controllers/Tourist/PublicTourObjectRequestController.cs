@@ -28,7 +28,7 @@ namespace Explorer.API.Controllers.Tourist
         }
 
 
-        [HttpPost("createRequest/{tourObjectId:int}/{authorId:int}")]  //na klikk dugmeta proglasi javnom
+        [HttpPost("createRequest/{tourObjectId:int}/{authorId:int}")]  //na klikk dugmeta proglasi javnom , gd e se nalazi na frontu?
         public ActionResult<TourObjectRequestDto> Create(int tourObjectId, int authorId)
         {
             var result = _requestService.Create(tourObjectId, authorId);
