@@ -24,12 +24,33 @@ namespace Explorer.API.Controllers.Author.Administration
         {
             _tourPointService = tourPointService;
         }
+
         [Authorize(Policy = "authorPolicy")]
         [HttpGet]
-        public ActionResult<PagedResult<TourPointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<TourPointDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourPointService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            //var result = _tourPointService.GetPaged(page, pageSize);
+            //return CreateResponse(result);
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("http://localhost:3000/tourPoint/getAll");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    List<TourPointDto> tourPoints = JsonConvert.DeserializeObject<List<TourPointDto>>(responseContent);
+                    PagedResult<TourPointDto> pagedResult = new PagedResult<TourPointDto>(tourPoints, tourPoints.Count);
+                    return Ok(pagedResult);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occurred while getting tour points.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+            }
         }
 
         [HttpPost]  //ovo je za dovanje kljucne tacke
