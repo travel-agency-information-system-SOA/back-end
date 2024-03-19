@@ -1,4 +1,5 @@
-﻿using Explorer.Blog.API.Dtos;
+﻿using Azure;
+using Explorer.Blog.API.Dtos;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API;
 using Explorer.Encounters.API.Dtos;
@@ -10,6 +11,7 @@ using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics.Metrics;
 using System.Net;
 using System.Net.Http;
@@ -33,26 +35,86 @@ public class EncounterController : BaseApiController
         _socialEncounterService = socialEncounterService;
         _hiddenLocationEncounterService = hiddenLocationEncounterService;
     }
-     
+
     [HttpGet]
-    public ActionResult<PagedResult<EncounterDto>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<EncounterDto>>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _encounterService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        // Poziv mikroservisa za dobavljanje svih susreta
+        var response = await _httpClient.GetAsync($"http://localhost:4000/encounters?page={page}&pageSize={pageSize}");
+
+        // Provera statusa odgovora
+        if (response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            // Deserializujete odgovor u List<EncounterDto>
+            List<EncounterDto> encounters = JsonConvert.DeserializeObject<List<EncounterDto>>(responseContent);
+
+            // Kreiranje PagedResult objekta
+            PagedResult<EncounterDto> pagedResult = new PagedResult<EncounterDto>(encounters, encounters.Count);
+
+            // Vraćanje PagedResult<EncounterDto> kao rezultat akcije.
+            return Ok(pagedResult);
+        }
+        else
+        {
+            // Vraćanje odgovarajućeg statusa u slučaju greške
+            return StatusCode((int)response.StatusCode, "Error occurred while fetching encounters.");
+        }
     }
 
     [HttpGet("social")]
-    public ActionResult<PagedResult<SocialEncounterDto>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<SocialEncounterDto>>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _socialEncounterService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        // Poziv mikroservisa za dobavljanje svih socijalnih susreta
+        var response = await _httpClient.GetAsync($"http://localhost:4000/socialEncounters?page={page}&pageSize={pageSize}");
+
+        // Provera statusa odgovora
+        if (response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            // Deserializujete odgovor u List<EncounterDto>
+            List<SocialEncounterDto> encounters = JsonConvert.DeserializeObject<List<SocialEncounterDto>>(responseContent);
+
+            // Kreiranje PagedResult objekta
+            PagedResult<SocialEncounterDto> pagedResult = new PagedResult<SocialEncounterDto>(encounters, encounters.Count);
+
+            // Vraćanje PagedResult<EncounterDto> kao rezultat akcije.
+            return Ok(pagedResult);
+        }
+        else
+        {
+            // Vraćanje odgovarajućeg statusa u slučaju greške
+            return StatusCode((int)response.StatusCode, "Error occurred while fetching encounters.");
+        }
     }
 
     [HttpGet("hiddenLocation")]
-    public ActionResult<PagedResult<HiddenLocationEncounterDto>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<HiddenLocationEncounterDto>>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _hiddenLocationEncounterService.GetPaged(page, pageSize);
-        return CreateResponse(result);
+        // Poziv mikroservisa za dobavljanje svih susreta na skrivenim lokacijama
+        var response = await _httpClient.GetAsync($"http://localhost:4000/hiddenLocationEncounters?page={page}&pageSize={pageSize}");
+
+        // Provera statusa odgovora
+        if (response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            // Deserializujete odgovor u List<EncounterDto>
+            List<HiddenLocationEncounterDto> encounters = JsonConvert.DeserializeObject<List<HiddenLocationEncounterDto>>(responseContent);
+
+            // Kreiranje PagedResult objekta
+            PagedResult<HiddenLocationEncounterDto> pagedResult = new PagedResult<HiddenLocationEncounterDto>(encounters, encounters.Count);
+
+            // Vraćanje PagedResult<EncounterDto> kao rezultat akcije.
+            return Ok(pagedResult);
+        }
+        else
+        {
+            // Vraćanje odgovarajućeg statusa u slučaju greške
+            return StatusCode((int)response.StatusCode, "Error occurred while fetching encounters.");
+        }
     }
 
     //mikroservisi
@@ -267,112 +329,185 @@ public class EncounterController : BaseApiController
         }
     }
 
+    //UPDATE
+
     [HttpPut]
-    public ActionResult<EncounterDto> Update([FromBody] EncounterDto encounter)
+    public async Task<ActionResult<EncounterDto>> Update([FromBody] EncounterDto encounter)
     {
+        // Serijalizacija objekta u JSON
+        string json = JsonConvert.SerializeObject(encounter);
+        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var result = _encounterService.Update(encounter);
-        return CreateResponse(result);
+        try
+        {
+            // Šaljemo PUT zahtev na mikroservis
+            HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:4000/encounters/update", content);
+
+            // Proveravamo status odgovora
+            if (response.IsSuccessStatusCode)
+            {
+                // Ako je odgovor uspešan, čitamo sadržaj odgovora
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Deserijalizujemo JSON odgovor u EncounterDto objekat
+                EncounterDto updatedEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
+
+                // Vraćamo OK rezultat sa ažuriranim susretom
+                return Ok(updatedEncounter);
+            }
+            else
+            {
+                // Ako je došlo do greške, vraćamo odgovarajući HTTP status
+                return StatusCode((int)response.StatusCode, "Error occurred while updating encounter.");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            // Uhvatamo eventualne greške prilikom slanja zahteva
+            return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+        }
     }
 
+    //HIDDEN LOCATION ENCOUNTER UPDATE
     [HttpPut("hiddenLocation")]
-    public ActionResult<HiddenLocationEncounterDto> Update([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
+    public async Task<ActionResult<HiddenLocationEncounterDto>> Update([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
     {
-        EncounterDto encounterDto = new EncounterDto();
-        encounterDto.Id = wholeEncounter.EncounterId;
-        encounterDto.Name = wholeEncounter.Name;
-        encounterDto.Description = wholeEncounter.Description;
-        encounterDto.XpPoints = wholeEncounter.XpPoints;
-        encounterDto.Status = wholeEncounter.Status;
-        encounterDto.Type = wholeEncounter.Type;
-        encounterDto.Longitude = wholeEncounter.Longitude;
-        encounterDto.Latitude = wholeEncounter.Latitude;
-        encounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
-        var baseEncounter = _encounterService.Update(encounterDto);
-        if (!baseEncounter.IsSuccess)
+        // Prvo ažurirajte EncounterDto
+        var encounterDto = new EncounterDto
         {
-            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
-        }
+            Id = wholeEncounter.EncounterId,
+            Name = wholeEncounter.Name,
+            Description = wholeEncounter.Description,
+            XpPoints = wholeEncounter.XpPoints,
+            Status = wholeEncounter.Status,
+            Type = wholeEncounter.Type,
+            Longitude = wholeEncounter.Longitude,
+            Latitude = wholeEncounter.Latitude,
+            ShouldBeApproved = wholeEncounter.ShouldBeApproved
+        };
 
-        HiddenLocationEncounterDto hiddenLocationEncounterDto = new HiddenLocationEncounterDto();
-        hiddenLocationEncounterDto.Id = wholeEncounter.Id;
-        hiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
-        hiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
-        hiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
-        hiddenLocationEncounterDto.ImageURL = wholeEncounter.ImageURL;
-        hiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
-
-        var result = _hiddenLocationEncounterService.Update(hiddenLocationEncounterDto);
-        if (!result.IsSuccess)
+        try
         {
-            return StatusCode((int)HttpStatusCode.BadRequest, result);
-        }
-        var wholeHiddenLocationEncounterDto = new WholeHiddenLocationEncounterDto();
-        wholeHiddenLocationEncounterDto.EncounterId = baseEncounter.Value.Id;
-        wholeHiddenLocationEncounterDto.Name = wholeEncounter.Name;
-        wholeHiddenLocationEncounterDto.Description = wholeEncounter.Description;
-        wholeHiddenLocationEncounterDto.XpPoints = wholeEncounter.XpPoints;
-        wholeHiddenLocationEncounterDto.Status = wholeEncounter.Status;
-        wholeHiddenLocationEncounterDto.Type = wholeEncounter.Type;
-        wholeHiddenLocationEncounterDto.Latitude = wholeEncounter.Latitude;
-        wholeHiddenLocationEncounterDto.Longitude = wholeEncounter.Longitude;
-        wholeHiddenLocationEncounterDto.Id = result.Value.Id;
-        wholeHiddenLocationEncounterDto.ImageURL = wholeEncounter.ImageURL;
-        wholeHiddenLocationEncounterDto.ImageLatitude = wholeEncounter.ImageLatitude;
-        wholeHiddenLocationEncounterDto.ImageLongitude = wholeEncounter.ImageLongitude;
-        wholeHiddenLocationEncounterDto.DistanceTreshold = wholeEncounter.DistanceTreshold;
-        wholeHiddenLocationEncounterDto.ShouldBeApproved = wholeEncounter.ShouldBeApproved;
+            // Serijalizacija EncounterDto u JSON
+            string encounterJson = JsonConvert.SerializeObject(encounterDto);
+            HttpContent encounterContent = new StringContent(encounterJson, Encoding.UTF8, "application/json");
 
-        return StatusCode((int)HttpStatusCode.NoContent, wholeHiddenLocationEncounterDto);
+            // Slanje PUT zahteva na mikroservis za ažuriranje EncounterDto
+            HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/update", encounterContent);
+
+            // Provera statusa odgovora za ažuriranje EncounterDto
+            if (!encounterResponse.IsSuccessStatusCode)
+            {
+                // Ako nije uspelo, vraćamo odgovarajući HTTP status
+                return StatusCode((int)encounterResponse.StatusCode, "Error occurred while updating encounter.");
+            }
+
+            // Sada ažurirajte HiddenLocationEncounterDto
+            var hiddenLocationEncounterDto = new HiddenLocationEncounterDto
+            {
+                Id = wholeEncounter.Id,
+                EncounterId = encounterDto.Id,
+                ImageLatitude = wholeEncounter.ImageLatitude,
+                ImageLongitude = wholeEncounter.ImageLongitude,
+                ImageURL = wholeEncounter.ImageURL,
+                DistanceTreshold = wholeEncounter.DistanceTreshold
+            };
+
+            // Serijalizacija HiddenLocationEncounterDto u JSON
+            string hiddenLocationEncounterJson = JsonConvert.SerializeObject(hiddenLocationEncounterDto);
+            HttpContent hiddenLocationEncounterContent = new StringContent(hiddenLocationEncounterJson, Encoding.UTF8, "application/json");
+
+            // Slanje PUT zahteva na mikroservis za ažuriranje HiddenLocationEncounterDto
+            HttpResponseMessage hiddenLocationEncounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/updateHiddenLocationEncounter", hiddenLocationEncounterContent);
+
+            // Provera statusa odgovora za ažuriranje HiddenLocationEncounterDto
+            if (!hiddenLocationEncounterResponse.IsSuccessStatusCode)
+            {
+                // Ako nije uspelo, vraćamo odgovarajući HTTP status
+                return StatusCode((int)hiddenLocationEncounterResponse.StatusCode, "Error occurred while updating hidden location encounter.");
+            }
+
+            // Ako je sve uspešno, vraćamo odgovarajući HTTP status bez sadržaja
+            return StatusCode((int)HttpStatusCode.NoContent);
+        }
+        catch (HttpRequestException ex)
+        {
+            // Uhvatamo eventualne greške prilikom slanja zahteva i vraćamo odgovarajući HTTP status
+            return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+        }
     }
+
 
     [HttpPut("social")]
-    public ActionResult<WholeSocialEncounterDto> Update([FromBody] WholeSocialEncounterDto socialEncounter)
+    //WholeSocialEncounterDto povratna vrednost cele funkcije
+    public async Task<ActionResult<WholeSocialEncounterDto>> UpdateSocialEncounter([FromBody] WholeSocialEncounterDto socialEncounter)
     {
-        EncounterDto encounterDto = new EncounterDto();
-        encounterDto.Id = socialEncounter.EncounterId;
-        encounterDto.Name = socialEncounter.Name;
-        encounterDto.Description = socialEncounter.Description;
-        encounterDto.XpPoints = socialEncounter.XpPoints;
-        encounterDto.Status = socialEncounter.Status;
-        encounterDto.Type = socialEncounter.Type;
-        encounterDto.Longitude = socialEncounter.Longitude;
-        encounterDto.Latitude = socialEncounter.Latitude;
-        encounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
-        var baseEncounter = _encounterService.Update(encounterDto);
-        if (!baseEncounter.IsSuccess)
+        // Prvo konvertujemo WholeSocialEncounterDto u EncounterDto
+        var encounterDto = new EncounterDto
         {
-            return StatusCode((int)HttpStatusCode.BadRequest, baseEncounter);
-        }
-        SocialEncounterDto socialEncounterDto = new SocialEncounterDto();
-        socialEncounterDto.Id = socialEncounter.Id;
-        socialEncounterDto.EncounterId = baseEncounter.Value.Id;
-        socialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
-        socialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
-        socialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
-        var result = _socialEncounterService.Update(socialEncounterDto);
-        if (!result.IsSuccess)
+            Id = socialEncounter.EncounterId,
+            Name = socialEncounter.Name,
+            Description = socialEncounter.Description,
+            XpPoints = socialEncounter.XpPoints,
+            Status = socialEncounter.Status,
+            Type = socialEncounter.Type,
+            Longitude = socialEncounter.Longitude,
+            Latitude = socialEncounter.Latitude,
+            ShouldBeApproved = socialEncounter.ShouldBeApproved
+        };
+
+        try
         {
-            return StatusCode((int)HttpStatusCode.BadRequest, result);
+            // Serijalizujemo EncounterDto u JSON
+            string json = JsonConvert.SerializeObject(encounterDto);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Šaljemo PUT zahtev na mikroservis za ažuriranje susreta
+            HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/update", content);
+
+            // Proveravamo status odgovora
+            if (!encounterResponse.IsSuccessStatusCode)
+            {
+                // Ako nije uspeo, vraćamo odgovarajući HTTP status
+                return StatusCode((int)encounterResponse.StatusCode, "Error occurred while updating encounter.");
+            }
+
+            // Serijalizujemo odgovor u string
+            string encounterResponseContent = await encounterResponse.Content.ReadAsStringAsync();
+
+            // Deserijalizujemo odgovor u ažurirani EncounterDto
+            EncounterDto updatedEncounter = JsonConvert.DeserializeObject<EncounterDto>(encounterResponseContent);
+
+            // Zatim konvertujemo WholeSocialEncounterDto u SocialEncounterDto
+            var socialEncounterDto = new SocialEncounterDto
+            {
+                Id = socialEncounter.Id,
+                EncounterId = updatedEncounter.Id,
+                TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion,
+                DistanceTreshold = socialEncounter.DistanceTreshold,
+                TouristIDs = socialEncounter.TouristIDs
+            };
+
+            // Šaljemo PUT zahtev na mikroservis za ažuriranje socijalnog susreta
+            HttpResponseMessage socialEncounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/updateSocialEncounter", content);
+
+            // Proveravamo status odgovora
+            if (!socialEncounterResponse.IsSuccessStatusCode)
+            {
+                // Ako nije uspeo, vraćamo odgovarajući HTTP status
+                return StatusCode((int)socialEncounterResponse.StatusCode, "Error occurred while updating social encounter.");
+            }
+
+            // Ako je sve uspešno, vraćamo odgovor
+            return StatusCode((int)HttpStatusCode.NoContent, socialEncounterDto);
         }
-
-        var wholeSocialEncounterDto = new WholeSocialEncounterDto();
-        wholeSocialEncounterDto.EncounterId = baseEncounter.Value.Id;
-        wholeSocialEncounterDto.Name = socialEncounter.Name;
-        wholeSocialEncounterDto.Description = socialEncounter.Description;
-        wholeSocialEncounterDto.XpPoints = socialEncounter.XpPoints;
-        wholeSocialEncounterDto.Status = socialEncounter.Status;
-        wholeSocialEncounterDto.Type = socialEncounter.Type;
-        wholeSocialEncounterDto.Latitude = socialEncounter.Latitude;
-        wholeSocialEncounterDto.Longitude = socialEncounter.Longitude;
-        wholeSocialEncounterDto.Id = result.Value.Id;
-        wholeSocialEncounterDto.TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion;
-        wholeSocialEncounterDto.DistanceTreshold = socialEncounter.DistanceTreshold;
-        wholeSocialEncounterDto.TouristIDs = socialEncounter.TouristIDs;
-        wholeSocialEncounterDto.ShouldBeApproved = socialEncounter.ShouldBeApproved;
-
-        return StatusCode((int)HttpStatusCode.NoContent, wholeSocialEncounterDto);
+        catch (HttpRequestException ex)
+        {
+            // U slučaju greške prilikom slanja zahteva, vraćamo odgovarajući HTTP status
+            return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+        }
     }
+
     /*
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id)
@@ -403,38 +538,87 @@ public class EncounterController : BaseApiController
         var encounter = _encounterService.GetEncounterById(encounterId);
         return CreateResponse(encounter);
     }
-    
-    [HttpDelete("{baseEncounterId:int}")]
-    public ActionResult DeleteEncounter(int baseEncounterId)
-    {
-        var baseEncounter = _encounterService.Delete(baseEncounterId);
 
-        if (baseEncounter.IsSuccess)
+    //DELETE MIKROSERVIS
+
+    [HttpDelete("{baseEncounterId:int}")]
+    public async Task<ActionResult> DeleteEncounter(int baseEncounterId)
+    {
+        var baseEncounterResponse = await DeleteEncounterAsync(baseEncounterId);
+
+        if (baseEncounterResponse.IsSuccessStatusCode || baseEncounterResponse.StatusCode == HttpStatusCode.NoContent)
         {
-            long socialEncounterId = _socialEncounterService.GetId(baseEncounterId);
-            long hiddenLocationEncounterId = _hiddenLocationEncounterService.GetId(baseEncounterId);
+            var socialEncounterIdResponse = await GetSocialEncounterIdAsync(baseEncounterId);
+
+            string jsonResponse1 = await socialEncounterIdResponse.Content.ReadAsStringAsync();
+            JObject jsonObject1 = JObject.Parse(jsonResponse1);
+            int socialEncounterId = (int)jsonObject1["socialEncounterId"];
+
+            var hiddenLocationEncounterIdResponse = await GetHiddenLocationEncounterIdAsync(baseEncounterId);
+
+            string jsonResponse2 = await hiddenLocationEncounterIdResponse.Content.ReadAsStringAsync();
+            JObject jsonObject2 = JObject.Parse(jsonResponse2);
+            int hiddenLocationEncounterId = (int)jsonObject2["hiddenLocationEncounterId"];
 
             if (socialEncounterId != -1)
             {
-                var result = _socialEncounterService.Delete((int)socialEncounterId);
-                return CreateResponse(result);
+                var socialEncounterResponse = await DeleteSocialEncounterAsync(socialEncounterId);
+                return CreateResponse(socialEncounterResponse);
             }
             else if (hiddenLocationEncounterId != -1)
             {
-                var hiddenLocationResult = _hiddenLocationEncounterService.Delete((int)hiddenLocationEncounterId);
-                return CreateResponse(hiddenLocationResult);
+                var hiddenLocationEncounterResponse = await DeleteHiddenLocationEncounterAsync(hiddenLocationEncounterId);
+                return CreateResponse(hiddenLocationEncounterResponse);
             }
         }
 
-        // Handle the case when baseEncounterId doesn't match any specific type
-        return CreateResponse(baseEncounter);
+        return CreateResponse(baseEncounterResponse);
     }
 
+    private async Task<HttpResponseMessage> DeleteEncounterAsync(int baseEncounterId)
+    {
+        return await _httpClient.DeleteAsync($"http://localhost:4000/encounters/deleteEncounter/{baseEncounterId}");
+    }
+
+    private async Task<HttpResponseMessage> GetSocialEncounterIdAsync(int baseEncounterId)
+    {
+        return await _httpClient.GetAsync($"http://localhost:4000/encounters/getSocialEncounterId/{baseEncounterId}");
+    }
+
+    private async Task<HttpResponseMessage> GetHiddenLocationEncounterIdAsync(int baseEncounterId)
+    {
+        return await _httpClient.GetAsync($"http://localhost:4000/encounters/getHiddenLocationEncounterId/{baseEncounterId}");
+    }
+
+    private async Task<HttpResponseMessage> DeleteSocialEncounterAsync(long socialEncounterId)
+    {
+        return await _httpClient.DeleteAsync($"http://localhost:4000/encounters/deleteSocialEncounter/{socialEncounterId}");
+    }
+
+    private async Task<HttpResponseMessage> DeleteHiddenLocationEncounterAsync(long hiddenLocationEncounterId)
+    {
+        return await _httpClient.DeleteAsync($"http://localhost:4000/encounters/deleteHiddenLocationEncounter/{hiddenLocationEncounterId}");
+    }
+
+    private ActionResult CreateResponse(HttpResponseMessage response)
+    {
+        if (response.IsSuccessStatusCode)
+        {
+            return Ok("Encounter deleted successfully.");
+        }
+        else
+        {
+            return StatusCode((int)response.StatusCode, "Failed to delete encounter.");
+        }
+    }
+
+    /*
     [HttpGet("hiddenLocation/{encounterId:int}")]
     public ActionResult<PagedResult<HiddenLocationEncounterDto>> GetHiddenLocationEncounterByEncounterId(int encounterId)
     {
         var hiddenLocationEncounter = _hiddenLocationEncounterService.GetHiddenLocationEncounterByEncounterId(encounterId);
         return CreateResponse(hiddenLocationEncounter);
     }
+    */
 
 }
