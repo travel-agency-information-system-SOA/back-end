@@ -25,10 +25,11 @@ public class EncounterController : BaseApiController
 {
     private readonly IEncounterService _encounterService;
     private readonly IHiddenLocationEncounterService _hiddenLocationEncounterService;
-
     private readonly ISocialEncounterService _socialEncounterService;
 
+    //koirstimo ga za komunikaciju sa mikroservisima putem http zahteva
     private readonly HttpClient _httpClient = new HttpClient();
+
     public EncounterController(IEncounterService encounterService, ISocialEncounterService socialEncounterService, IHiddenLocationEncounterService hiddenLocationEncounterService)
     {
         _encounterService = encounterService;
@@ -39,26 +40,28 @@ public class EncounterController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<PagedResult<EncounterDto>>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        // Poziv mikroservisa za dobavljanje svih susreta
+        //async Task< > - potrpis metode da ce biti asinhrono izvrsavanje
+
+        //poziv mikroservisa za dobavljanje svih susreta
+        //saljemo get zahtev ka url koji je prosledjen kao agrument
         var response = await _httpClient.GetAsync($"http://localhost:4000/encounters?page={page}&pageSize={pageSize}");
 
-        // Provera statusa odgovora
         if (response.IsSuccessStatusCode)
         {
+            //ceka na asinhrono citanje sadrzaja http odgovora (kao string)
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            // Deserializujete odgovor u List<EncounterDto>
+            //DESERIJALIZUJE odgovor u List<EncounterDto>
+            //mi dobijemo JSON string - sadrzaj http odgovora (kao odgovor od mikroservisa), a hocemo da ga deserijalizujemo u .Net objekte
             List<EncounterDto> encounters = JsonConvert.DeserializeObject<List<EncounterDto>>(responseContent);
 
-            // Kreiranje PagedResult objekta
+            //kreiranje pagedResult objekta
             PagedResult<EncounterDto> pagedResult = new PagedResult<EncounterDto>(encounters, encounters.Count);
 
-            // Vraćanje PagedResult<EncounterDto> kao rezultat akcije.
             return Ok(pagedResult);
         }
         else
         {
-            // Vraćanje odgovarajućeg statusa u slučaju greške
             return StatusCode((int)response.StatusCode, "Error occurred while fetching encounters.");
         }
     }
@@ -66,26 +69,20 @@ public class EncounterController : BaseApiController
     [HttpGet("social")]
     public async Task<ActionResult<PagedResult<SocialEncounterDto>>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        // Poziv mikroservisa za dobavljanje svih socijalnih susreta
         var response = await _httpClient.GetAsync($"http://localhost:4000/socialEncounters?page={page}&pageSize={pageSize}");
 
-        // Provera statusa odgovora
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            // Deserializujete odgovor u List<EncounterDto>
             List<SocialEncounterDto> encounters = JsonConvert.DeserializeObject<List<SocialEncounterDto>>(responseContent);
 
-            // Kreiranje PagedResult objekta
             PagedResult<SocialEncounterDto> pagedResult = new PagedResult<SocialEncounterDto>(encounters, encounters.Count);
 
-            // Vraćanje PagedResult<EncounterDto> kao rezultat akcije.
             return Ok(pagedResult);
         }
         else
         {
-            // Vraćanje odgovarajućeg statusa u slučaju greške
             return StatusCode((int)response.StatusCode, "Error occurred while fetching encounters.");
         }
     }
@@ -93,76 +90,63 @@ public class EncounterController : BaseApiController
     [HttpGet("hiddenLocation")]
     public async Task<ActionResult<PagedResult<HiddenLocationEncounterDto>>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        // Poziv mikroservisa za dobavljanje svih susreta na skrivenim lokacijama
         var response = await _httpClient.GetAsync($"http://localhost:4000/hiddenLocationEncounters?page={page}&pageSize={pageSize}");
 
-        // Provera statusa odgovora
         if (response.IsSuccessStatusCode)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            // Deserializujete odgovor u List<EncounterDto>
             List<HiddenLocationEncounterDto> encounters = JsonConvert.DeserializeObject<List<HiddenLocationEncounterDto>>(responseContent);
 
-            // Kreiranje PagedResult objekta
             PagedResult<HiddenLocationEncounterDto> pagedResult = new PagedResult<HiddenLocationEncounterDto>(encounters, encounters.Count);
 
-            // Vraćanje PagedResult<EncounterDto> kao rezultat akcije.
             return Ok(pagedResult);
         }
         else
         {
-            // Vraćanje odgovarajućeg statusa u slučaju greške
             return StatusCode((int)response.StatusCode, "Error occurred while fetching encounters.");
         }
     }
 
-    //mikroservisi
     [HttpPost]
     public async Task<ActionResult<EncounterDto>> Create([FromBody] EncounterDto encounter)
     {
-        //var result = _encounterService.Create(encounter);
-        //return CreateResponse(result);
-
-        // Serijalizujemo objekat u JSON
+        //serijalizujemo objekat u json, kako bi smo ga mogli poslati mikroservisu putem http zahteva
         string json = JsonConvert.SerializeObject(encounter);
+
+        //koristi se za sadrzaj razlicitih zahteva
+        //mime tip - tip sadrzaja http zahteva (poslednje) - oznacava da je json format 
+        //omogucava slanje podataka u json formatu na server
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
         try
         {
-            // Šaljemo POST zahtev na mikroservis
+            //HttpResponseMessage - odgovor koji ce biti vracen nakon slanja http zahteva (statusni kod, sadrzaj, zaglavlje...)
             HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/create", content);
 
-            // Proveravamo status odgovora
             if (response.IsSuccessStatusCode)
             {
-                // Ako je odgovor uspešan, čitamo sadržaj odgovora
+                //citamo sadrzaj odgovora
                 string responseContent = await response.Content.ReadAsStringAsync();
 
-                // Deserijalizujemo JSON odgovor u TourDTO objekat
                 EncounterDto createdEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
 
-                // Vraćamo OK rezultat sa kreiranim turizmom
                 return Ok(createdEncounter);
             }
             else
             {
-                // Ako je došlo do greške, vraćamo odgovarajući HTTP status
                 return StatusCode((int)response.StatusCode, "Error occurred while creating encounter.");
             }
         }
         catch (HttpRequestException ex)
         {
-            // Uhvatamo eventualne greške prilikom slanja zahteva
             return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
         }
     }
 
-    //HIDDEN LOCATION ENCOUNTER
-
     [HttpPost("hiddenLocation")]
     public async Task<ActionResult<WholeHiddenLocationEncounterDto>> Create([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
     {
-        // Kreiranje susreta
         var encounterDto = new EncounterDto
         {
             Name = wholeEncounter.Name,
@@ -175,7 +159,9 @@ public class EncounterController : BaseApiController
             ShouldBeApproved = wholeEncounter.ShouldBeApproved
         };
 
-        // Slanje POST zahteva za kreiranje susreta
+        //PRVO KREIRALI OBICAN ENCOUNTER (BASE ENCOUNTER)
+        //PostAsync: zahteva kreiranje content objekta, moze sadrzati bilo sta ne samo json objekte vec taj content
+        //PostAsJsonAsync: omogucava slanje objekta kao jsona, objekat ce biti automatski serijalizovan kao json pre slanja
         var baseEncounterResponse = await _httpClient.PostAsJsonAsync("http://localhost:4000/encounters/create", encounterDto);
 
         if (!baseEncounterResponse.IsSuccessStatusCode)
@@ -183,10 +169,11 @@ public class EncounterController : BaseApiController
             return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating encounter.");
         }
 
-        // Deserijalizacija odgovora u EncounterDto
+        //deserijalizacija odgovora u EncounterDto
+        //cita sadrzaj http odgovora i deserijalizuje ga u odgovarajuci objekat iz .Net
         var createdEncounter = await baseEncounterResponse.Content.ReadFromJsonAsync<EncounterDto>();
 
-        // Kreiranje skrivenog susreta
+        //NA OSNOVU OBICNOG KREIRAJU HIDDEN LOCATION ENCOUNTER
         var hiddenLocationEncounterDto = new HiddenLocationEncounterDto
         {
             EncounterId = createdEncounter.Id,
@@ -196,7 +183,6 @@ public class EncounterController : BaseApiController
             DistanceTreshold = wholeEncounter.DistanceTreshold
         };
 
-        // Slanje POST zahteva za kreiranje skrivenog susreta
         var hiddenLocationEncounterResponse = await _httpClient.PostAsJsonAsync("http://localhost:4000/encounters/createHiddenLocationEncounter", hiddenLocationEncounterDto);
 
         if (!hiddenLocationEncounterResponse.IsSuccessStatusCode)
@@ -204,14 +190,11 @@ public class EncounterController : BaseApiController
             return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating hidden location encounter.");
         }
 
-        // Deserijalizacija odgovora u WholeHiddenLocationEncounterDto
         var createdHiddenLocationEncounter = await hiddenLocationEncounterResponse.Content.ReadFromJsonAsync<WholeHiddenLocationEncounterDto>();
 
         return StatusCode((int)HttpStatusCode.Created, createdHiddenLocationEncounter);
     }
 
-
-    //ENCOUNTER
     private async Task<ActionResult<EncounterDto>> CreateBaseEncounterAsync(EncounterDto encounterDto)
     {
         string json = JsonConvert.SerializeObject(encounterDto);
@@ -253,14 +236,8 @@ public class EncounterController : BaseApiController
             ShouldBeApproved = socialEncounter.ShouldBeApproved
         };
 
-        var baseEncounterResponse = await CreateBaseEncounterAsync(encounterDto); // Pozivamo metodu za kreiranje osnovnog sastanka
-
-        /*
-        if (baseEncounterResponse.Value == null)
-        {
-            return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating encounter."); // Vraćamo BadRequest ako je rezultat null
-        }
-        */
+        //kreiranje encountera
+        var baseEncounterResponse = await CreateBaseEncounterAsync(encounterDto);
 
         var baseEncounter = (OkObjectResult)baseEncounterResponse.Result;
         var createdEncounter = (EncounterDto)baseEncounter.Value;
@@ -310,7 +287,7 @@ public class EncounterController : BaseApiController
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         try
         {
-            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/createSocialEncounter", content); // Promeniti URL na odgovarajući za kreiranje socijalnog sastanka
+            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/createSocialEncounter", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -329,50 +306,38 @@ public class EncounterController : BaseApiController
         }
     }
 
-    //UPDATE
-
     [HttpPut]
     public async Task<ActionResult<EncounterDto>> Update([FromBody] EncounterDto encounter)
     {
-        // Serijalizacija objekta u JSON
         string json = JsonConvert.SerializeObject(encounter);
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
         try
         {
-            // Šaljemo PUT zahtev na mikroservis
             HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:4000/encounters/update", content);
 
-            // Proveravamo status odgovora
             if (response.IsSuccessStatusCode)
             {
-                // Ako je odgovor uspešan, čitamo sadržaj odgovora
                 string responseContent = await response.Content.ReadAsStringAsync();
 
-                // Deserijalizujemo JSON odgovor u EncounterDto objekat
                 EncounterDto updatedEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
 
-                // Vraćamo OK rezultat sa ažuriranim susretom
                 return Ok(updatedEncounter);
             }
             else
             {
-                // Ako je došlo do greške, vraćamo odgovarajući HTTP status
                 return StatusCode((int)response.StatusCode, "Error occurred while updating encounter.");
             }
         }
         catch (HttpRequestException ex)
         {
-            // Uhvatamo eventualne greške prilikom slanja zahteva
             return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
         }
     }
 
-    //HIDDEN LOCATION ENCOUNTER UPDATE
     [HttpPut("hiddenLocation")]
     public async Task<ActionResult<HiddenLocationEncounterDto>> Update([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
     {
-        // Prvo ažurirajte EncounterDto
         var encounterDto = new EncounterDto
         {
             Id = wholeEncounter.EncounterId,
@@ -388,21 +353,16 @@ public class EncounterController : BaseApiController
 
         try
         {
-            // Serijalizacija EncounterDto u JSON
             string encounterJson = JsonConvert.SerializeObject(encounterDto);
             HttpContent encounterContent = new StringContent(encounterJson, Encoding.UTF8, "application/json");
 
-            // Slanje PUT zahteva na mikroservis za ažuriranje EncounterDto
             HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/update", encounterContent);
 
-            // Provera statusa odgovora za ažuriranje EncounterDto
             if (!encounterResponse.IsSuccessStatusCode)
             {
-                // Ako nije uspelo, vraćamo odgovarajući HTTP status
                 return StatusCode((int)encounterResponse.StatusCode, "Error occurred while updating encounter.");
             }
 
-            // Sada ažurirajte HiddenLocationEncounterDto
             var hiddenLocationEncounterDto = new HiddenLocationEncounterDto
             {
                 Id = wholeEncounter.Id,
@@ -413,36 +373,28 @@ public class EncounterController : BaseApiController
                 DistanceTreshold = wholeEncounter.DistanceTreshold
             };
 
-            // Serijalizacija HiddenLocationEncounterDto u JSON
             string hiddenLocationEncounterJson = JsonConvert.SerializeObject(hiddenLocationEncounterDto);
             HttpContent hiddenLocationEncounterContent = new StringContent(hiddenLocationEncounterJson, Encoding.UTF8, "application/json");
 
-            // Slanje PUT zahteva na mikroservis za ažuriranje HiddenLocationEncounterDto
             HttpResponseMessage hiddenLocationEncounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/updateHiddenLocationEncounter", hiddenLocationEncounterContent);
 
-            // Provera statusa odgovora za ažuriranje HiddenLocationEncounterDto
             if (!hiddenLocationEncounterResponse.IsSuccessStatusCode)
             {
-                // Ako nije uspelo, vraćamo odgovarajući HTTP status
                 return StatusCode((int)hiddenLocationEncounterResponse.StatusCode, "Error occurred while updating hidden location encounter.");
             }
 
-            // Ako je sve uspešno, vraćamo odgovarajući HTTP status bez sadržaja
             return StatusCode((int)HttpStatusCode.NoContent);
         }
         catch (HttpRequestException ex)
         {
-            // Uhvatamo eventualne greške prilikom slanja zahteva i vraćamo odgovarajući HTTP status
             return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
         }
     }
 
 
     [HttpPut("social")]
-    //WholeSocialEncounterDto povratna vrednost cele funkcije
     public async Task<ActionResult<WholeSocialEncounterDto>> UpdateSocialEncounter([FromBody] WholeSocialEncounterDto socialEncounter)
     {
-        // Prvo konvertujemo WholeSocialEncounterDto u EncounterDto
         var encounterDto = new EncounterDto
         {
             Id = socialEncounter.EncounterId,
@@ -458,27 +410,20 @@ public class EncounterController : BaseApiController
 
         try
         {
-            // Serijalizujemo EncounterDto u JSON
             string json = JsonConvert.SerializeObject(encounterDto);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            // Šaljemo PUT zahtev na mikroservis za ažuriranje susreta
             HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/update", content);
 
-            // Proveravamo status odgovora
             if (!encounterResponse.IsSuccessStatusCode)
             {
-                // Ako nije uspeo, vraćamo odgovarajući HTTP status
                 return StatusCode((int)encounterResponse.StatusCode, "Error occurred while updating encounter.");
             }
 
-            // Serijalizujemo odgovor u string
             string encounterResponseContent = await encounterResponse.Content.ReadAsStringAsync();
 
-            // Deserijalizujemo odgovor u ažurirani EncounterDto
             EncounterDto updatedEncounter = JsonConvert.DeserializeObject<EncounterDto>(encounterResponseContent);
 
-            // Zatim konvertujemo WholeSocialEncounterDto u SocialEncounterDto
             var socialEncounterDto = new SocialEncounterDto
             {
                 Id = socialEncounter.Id,
@@ -488,34 +433,37 @@ public class EncounterController : BaseApiController
                 TouristIDs = socialEncounter.TouristIDs
             };
 
-            // Šaljemo PUT zahtev na mikroservis za ažuriranje socijalnog susreta
             HttpResponseMessage socialEncounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/updateSocialEncounter", content);
 
-            // Proveravamo status odgovora
             if (!socialEncounterResponse.IsSuccessStatusCode)
             {
-                // Ako nije uspeo, vraćamo odgovarajući HTTP status
                 return StatusCode((int)socialEncounterResponse.StatusCode, "Error occurred while updating social encounter.");
             }
 
-            // Ako je sve uspešno, vraćamo odgovor
             return StatusCode((int)HttpStatusCode.NoContent, socialEncounterDto);
         }
         catch (HttpRequestException ex)
         {
-            // U slučaju greške prilikom slanja zahteva, vraćamo odgovarajući HTTP status
             return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
         }
     }
 
     [HttpGet("getEncounter/{encounterId:int}")]
-    public ActionResult<PagedResult<EncounterDto>> GetEncounter(int encounterId)
+    public async Task<ActionResult<EncounterDto>> GetEncounter(int encounterId)
     {
-        var encounter = _encounterService.GetEncounterById(encounterId);
-        return CreateResponse(encounter);
-    }
+        HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:4000/encounters/getEncounterById/{encounterId}");
 
-    //DELETE MIKROSERVIS
+        if (response.IsSuccessStatusCode)
+        {
+            //procita odgovor http zahteva kao json i odmah ga deserijalizuje u odgovarajuci objekat
+            var encounter = await response.Content.ReadAsAsync<EncounterDto>();
+            return encounter;
+        }
+        else
+        {
+            throw new HttpRequestException($"Failed to retrieve data from microservice. Status code: {response.StatusCode}");
+        }
+    }
 
     [HttpDelete("{baseEncounterId:int}")]
     public async Task<ActionResult> DeleteEncounter(int baseEncounterId)
@@ -526,8 +474,12 @@ public class EncounterController : BaseApiController
         {
             var socialEncounterIdResponse = await GetSocialEncounterIdAsync(baseEncounterId);
 
+            //ovo sam radila jer bi mi bio potreban dodatni dto 
+            //citamo odgovor kao json string
             string jsonResponse1 = await socialEncounterIdResponse.Content.ReadAsStringAsync();
+            //json string konvertujemo u json objekat
             JObject jsonObject1 = JObject.Parse(jsonResponse1);
+            //odavde (iz json objekta) izvlacimo vrednost polja socialEncounterId 
             int socialEncounterId = (int)jsonObject1["socialEncounterId"];
 
             var hiddenLocationEncounterIdResponse = await GetHiddenLocationEncounterIdAsync(baseEncounterId);
@@ -591,19 +543,15 @@ public class EncounterController : BaseApiController
     [HttpGet("hiddenLocation/{encounterId:int}")]
     public async Task<ActionResult<HiddenLocationEncounterDto>> GetHiddenLocationEncounterByEncounterId(int encounterId)
     {
-        // Make GET request to microservice
         HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:4000/encounters/getHiddenLocationEncounter/{encounterId}");
 
-        // Check if request was successful
         if (response.IsSuccessStatusCode)
         {
-            // Deserialize response body to your DTO
             var hiddenLocationEncounter = await response.Content.ReadAsAsync<HiddenLocationEncounterDto>();
             return hiddenLocationEncounter;
         }
         else
         {
-            // Handle error if request was not successful
             throw new HttpRequestException($"Failed to retrieve data from microservice. Status code: {response.StatusCode}");
         }
     }
