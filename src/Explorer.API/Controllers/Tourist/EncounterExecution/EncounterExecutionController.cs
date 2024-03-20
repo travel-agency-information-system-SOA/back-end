@@ -28,10 +28,31 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<EncounterExecutionDto>> GePaged([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<EncounterExecutionDto>>> GetPaged([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _encounterExecutionService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    List<EncounterExecutionDto> encounters = JsonConvert.DeserializeObject<List<EncounterExecutionDto>>(responseContent);
+                    PagedResult<EncounterExecutionDto> pagedResult = new PagedResult<EncounterExecutionDto>(encounters, encounters.Count);
+                    
+                    return Ok(pagedResult);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while fetching data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
 
         [HttpPost]
