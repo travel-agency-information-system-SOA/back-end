@@ -508,30 +508,6 @@ public class EncounterController : BaseApiController
         }
     }
 
-    /*
-    [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
-    {
-        var result = _encounterService.Delete(id);
-        return CreateResponse(result);
-    }
-    [HttpDelete("hiddenLocation/{baseEncounterId:int}/{hiddenLocationEncounterId:int}")]
-    public ActionResult DeleteHiddenLocationEncounter(int baseEncounterId, int hiddenLocationEncounterId)
-    {
-        var baseEncounter = _encounterService.Delete(baseEncounterId);
-        var result = _hiddenLocationEncounterService.Delete(hiddenLocationEncounterId);
-        return CreateResponse(result);
-    }
-
-
-    [HttpDelete("social/{baseEncounterId:int}/{socialEncounterId:int}")]
-    public ActionResult Delete(int baseEncounterId, int socialEncounterId)
-    {
-        var baseEncounter = _encounterService.Delete(baseEncounterId);
-        var result = _socialEncounterService.Delete(socialEncounterId);
-        return CreateResponse(result);
-    }
-    */
     [HttpGet("getEncounter/{encounterId:int}")]
     public ActionResult<PagedResult<EncounterDto>> GetEncounter(int encounterId)
     {
@@ -612,13 +588,23 @@ public class EncounterController : BaseApiController
         }
     }
 
-    /*
     [HttpGet("hiddenLocation/{encounterId:int}")]
-    public ActionResult<PagedResult<HiddenLocationEncounterDto>> GetHiddenLocationEncounterByEncounterId(int encounterId)
+    public async Task<ActionResult<HiddenLocationEncounterDto>> GetHiddenLocationEncounterByEncounterId(int encounterId)
     {
-        var hiddenLocationEncounter = _hiddenLocationEncounterService.GetHiddenLocationEncounterByEncounterId(encounterId);
-        return CreateResponse(hiddenLocationEncounter);
-    }
-    */
+        // Make GET request to microservice
+        HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:4000/encounters/getHiddenLocationEncounter/{encounterId}");
 
+        // Check if request was successful
+        if (response.IsSuccessStatusCode)
+        {
+            // Deserialize response body to your DTO
+            var hiddenLocationEncounter = await response.Content.ReadAsAsync<HiddenLocationEncounterDto>();
+            return hiddenLocationEncounter;
+        }
+        else
+        {
+            // Handle error if request was not successful
+            throw new HttpRequestException($"Failed to retrieve data from microservice. Status code: {response.StatusCode}");
+        }
+    }
 }
