@@ -2,6 +2,7 @@
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -27,10 +28,31 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<EncounterExecutionDto>> GePaged([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<EncounterExecutionDto>>> GetPaged([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _encounterExecutionService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    List<EncounterExecutionDto> encounters = JsonConvert.DeserializeObject<List<EncounterExecutionDto>>(responseContent);
+                    PagedResult<EncounterExecutionDto> pagedResult = new PagedResult<EncounterExecutionDto>(encounters, encounters.Count);
+                    
+                    return Ok(pagedResult);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while fetching data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -90,10 +112,28 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var result = _encounterExecutionService.Delete(id);
-            return CreateResponse(result);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution/delete/{id}";
+                HttpResponseMessage response = await _httpClient.DeleteAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    return Ok(responseContent);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while deleting data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
 
         [HttpGet("checkSocialEncounter/{encounterId:int}")]
