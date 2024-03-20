@@ -2,6 +2,7 @@
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -90,10 +91,28 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var result = _encounterExecutionService.Delete(id);
-            return CreateResponse(result);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution/delete/{id}";
+                HttpResponseMessage response = await _httpClient.DeleteAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    return Ok(responseContent);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while deleting data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
 
         [HttpGet("checkSocialEncounter/{encounterId:int}")]
