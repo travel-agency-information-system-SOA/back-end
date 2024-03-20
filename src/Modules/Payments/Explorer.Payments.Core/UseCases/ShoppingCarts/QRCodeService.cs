@@ -32,11 +32,11 @@ namespace Explorer.Payments.Core.UseCases.ShoppingCarts
             int userID = shoppingCart.TouristId;
             if(userID == 300)
             {
-                email = "lukazelovic@gmail.com";
+                email = "mrk";
             }
             else
             {
-                email = "spasoje.brboric@gmail.com";
+                email = "mrk";
             }
             string cartString = GenerateShoppingCartInfoString(shoppingCart);
             byte[] qrCode = GenerateQRCodeBytes(cartString);

@@ -4,6 +4,8 @@ using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.UseCases;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Explorer.API.Controllers.Tourist.EncounterExecution
 {
@@ -14,6 +16,8 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         private readonly IEncounterExecutionService _encounterExecutionService;
         private readonly ISocialEncounterService _socialEncounterService;
         private readonly IHiddenLocationEncounterService _hiddenLocationEncounterService;
+
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public EncounterExecutionController(IEncounterExecutionService service, ISocialEncounterService socialEncounterService, IHiddenLocationEncounterService hiddenLocationEncounterService)
         {
@@ -28,18 +32,63 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
             var result = _encounterExecutionService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
+
         [HttpPost]
-        public ActionResult<EncounterExecutionDto> Create([FromBody] EncounterExecutionDto encounterExecution)
+        public async Task<ActionResult<EncounterExecutionDto>> Create([FromBody] EncounterExecutionDto encounterExecution)
         {
-            var result = _encounterExecutionService.Create(encounterExecution);
-            return CreateResponse(result);
+            string json = JsonConvert.SerializeObject(encounterExecution);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounterExecution/create", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    EncounterExecutionDto createdEncounter = JsonConvert.DeserializeObject<EncounterExecutionDto>(responseContent);
+
+                    return Ok(createdEncounter);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while creating encounter execution.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
+
         [HttpPut("{id:int}")]
-        public ActionResult<EncounterExecutionDto> Update([FromBody] EncounterExecutionDto encounterExecution)
+        public async Task<ActionResult<EncounterExecutionDto>> Update([FromBody] EncounterExecutionDto encounterExecution, int id)
         {
-            var result = _encounterExecutionService.Update(encounterExecution);
-            return CreateResponse(result);
+            string json = JsonConvert.SerializeObject(encounterExecution);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PutAsync($"http://localhost:4000/encounterExecution/update/{id}", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    EncounterExecutionDto createdEncounter = JsonConvert.DeserializeObject<EncounterExecutionDto>(responseContent);
+
+                    return Ok(createdEncounter);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while updating encounter execution.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
+
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
@@ -59,10 +108,29 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpGet("getActive/{userId:int}")]
-        public ActionResult<PagedResult<EncounterExecutionDto>> GetActiveByUser(int userId)
+        public async Task<ActionResult<EncounterExecutionDto>> GetActiveByUser(int userId)
         {
-            var execution = _encounterExecutionService.GetExecutionByUser(userId);
-            return CreateResponse(execution);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution/getActive/{userId}";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    EncounterExecutionDto result = JsonConvert.DeserializeObject<EncounterExecutionDto>(responseContent);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while fetching data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
 
         [HttpGet("checkHidden/{executionId:int}/{encounterId:int}")]
@@ -74,12 +142,29 @@ namespace Explorer.API.Controllers.Tourist.EncounterExecution
         }
 
         [HttpGet("completeExecution/{userId:int}")]
-        public ActionResult<EncounterExecutionDto> CompleteExecution(int userId)
+        public async Task<ActionResult<EncounterExecutionDto>> CompleteExecution(int userId)
         {
-            Result<EncounterExecutionDto> execution = _encounterExecutionService.CompleteEncounter(userId);
-            return CreateResponse(execution);
+            try
+            {
+                string url = $"http://localhost:4000/encounterExecution/completeExecution/{userId}";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    EncounterExecutionDto result = JsonConvert.DeserializeObject<EncounterExecutionDto>(responseContent);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occured while fetching data.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occured while sending request: {ex.Message}");
+            }
         }
-
-
     }
 }
