@@ -7,6 +7,7 @@ using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 
 namespace Explorer.API.Controllers.Author.Administration
@@ -109,11 +110,33 @@ namespace Explorer.API.Controllers.Author.Administration
 		}
 
         [HttpGet("getById/{id:int}")]
-        public ActionResult<TourPointDto> GetTourPointById(int id)
+        public async  Task<ActionResult<TourPointDto>>  GetTourPointById(int id)
         {
-            var result = _tourPointService.Get(id);
-            return CreateResponse(Result.Ok(result));
-        }
+            // var result = _tourPointService.Get(id);
+            // return CreateResponse(Result.Ok(result));
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:3000/tourPoint/getById/{id}");
 
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    TourPointDto tourPoint = JsonConvert.DeserializeObject<TourPointDto>(responseContent);
+                    return Ok(tourPoint);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound("Tour point not found.");
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occurred while getting tour point.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+            }
+        }
     }
 }
