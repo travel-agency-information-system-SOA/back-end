@@ -34,7 +34,7 @@ namespace Explorer.API.Controllers.Author.Administration
             //return CreateResponse(result);
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync("http://localhost:3000/tourPoint/getAll");
+                HttpResponseMessage response = await _httpClient.GetAsync("http://tours:3000/tourPoint/getAll");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -65,7 +65,7 @@ namespace Explorer.API.Controllers.Author.Administration
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:3000/tourPoint/create", content);
+                HttpResponseMessage response = await _httpClient.PostAsync("http://tours:3000/tourPoint/create", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -116,7 +116,7 @@ namespace Explorer.API.Controllers.Author.Administration
             // return CreateResponse(Result.Ok(result));
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:3000/tourPoint/getById/{id}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"http://tours:3000/tourPoint/getById/{id}");
 
                 if (response.IsSuccessStatusCode)
                 {

@@ -44,7 +44,7 @@ public class EncounterController : BaseApiController
 
         //poziv mikroservisa za dobavljanje svih susreta
         //saljemo get zahtev ka url koji je prosledjen kao agrument
-        var response = await _httpClient.GetAsync($"http://localhost:4000/encounters?page={page}&pageSize={pageSize}");
+        var response = await _httpClient.GetAsync($"http://encounters:4000/encounters?page={page}&pageSize={pageSize}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -69,7 +69,7 @@ public class EncounterController : BaseApiController
     [HttpGet("social")]
     public async Task<ActionResult<PagedResult<SocialEncounterDto>>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var response = await _httpClient.GetAsync($"http://localhost:4000/socialEncounters?page={page}&pageSize={pageSize}");
+        var response = await _httpClient.GetAsync($"http://encounters:4000/socialEncounters?page={page}&pageSize={pageSize}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -90,7 +90,7 @@ public class EncounterController : BaseApiController
     [HttpGet("hiddenLocation")]
     public async Task<ActionResult<PagedResult<HiddenLocationEncounterDto>>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var response = await _httpClient.GetAsync($"http://localhost:4000/hiddenLocationEncounters?page={page}&pageSize={pageSize}");
+        var response = await _httpClient.GetAsync($"http://encounters:4000/hiddenLocationEncounters?page={page}&pageSize={pageSize}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -122,7 +122,7 @@ public class EncounterController : BaseApiController
         try
         {
             //HttpResponseMessage - odgovor koji ce biti vracen nakon slanja http zahteva (statusni kod, sadrzaj, zaglavlje...)
-            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/create", content);
+            HttpResponseMessage response = await _httpClient.PostAsync("http://encounters:4000/encounters/create", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -162,7 +162,7 @@ public class EncounterController : BaseApiController
         //PRVO KREIRALI OBICAN ENCOUNTER (BASE ENCOUNTER)
         //PostAsync: zahteva kreiranje content objekta, moze sadrzati bilo sta ne samo json objekte vec taj content
         //PostAsJsonAsync: omogucava slanje objekta kao jsona, objekat ce biti automatski serijalizovan kao json pre slanja
-        var baseEncounterResponse = await _httpClient.PostAsJsonAsync("http://localhost:4000/encounters/create", encounterDto);
+        var baseEncounterResponse = await _httpClient.PostAsJsonAsync("http://encounters:4000/encounters/create", encounterDto);
 
         if (!baseEncounterResponse.IsSuccessStatusCode)
         {
@@ -183,7 +183,7 @@ public class EncounterController : BaseApiController
             DistanceTreshold = wholeEncounter.DistanceTreshold
         };
 
-        var hiddenLocationEncounterResponse = await _httpClient.PostAsJsonAsync("http://localhost:4000/encounters/createHiddenLocationEncounter", hiddenLocationEncounterDto);
+        var hiddenLocationEncounterResponse = await _httpClient.PostAsJsonAsync("http://encounters:4000/encounters/createHiddenLocationEncounter", hiddenLocationEncounterDto);
 
         if (!hiddenLocationEncounterResponse.IsSuccessStatusCode)
         {
@@ -201,7 +201,7 @@ public class EncounterController : BaseApiController
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         try
         {
-            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/create", content);
+            HttpResponseMessage response = await _httpClient.PostAsync("http://encounters:4000/encounters/create", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -287,7 +287,7 @@ public class EncounterController : BaseApiController
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         try
         {
-            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:4000/encounters/createSocialEncounter", content);
+            HttpResponseMessage response = await _httpClient.PostAsync("http://encounters:4000/encounters/createSocialEncounter", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -314,7 +314,7 @@ public class EncounterController : BaseApiController
 
         try
         {
-            HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:4000/encounters/update", content);
+            HttpResponseMessage response = await _httpClient.PutAsync("http://encounters:4000/encounters/update", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -356,7 +356,7 @@ public class EncounterController : BaseApiController
             string encounterJson = JsonConvert.SerializeObject(encounterDto);
             HttpContent encounterContent = new StringContent(encounterJson, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/update", encounterContent);
+            HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://encounters:4000/encounters/update", encounterContent);
 
             if (!encounterResponse.IsSuccessStatusCode)
             {
@@ -376,7 +376,7 @@ public class EncounterController : BaseApiController
             string hiddenLocationEncounterJson = JsonConvert.SerializeObject(hiddenLocationEncounterDto);
             HttpContent hiddenLocationEncounterContent = new StringContent(hiddenLocationEncounterJson, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage hiddenLocationEncounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/updateHiddenLocationEncounter", hiddenLocationEncounterContent);
+            HttpResponseMessage hiddenLocationEncounterResponse = await _httpClient.PutAsync("http://encounters:4000/encounters/updateHiddenLocationEncounter", hiddenLocationEncounterContent);
 
             if (!hiddenLocationEncounterResponse.IsSuccessStatusCode)
             {
@@ -413,7 +413,7 @@ public class EncounterController : BaseApiController
             string json = JsonConvert.SerializeObject(encounterDto);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/update", content);
+            HttpResponseMessage encounterResponse = await _httpClient.PutAsync("http://encounters:4000/encounters/update", content);
 
             if (!encounterResponse.IsSuccessStatusCode)
             {
@@ -433,7 +433,7 @@ public class EncounterController : BaseApiController
                 TouristIDs = socialEncounter.TouristIDs
             };
 
-            HttpResponseMessage socialEncounterResponse = await _httpClient.PutAsync("http://localhost:4000/encounters/updateSocialEncounter", content);
+            HttpResponseMessage socialEncounterResponse = await _httpClient.PutAsync("http://encounters:4000/encounters/updateSocialEncounter", content);
 
             if (!socialEncounterResponse.IsSuccessStatusCode)
             {
@@ -451,7 +451,7 @@ public class EncounterController : BaseApiController
     [HttpGet("getEncounter/{encounterId:int}")]
     public async Task<ActionResult<EncounterDto>> GetEncounter(int encounterId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:4000/encounters/getEncounterById/{encounterId}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"http://encounters:4000/encounters/getEncounterById/{encounterId}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -505,27 +505,27 @@ public class EncounterController : BaseApiController
 
     private async Task<HttpResponseMessage> DeleteEncounterAsync(int baseEncounterId)
     {
-        return await _httpClient.DeleteAsync($"http://localhost:4000/encounters/deleteEncounter/{baseEncounterId}");
+        return await _httpClient.DeleteAsync($"http://encounters:4000/encounters/deleteEncounter/{baseEncounterId}");
     }
 
     private async Task<HttpResponseMessage> GetSocialEncounterIdAsync(int baseEncounterId)
     {
-        return await _httpClient.GetAsync($"http://localhost:4000/encounters/getSocialEncounterId/{baseEncounterId}");
+        return await _httpClient.GetAsync($"http://encounters:4000/encounters/getSocialEncounterId/{baseEncounterId}");
     }
 
     private async Task<HttpResponseMessage> GetHiddenLocationEncounterIdAsync(int baseEncounterId)
     {
-        return await _httpClient.GetAsync($"http://localhost:4000/encounters/getHiddenLocationEncounterId/{baseEncounterId}");
+        return await _httpClient.GetAsync($"http://encounters:4000/encounters/getHiddenLocationEncounterId/{baseEncounterId}");
     }
 
     private async Task<HttpResponseMessage> DeleteSocialEncounterAsync(long socialEncounterId)
     {
-        return await _httpClient.DeleteAsync($"http://localhost:4000/encounters/deleteSocialEncounter/{socialEncounterId}");
+        return await _httpClient.DeleteAsync($"http://encounters:4000/encounters/deleteSocialEncounter/{socialEncounterId}");
     }
 
     private async Task<HttpResponseMessage> DeleteHiddenLocationEncounterAsync(long hiddenLocationEncounterId)
     {
-        return await _httpClient.DeleteAsync($"http://localhost:4000/encounters/deleteHiddenLocationEncounter/{hiddenLocationEncounterId}");
+        return await _httpClient.DeleteAsync($"http://encounters:4000/encounters/deleteHiddenLocationEncounter/{hiddenLocationEncounterId}");
     }
 
     private ActionResult CreateResponse(HttpResponseMessage response)
@@ -543,7 +543,7 @@ public class EncounterController : BaseApiController
     [HttpGet("hiddenLocation/{encounterId:int}")]
     public async Task<ActionResult<HiddenLocationEncounterDto>> GetHiddenLocationEncounterByEncounterId(int encounterId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:4000/encounters/getHiddenLocationEncounter/{encounterId}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"http://encounters:4000/encounters/getHiddenLocationEncounter/{encounterId}");
 
         if (response.IsSuccessStatusCode)
         {

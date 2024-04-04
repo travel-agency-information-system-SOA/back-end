@@ -39,7 +39,7 @@ namespace Explorer.API.Controllers.Author.Administration
 			try
 			{
 				// Šaljemo POST zahtev na mikroservis
-				HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:3000/tourObjects/create", content);
+				HttpResponseMessage response = await _httpClient.PostAsync("http://tours:3000/tourObjects/create", content);
 
 				// Proveravamo status odgovora
 				if (response.IsSuccessStatusCode)

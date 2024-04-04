@@ -37,7 +37,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             try
             {
                 // Šaljemo POST zahtev na mikroservis
-                HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:3000/tours/create", content);
+                HttpResponseMessage response = await _httpClient.PostAsync("http://tours:3000/tours/create", content);
 
                 // Proveravamo status odgovora
                 if (response.IsSuccessStatusCode)
@@ -86,7 +86,7 @@ namespace Explorer.API.Controllers.Author.Authoring
         {
             try
             {
-                string url = $"http://localhost:3000/tours/getByAuthor/{userId}?page={page}&pageSize={pageSize}";
+                string url = $"http://tours:3000/tours/getByAuthor/{userId}?page={page}&pageSize={pageSize}";
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -133,7 +133,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 				HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
 				// Šaljemo DELETE zahtev na Go aplikaciju
-				HttpResponseMessage response = await _httpClient.DeleteAsync("http://localhost:3000/tours/delete/" + id);
+				HttpResponseMessage response = await _httpClient.DeleteAsync("http://tours:3000/tours/delete/" + id);
 
 				// Proveravamo status odgovora
 				if (response.IsSuccessStatusCode)
@@ -173,7 +173,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             // return CreateResponse(result);
             try
             {
-                string url = $"http://localhost:3000/tours/setCaracteristics/{id}";
+                string url = $"http://tours:3000/tours/setCaracteristics/{id}";
                 var json = JsonConvert.SerializeObject(tourCharacteristic);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PutAsync(url, content);
@@ -212,7 +212,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 				HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
 				// Šaljemo POST zahtev na Go aplikaciju
-				HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:3000/tours/publish/" + tourId, content);
+				HttpResponseMessage response = await _httpClient.PutAsync("http://tours:3000/tours/publish/" + tourId, content);
 
 				// Proveravamo status odgovora
 				if (response.IsSuccessStatusCode)
@@ -257,7 +257,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 				HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
 				// Šaljemo POST zahtev na Go aplikaciju
-				HttpResponseMessage response = await _httpClient.PutAsync("http://localhost:3000/tours/archive/" + id, content);
+				HttpResponseMessage response = await _httpClient.PutAsync("http://tours:3000/tours/archive/" + id, content);
 
 				// Proveravamo status odgovora
 				if (response.IsSuccessStatusCode)

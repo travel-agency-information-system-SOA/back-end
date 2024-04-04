@@ -40,7 +40,7 @@ namespace Explorer.API.Controllers.Author.Administration
 
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:3000/publicTourPoint/setPublicTourPoint/{tourPointId}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"http://tours:3000/publicTourPoint/setPublicTourPoint/{tourPointId}");
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();

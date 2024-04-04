@@ -23,6 +23,8 @@ else
 {
     app.UseExceptionHandler("/error");
     app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseRouting();
