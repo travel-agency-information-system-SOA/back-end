@@ -38,7 +38,7 @@ public class EncounterController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<EncounterDto>>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<EncounterMongoDto>>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
         //async Task< > - potrpis metode da ce biti asinhrono izvrsavanje
 
@@ -53,10 +53,10 @@ public class EncounterController : BaseApiController
 
             //DESERIJALIZUJE odgovor u List<EncounterDto>
             //mi dobijemo JSON string - sadrzaj http odgovora (kao odgovor od mikroservisa), a hocemo da ga deserijalizujemo u .Net objekte
-            List<EncounterDto> encounters = JsonConvert.DeserializeObject<List<EncounterDto>>(responseContent);
+            List<EncounterMongoDto> encounters = JsonConvert.DeserializeObject<List<EncounterMongoDto>>(responseContent);
 
             //kreiranje pagedResult objekta
-            PagedResult<EncounterDto> pagedResult = new PagedResult<EncounterDto>(encounters, encounters.Count);
+            PagedResult<EncounterMongoDto> pagedResult = new PagedResult<EncounterMongoDto>(encounters, encounters.Count);
 
             return Ok(pagedResult);
         }
@@ -145,9 +145,9 @@ public class EncounterController : BaseApiController
     }
 
     [HttpPost("hiddenLocation")]
-    public async Task<ActionResult<WholeHiddenLocationEncounterDto>> Create([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
+    public async Task<ActionResult<WholeHiddenLocationEncounterMongoDto>> Create([FromBody] WholeHiddenLocationEncounterMongoDto wholeEncounter)
     {
-        var encounterDto = new EncounterDto
+        var encounterDto = new EncounterMongoDto
         {
             Name = wholeEncounter.Name,
             Description = wholeEncounter.Description,
@@ -171,12 +171,12 @@ public class EncounterController : BaseApiController
 
         //deserijalizacija odgovora u EncounterDto
         //cita sadrzaj http odgovora i deserijalizuje ga u odgovarajuci objekat iz .Net
-        var createdEncounter = await baseEncounterResponse.Content.ReadFromJsonAsync<EncounterDto>();
+        var createdEncounter = await baseEncounterResponse.Content.ReadFromJsonAsync<EncounterMongoDto>();
 
         //NA OSNOVU OBICNOG KREIRAJU HIDDEN LOCATION ENCOUNTER
-        var hiddenLocationEncounterDto = new HiddenLocationEncounterDto
+        var hiddenLocationEncounterDto = new HiddenLocationEncounterMongoDto
         {
-            EncounterId = createdEncounter.Id,
+            Encounter = createdEncounter,
             ImageLatitude = wholeEncounter.ImageLatitude,
             ImageLongitude = wholeEncounter.ImageLongitude,
             ImageURL = wholeEncounter.ImageURL,
@@ -190,12 +190,12 @@ public class EncounterController : BaseApiController
             return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating hidden location encounter.");
         }
 
-        var createdHiddenLocationEncounter = await hiddenLocationEncounterResponse.Content.ReadFromJsonAsync<WholeHiddenLocationEncounterDto>();
+        var createdHiddenLocationEncounter = await hiddenLocationEncounterResponse.Content.ReadFromJsonAsync<WholeHiddenLocationEncounterMongoDto>();
 
         return StatusCode((int)HttpStatusCode.Created, createdHiddenLocationEncounter);
     }
 
-    private async Task<ActionResult<EncounterDto>> CreateBaseEncounterAsync(EncounterDto encounterDto)
+    private async Task<ActionResult<EncounterMongoDto>> CreateBaseEncounterAsync(EncounterMongoDto encounterDto)
     {
         string json = JsonConvert.SerializeObject(encounterDto);
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -206,7 +206,7 @@ public class EncounterController : BaseApiController
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                EncounterDto createdEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
+                EncounterMongoDto createdEncounter = JsonConvert.DeserializeObject<EncounterMongoDto>(responseContent);
                 return Ok(createdEncounter);
             }
             else
@@ -222,9 +222,9 @@ public class EncounterController : BaseApiController
      
     //SOCIAL ENCOUNTER CEO
     [HttpPost("social")]
-    public async Task<ActionResult<WholeSocialEncounterDto>> CreateSocialEncounter([FromBody] WholeSocialEncounterDto socialEncounter)
+    public async Task<ActionResult<WholeSocialEncounterMongoDto>> CreateSocialEncounter([FromBody] WholeSocialEncounterMongoDto socialEncounter)
     {
-        EncounterDto encounterDto = new EncounterDto
+        EncounterMongoDto encounterDto = new EncounterMongoDto
         {
             Name = socialEncounter.Name,
             Description = socialEncounter.Description,
@@ -240,11 +240,16 @@ public class EncounterController : BaseApiController
         var baseEncounterResponse = await CreateBaseEncounterAsync(encounterDto);
 
         var baseEncounter = (OkObjectResult)baseEncounterResponse.Result;
-        var createdEncounter = (EncounterDto)baseEncounter.Value;
+        var createdEncounter = (EncounterMongoDto)baseEncounter.Value;
 
-        SocialEncounterDto socialEncounterDto = new SocialEncounterDto
+        Console.WriteLine("Kreiran encounter: " + createdEncounter);
+
+        Console.WriteLine("ID of created encounter: " + createdEncounter.Id);
+
+        SocialEncounterMongoDto socialEncounterDto = new SocialEncounterMongoDto
         {
-            EncounterId = createdEncounter.Id,
+            //EncounterId = createdEncounter.Id.ToString(),
+            Encounter = createdEncounter,
             TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion,
             DistanceTreshold = socialEncounter.DistanceTreshold,
             TouristIDs = socialEncounter.TouristIDs
@@ -260,7 +265,7 @@ public class EncounterController : BaseApiController
         }
         */
 
-        var wholeSocialEncounterDto = new WholeSocialEncounterDto
+        var wholeSocialEncounterMongoDto = new WholeSocialEncounterMongoDto
         {
             EncounterId = createdEncounter.Id,
             Name = socialEncounter.Name,
@@ -270,18 +275,18 @@ public class EncounterController : BaseApiController
             Type = socialEncounter.Type,
             Latitude = socialEncounter.Latitude,
             Longitude = socialEncounter.Longitude,
-            //Id = result.Value.Id,
+            //Id = result.Value.Id, //PROBAJ OVO DA OTKOMENTARISES
             TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion,
             DistanceTreshold = socialEncounter.DistanceTreshold,
             TouristIDs = socialEncounter.TouristIDs,
             ShouldBeApproved = socialEncounter.ShouldBeApproved
         };
 
-        return StatusCode((int)HttpStatusCode.Created, wholeSocialEncounterDto);
+        return StatusCode((int)HttpStatusCode.Created, wholeSocialEncounterMongoDto);
     }
 
     //SOCIAL ENCOUNTER
-    private async Task<ActionResult<SocialEncounterDto>> CreateSocialEncounterAsync(SocialEncounterDto socialEncounterDto)
+    private async Task<ActionResult<SocialEncounterMongoDto>> CreateSocialEncounterAsync(SocialEncounterMongoDto socialEncounterDto)
     {
         string json = JsonConvert.SerializeObject(socialEncounterDto);
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -292,7 +297,7 @@ public class EncounterController : BaseApiController
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                SocialEncounterDto createdSocialEncounter = JsonConvert.DeserializeObject<SocialEncounterDto>(responseContent);
+                SocialEncounterMongoDto createdSocialEncounter = JsonConvert.DeserializeObject<SocialEncounterMongoDto>(responseContent);
                 return Ok(createdSocialEncounter);
             }
             else
