@@ -65,7 +65,7 @@ namespace Explorer.API.Controllers
 
 
         //create followers, izmeni povratnu vrednost za front?
-        [HttpPost("/followers/{userId:int}/{followerId:int}")]
+        [HttpPost("followers/{userId:int}/{followerId:int}")]
         public async Task<ActionResult<NeoFollowerDto>> Create(int userId, int followerId)
         {
             var content = new StringContent("", Encoding.UTF8, "application/json");
@@ -93,7 +93,7 @@ namespace Explorer.API.Controllers
         }
 
         //get followings iskombinuj sa blogovima sa beka 
-        [HttpGet("/getFollowings/{userId:int}")]
+        [HttpGet("getFollowings/{userId:int}")]
         public async Task<ActionResult<List<BlogPostDto>>> GetUserFollowings(int userId)
         {
             var requestUri = $"http://followers:8090/followers/followings/{userId}";
@@ -130,7 +130,7 @@ namespace Explorer.API.Controllers
 
 
         //get all recommendations
-        [HttpGet("/getAllRecomodations/{userId:int}")]
+        [HttpGet("getAllRecomodations/{userId:int}")]
         public async Task<ActionResult<List<BlogPostDto>>> GetUserRecommodations(int userId)
         {
             var requestUri = $"http://followers:8090/followers/followings/{userId}";

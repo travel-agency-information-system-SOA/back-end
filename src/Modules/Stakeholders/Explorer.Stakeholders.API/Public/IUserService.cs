@@ -13,5 +13,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<UserDto> Get(int userId);
         UserRole GetUserRole(int userId);
         Result<UserDto> ConfirmRegistration(string verificationToken);
-    }
+		Result<List<UserDto>> GetAll();
+	}
 }

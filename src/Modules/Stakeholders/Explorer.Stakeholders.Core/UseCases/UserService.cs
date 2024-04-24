@@ -42,5 +42,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             var updatedUser = _userRepository.Update(user);
             return MapToDto(updatedUser);
         }
-    }
+
+		public Result<List<UserDto>> GetAll()
+		{
+			var users = _userRepository.GetAll();
+			return MapToDto(users);
+		}
+	}
 }

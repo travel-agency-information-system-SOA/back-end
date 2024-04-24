@@ -30,5 +30,12 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
-    }
+		[HttpGet("all")]
+		public ActionResult<List<UserDto>> GetAll()
+		{
+			var result = _userService.GetAll();
+			return CreateResponse(result);
+		}
+
+	}
 }
