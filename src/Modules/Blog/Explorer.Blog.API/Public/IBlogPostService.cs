@@ -25,6 +25,7 @@ namespace Explorer.Blog.API.Public
 
         Result<BlogPostDto> AddRating(int blogPostId, BlogPostRatingDto comment);
         Result<BlogPostDto> RemoveRating(int blogPostId, int userId);
+        Result<List<BlogPostDto>> GetAllByAuthorIds(int autorIds);
     }
 }
 

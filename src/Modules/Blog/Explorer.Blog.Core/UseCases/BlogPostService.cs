@@ -2,12 +2,14 @@
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Internal;
 using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,10 +19,18 @@ namespace Explorer.Blog.Core.UseCases
     {
         private readonly IInternalUserService _internalUserService;
         private readonly IMapper _mapper;
-        public BlogPostService(ICrudRepository<BlogPost> crudRepository, IMapper mapper, IInternalUserService internalUserService) : base(crudRepository, mapper)
+        private readonly IBlogPostRepository _blogPostRepository;
+
+        //izmenila
+        public BlogPostService(
+            ICrudRepository<BlogPost> crudRepository,
+            IBlogPostRepository blogPostRepository,
+            IMapper mapper,
+            IInternalUserService internalUserService) : base(crudRepository, mapper)
         {
             _internalUserService = internalUserService;
             _mapper = mapper;
+            _blogPostRepository = blogPostRepository;
         }
 
         Result<BlogPostDto> IBlogPostService.GetById(int id)
@@ -247,6 +257,25 @@ namespace Explorer.Blog.Core.UseCases
             }
         }
 
-        
+        //dodala -  follower modul
+        public Result<List<BlogPostDto>> GetAllByAuthorIds(int authorIds)
+        {
+            try
+            {
+                var blogPosts = new List<BlogPostDto>();
+                var authorBlogs = _blogPostRepository.GetByAuthorId(authorIds);
+                foreach(var blog in authorBlogs)
+                {
+                    var blogDto = MapToDto(blog);
+                    blogPosts.Add(blogDto);
+                }
+               
+                return Result.Ok(blogPosts);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail<List<BlogPostDto>>(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }

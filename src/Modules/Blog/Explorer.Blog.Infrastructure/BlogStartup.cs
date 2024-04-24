@@ -1,10 +1,13 @@
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.Blog.Core.Mappers;
 using Explorer.Blog.Core.UseCases;
 using Explorer.Blog.Infrastructure.Database;
+using Explorer.Blog.Infrastructure.Database.Repositories;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,6 +33,8 @@ public static class BlogStartup
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<BlogPost>), typeof(CrudDatabaseRepository<BlogPost, BlogContext>));
+
+        services.AddScoped<IBlogPostRepository, BlogPostRepository>(); //dodala ??
 
         //services.AddScoped(typeof(ICrudRepository<BlogPostComment>), typeof(CrudDatabaseRepository<BlogPostComment, BlogContext>));
 
