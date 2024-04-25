@@ -69,7 +69,7 @@ namespace Explorer.API.Controllers
         public async Task<ActionResult<NeoFollowerDto>> Create(int userId, int followerId)
         {
             var content = new StringContent("", Encoding.UTF8, "application/json");
-            var requestUri = $"http://localhost:8090/followers/{userId}/{followerId}";
+            var requestUri = $"http://followers:8090/followers/{userId}/{followerId}";
 
             try
             {
@@ -96,7 +96,7 @@ namespace Explorer.API.Controllers
         [HttpGet("getFollowings/{userId:int}")]
         public async Task<ActionResult<List<BlogPostDto>>> GetFollowingsWithBlogs(int userId)
         {
-            var requestUri = $"http://localhost:8090/followers/followings/{userId}";
+            var requestUri = $"http://followers:8090/followers/followings/{userId}";
 
             try
             {
@@ -142,7 +142,7 @@ namespace Explorer.API.Controllers
 		[HttpGet("getAllRecomodations/{userId:int}")]
 		public async Task<ActionResult<List<NeoUserDto>>> GetUserRecommendations(int userId)
 		{
-			var requestUri = $"http://localhost:8090/followers/recommendations/{userId}";
+			var requestUri = $"http://followers:8090/followers/recommendations/{userId}";
 
 			try
 			{
@@ -170,7 +170,7 @@ namespace Explorer.API.Controllers
         [HttpGet("findUserFollowings/{userId:int}")]
         public async Task<ActionResult<List<NeoUserDto>>> FindUserFollowings(int userId)
         {
-            var requestUri = $"http://localhost:8090/followers/followings/{userId}";
+            var requestUri = $"http://followers:8090/followers/followings/{userId}";
 
             try
             {
