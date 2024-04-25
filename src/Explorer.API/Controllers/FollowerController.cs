@@ -96,26 +96,35 @@ namespace Explorer.API.Controllers
         [HttpGet("getFollowings/{userId:int}")]
         public async Task<ActionResult<List<BlogPostDto>>> GetUserFollowings(int userId)
         {
-            var requestUri = $"http://followers:8090/followers/followings/{userId}";
+            var requestUri = $"http://localhost:8090/followers/followings/{userId}";
 
             try
             {
                 var response = await _httpClient.GetAsync(requestUri);
 
-                if (response.IsSuccessStatusCode)
+                if(response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var followers = JsonConvert.DeserializeObject<List<NeoUserDto>>(responseContent);
 
-                    var blogPosts = new List<BlogPostDto>();
+                    var allBlogPosts = new List<BlogPostDto>();
+
                     foreach (var follower in followers)
-                    { 
-                        //konfuzija nema smisla??
-                        //var blogs = _blogPostService.GetAllByAuthorIds(follower.Id);
-                        //blogPosts.Add(blogs);
+                    {
+                        var blogsResult = _blogPostService.GetAllByAuthorIds(follower.Id);
+
+                        if (blogsResult.IsSuccess) //proveriti
+                        {
+                            var blogs = blogsResult.Value;
+                            allBlogPosts.AddRange(blogs);
+                        }
+                        else
+                        {
+                            return StatusCode(500, "Error occurred while getting blog posts.");
+                        }
                     }
 
-                    return Ok(blogPosts);
+                    return Ok(allBlogPosts); // Vraćamo jednu listu koja sadrži sve blogove
                 }
                 else
                 {
@@ -128,8 +137,8 @@ namespace Explorer.API.Controllers
             }
         }
 
-
-        //get all recommendations
+         
+        //get all recommendations - nisam zavrsila metodu 
         [HttpGet("getAllRecomodations/{userId:int}")]
         public async Task<ActionResult<List<BlogPostDto>>> GetUserRecommodations(int userId)
         {
@@ -174,10 +183,5 @@ namespace Explorer.API.Controllers
                 return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
             }
         }
-
-
-
-
-
     }
 }
