@@ -67,7 +67,7 @@ public class EncounterController : BaseApiController
     }
 
     [HttpGet("social")]
-    public async Task<ActionResult<PagedResult<SocialEncounterDto>>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<SocialEncounterMongoDto>>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
         var response = await _httpClient.GetAsync($"http://encounters:4000/socialEncounters?page={page}&pageSize={pageSize}");
 
@@ -75,9 +75,9 @@ public class EncounterController : BaseApiController
         {
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            List<SocialEncounterDto> encounters = JsonConvert.DeserializeObject<List<SocialEncounterDto>>(responseContent);
+            List<SocialEncounterMongoDto> encounters = JsonConvert.DeserializeObject<List<SocialEncounterMongoDto>>(responseContent);
 
-            PagedResult<SocialEncounterDto> pagedResult = new PagedResult<SocialEncounterDto>(encounters, encounters.Count);
+            PagedResult<SocialEncounterMongoDto> pagedResult = new PagedResult<SocialEncounterMongoDto>(encounters, encounters.Count);
 
             return Ok(pagedResult);
         }
@@ -88,7 +88,7 @@ public class EncounterController : BaseApiController
     }
 
     [HttpGet("hiddenLocation")]
-    public async Task<ActionResult<PagedResult<HiddenLocationEncounterDto>>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
+    public async Task<ActionResult<PagedResult<HiddenLocationEncounterMongoDto>>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
         var response = await _httpClient.GetAsync($"http://encounters:4000/hiddenLocationEncounters?page={page}&pageSize={pageSize}");
 
@@ -96,9 +96,9 @@ public class EncounterController : BaseApiController
         {
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            List<HiddenLocationEncounterDto> encounters = JsonConvert.DeserializeObject<List<HiddenLocationEncounterDto>>(responseContent);
+            List<HiddenLocationEncounterMongoDto> encounters = JsonConvert.DeserializeObject<List<HiddenLocationEncounterMongoDto>>(responseContent);
 
-            PagedResult<HiddenLocationEncounterDto> pagedResult = new PagedResult<HiddenLocationEncounterDto>(encounters, encounters.Count);
+            PagedResult<HiddenLocationEncounterMongoDto> pagedResult = new PagedResult<HiddenLocationEncounterMongoDto>(encounters, encounters.Count);
 
             return Ok(pagedResult);
         }
@@ -109,7 +109,7 @@ public class EncounterController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<ActionResult<EncounterDto>> Create([FromBody] EncounterDto encounter)
+    public async Task<ActionResult<EncounterMongoDto>> Create([FromBody] EncounterMongoDto encounter)
     {
         //serijalizujemo objekat u json, kako bi smo ga mogli poslati mikroservisu putem http zahteva
         string json = JsonConvert.SerializeObject(encounter);
@@ -129,7 +129,7 @@ public class EncounterController : BaseApiController
                 //citamo sadrzaj odgovora
                 string responseContent = await response.Content.ReadAsStringAsync();
 
-                EncounterDto createdEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
+                EncounterMongoDto createdEncounter = JsonConvert.DeserializeObject<EncounterMongoDto>(responseContent);
 
                 return Ok(createdEncounter);
             }
@@ -312,7 +312,7 @@ public class EncounterController : BaseApiController
     }
 
     [HttpPut]
-    public async Task<ActionResult<EncounterDto>> Update([FromBody] EncounterDto encounter)
+    public async Task<ActionResult<EncounterMongoDto>> Update([FromBody] EncounterMongoDto encounter)
     {
         string json = JsonConvert.SerializeObject(encounter);
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -325,7 +325,7 @@ public class EncounterController : BaseApiController
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
 
-                EncounterDto updatedEncounter = JsonConvert.DeserializeObject<EncounterDto>(responseContent);
+                EncounterMongoDto updatedEncounter = JsonConvert.DeserializeObject<EncounterMongoDto>(responseContent);
 
                 return Ok(updatedEncounter);
             }
@@ -341,9 +341,9 @@ public class EncounterController : BaseApiController
     }
 
     [HttpPut("hiddenLocation")]
-    public async Task<ActionResult<HiddenLocationEncounterDto>> Update([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
+    public async Task<ActionResult<HiddenLocationEncounterMongoDto>> Update([FromBody] WholeHiddenLocationEncounterMongoDto wholeEncounter)
     {
-        var encounterDto = new EncounterDto
+        var encounterDto = new EncounterMongoDto
         {
             Id = wholeEncounter.EncounterId,
             Name = wholeEncounter.Name,
@@ -368,10 +368,10 @@ public class EncounterController : BaseApiController
                 return StatusCode((int)encounterResponse.StatusCode, "Error occurred while updating encounter.");
             }
 
-            var hiddenLocationEncounterDto = new HiddenLocationEncounterDto
+            var hiddenLocationEncounterDto = new HiddenLocationEncounterMongoDto
             {
                 Id = wholeEncounter.Id,
-                EncounterId = encounterDto.Id,
+                Encounter = encounterDto,
                 ImageLatitude = wholeEncounter.ImageLatitude,
                 ImageLongitude = wholeEncounter.ImageLongitude,
                 ImageURL = wholeEncounter.ImageURL,
@@ -398,9 +398,9 @@ public class EncounterController : BaseApiController
 
 
     [HttpPut("social")]
-    public async Task<ActionResult<WholeSocialEncounterDto>> UpdateSocialEncounter([FromBody] WholeSocialEncounterDto socialEncounter)
+    public async Task<ActionResult<WholeSocialEncounterMongoDto>> UpdateSocialEncounter([FromBody] WholeSocialEncounterMongoDto socialEncounter)
     {
-        var encounterDto = new EncounterDto
+        var encounterDto = new EncounterMongoDto
         {
             Id = socialEncounter.EncounterId,
             Name = socialEncounter.Name,
@@ -427,12 +427,12 @@ public class EncounterController : BaseApiController
 
             string encounterResponseContent = await encounterResponse.Content.ReadAsStringAsync();
 
-            EncounterDto updatedEncounter = JsonConvert.DeserializeObject<EncounterDto>(encounterResponseContent);
+            EncounterMongoDto updatedEncounter = JsonConvert.DeserializeObject<EncounterMongoDto>(encounterResponseContent);
 
-            var socialEncounterDto = new SocialEncounterDto
+            var socialEncounterDto = new SocialEncounterMongoDto
             {
                 Id = socialEncounter.Id,
-                EncounterId = updatedEncounter.Id,
+                Encounter = updatedEncounter,
                 TouristsRequiredForCompletion = socialEncounter.TouristsRequiredForCompletion,
                 DistanceTreshold = socialEncounter.DistanceTreshold,
                 TouristIDs = socialEncounter.TouristIDs
@@ -470,8 +470,8 @@ public class EncounterController : BaseApiController
         }
     }
 
-    [HttpDelete("{baseEncounterId:int}")]
-    public async Task<ActionResult> DeleteEncounter(int baseEncounterId)
+    [HttpDelete("{baseEncounterId:string}")]
+    public async Task<ActionResult> DeleteEncounter(string baseEncounterId)
     {
         var baseEncounterResponse = await DeleteEncounterAsync(baseEncounterId);
 
@@ -485,20 +485,20 @@ public class EncounterController : BaseApiController
             //json string konvertujemo u json objekat
             JObject jsonObject1 = JObject.Parse(jsonResponse1);
             //odavde (iz json objekta) izvlacimo vrednost polja socialEncounterId 
-            int socialEncounterId = (int)jsonObject1["socialEncounterId"];
+            string socialEncounterId = (string)jsonObject1["socialEncounterId"];
 
             var hiddenLocationEncounterIdResponse = await GetHiddenLocationEncounterIdAsync(baseEncounterId);
 
             string jsonResponse2 = await hiddenLocationEncounterIdResponse.Content.ReadAsStringAsync();
             JObject jsonObject2 = JObject.Parse(jsonResponse2);
-            int hiddenLocationEncounterId = (int)jsonObject2["hiddenLocationEncounterId"];
+            string hiddenLocationEncounterId = (string)jsonObject2["hiddenLocationEncounterId"];
 
-            if (socialEncounterId != -1)
+            if (!string.IsNullOrEmpty(socialEncounterId))
             {
                 var socialEncounterResponse = await DeleteSocialEncounterAsync(socialEncounterId);
                 return CreateResponse(socialEncounterResponse);
             }
-            else if (hiddenLocationEncounterId != -1)
+            else if (!string.IsNullOrEmpty(hiddenLocationEncounterId))
             {
                 var hiddenLocationEncounterResponse = await DeleteHiddenLocationEncounterAsync(hiddenLocationEncounterId);
                 return CreateResponse(hiddenLocationEncounterResponse);
@@ -508,27 +508,27 @@ public class EncounterController : BaseApiController
         return CreateResponse(baseEncounterResponse);
     }
 
-    private async Task<HttpResponseMessage> DeleteEncounterAsync(int baseEncounterId)
+    private async Task<HttpResponseMessage> DeleteEncounterAsync(string baseEncounterId)
     {
         return await _httpClient.DeleteAsync($"http://encounters:4000/encounters/deleteEncounter/{baseEncounterId}");
     }
 
-    private async Task<HttpResponseMessage> GetSocialEncounterIdAsync(int baseEncounterId)
+    private async Task<HttpResponseMessage> GetSocialEncounterIdAsync(string baseEncounterId)
     {
         return await _httpClient.GetAsync($"http://encounters:4000/encounters/getSocialEncounterId/{baseEncounterId}");
     }
 
-    private async Task<HttpResponseMessage> GetHiddenLocationEncounterIdAsync(int baseEncounterId)
+    private async Task<HttpResponseMessage> GetHiddenLocationEncounterIdAsync(string baseEncounterId)
     {
         return await _httpClient.GetAsync($"http://encounters:4000/encounters/getHiddenLocationEncounterId/{baseEncounterId}");
     }
 
-    private async Task<HttpResponseMessage> DeleteSocialEncounterAsync(long socialEncounterId)
+    private async Task<HttpResponseMessage> DeleteSocialEncounterAsync(string socialEncounterId)
     {
         return await _httpClient.DeleteAsync($"http://encounters:4000/encounters/deleteSocialEncounter/{socialEncounterId}");
     }
 
-    private async Task<HttpResponseMessage> DeleteHiddenLocationEncounterAsync(long hiddenLocationEncounterId)
+    private async Task<HttpResponseMessage> DeleteHiddenLocationEncounterAsync(string hiddenLocationEncounterId)
     {
         return await _httpClient.DeleteAsync($"http://encounters:4000/encounters/deleteHiddenLocationEncounter/{hiddenLocationEncounterId}");
     }
