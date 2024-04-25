@@ -109,7 +109,7 @@ namespace Explorer.API.Controllers
 
                     var allBlogPosts = new List<BlogPostDto>();
 
-                    /*foreach (var follower in followers)
+                    foreach (var follower in followers)
                     {
                         var blogsResult = _blogPostService.GetAllByAuthorIds(follower.Id);
 
@@ -124,8 +124,7 @@ namespace Explorer.API.Controllers
                         }
                     }
 
-                    return Ok(allBlogPosts); // Vraćamo jednu listu koja sadrži sve blogove*/
-                    return Ok();
+                    return Ok(allBlogPosts); // Vraćamo jednu listu koja sadrži sve blogove
                 }
                 else
                 {
@@ -141,7 +140,7 @@ namespace Explorer.API.Controllers
 
 		//get all recommendations  
 		[HttpGet("getAllRecomodations/{userId:int}")]
-		public async Task<ActionResult<List<FollowerDto>>> GetUserRecommendations(int userId)
+		public async Task<ActionResult<List<NeoUserDto>>> GetUserRecommendations(int userId)
 		{
 			var requestUri = $"http://localhost:8090/followers/recommendations/{userId}";
 
@@ -152,7 +151,7 @@ namespace Explorer.API.Controllers
 				if (response.IsSuccessStatusCode)
 				{
 					var responseContent = await response.Content.ReadAsStringAsync();
-					var recommendedFollowers = JsonConvert.DeserializeObject<List<FollowerDto>>(responseContent);
+					var recommendedFollowers = JsonConvert.DeserializeObject<List<NeoUserDto>>(responseContent);
 
 					return Ok(recommendedFollowers);
 				}
