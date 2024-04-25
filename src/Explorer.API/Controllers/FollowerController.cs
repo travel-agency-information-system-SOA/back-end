@@ -64,7 +64,7 @@ namespace Explorer.API.Controllers
         }
 
 
-        //create followers, izmeni povratnu vrednost za front?
+        //create followers
         [HttpPost("followers/{userId:int}/{followerId:int}")]
         public async Task<ActionResult<NeoFollowerDto>> Create(int userId, int followerId)
         {
@@ -94,7 +94,7 @@ namespace Explorer.API.Controllers
 
         //get followings iskombinuj sa blogovima sa beka 
         [HttpGet("getFollowings/{userId:int}")]
-        public async Task<ActionResult<List<BlogPostDto>>> GetUserFollowings(int userId)
+        public async Task<ActionResult<List<BlogPostDto>>> GetFollowingsWithBlogs(int userId)
         {
             var requestUri = $"http://localhost:8090/followers/followings/{userId}";
 
@@ -165,5 +165,32 @@ namespace Explorer.API.Controllers
 				return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
 			}
 		}
-	}
+
+        //Svi koga prati
+        [HttpGet("findUserFollowings/{userId:int}")]
+        public async Task<ActionResult<List<NeoUserDto>>> FindUserFollowings(int userId)
+        {
+            var requestUri = $"http://localhost:8090/followers/followings/{userId}";
+
+            try
+            {
+                var response = await _httpClient.GetAsync(requestUri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var followers = JsonConvert.DeserializeObject<List<NeoUserDto>>(responseContent);
+                    return Ok(followers); 
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, "Error occurred while getting followers for user.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+            }
+        }
+    }
 }
