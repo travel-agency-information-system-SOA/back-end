@@ -109,7 +109,7 @@ namespace Explorer.API.Controllers
 
                     var allBlogPosts = new List<BlogPostDto>();
 
-                    foreach (var follower in followers)
+                    /*foreach (var follower in followers)
                     {
                         var blogsResult = _blogPostService.GetAllByAuthorIds(follower.Id);
 
@@ -124,7 +124,8 @@ namespace Explorer.API.Controllers
                         }
                     }
 
-                    return Ok(allBlogPosts); // Vraćamo jednu listu koja sadrži sve blogove
+                    return Ok(allBlogPosts); // Vraćamo jednu listu koja sadrži sve blogove*/
+                    return Ok();
                 }
                 else
                 {
@@ -137,51 +138,33 @@ namespace Explorer.API.Controllers
             }
         }
 
-         
-        //get all recommendations - nisam zavrsila metodu 
-        [HttpGet("getAllRecomodations/{userId:int}")]
-        public async Task<ActionResult<List<BlogPostDto>>> GetUserRecommodations(int userId)
-        {
-            var requestUri = $"http://followers:8090/followers/followings/{userId}";
 
-            try
-            {
-                var response = await _httpClient.GetAsync(requestUri);
+		//get all recommendations  
+		[HttpGet("getAllRecomodations/{userId:int}")]
+		public async Task<ActionResult<List<FollowerDto>>> GetUserRecommendations(int userId)
+		{
+			var requestUri = $"http://localhost:8090/followers/recommendations/{userId}";
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var followers = JsonConvert.DeserializeObject<List<NeoUserDto>>(responseContent);
+			try
+			{
+				var response = await _httpClient.GetAsync(requestUri);
 
-                    var allBlogPosts = new List<BlogPostDto>(); 
+				if (response.IsSuccessStatusCode)
+				{
+					var responseContent = await response.Content.ReadAsStringAsync();
+					var recommendedFollowers = JsonConvert.DeserializeObject<List<FollowerDto>>(responseContent);
 
-                    foreach (var follower in followers)
-                    {
-                        var blogsResult = _blogPostService.GetAllByAuthorIds(follower.Id);
-
-                        if (blogsResult.IsSuccess) //proveriti
-                        {
-                            var blogs = blogsResult.Value;
-                            allBlogPosts.AddRange(blogs); 
-                        }
-                        else
-                        {
-                            // Ukoliko operacija nije uspela, možete postaviti odgovarajući status koda ili obavestiti korisnika
-                            return StatusCode(500, "Error occurred while getting blog posts.");
-                        }
-                    }
-
-                    return Ok(allBlogPosts); // Vraćamo jednu listu koja sadrži sve blogove
-                }
-                else
-                {
-                    return StatusCode((int)response.StatusCode, "Error occurred while getting followers for user.");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
-            }
-        }
-    }
+					return Ok(recommendedFollowers);
+				}
+				else
+				{
+					return StatusCode((int)response.StatusCode, "Error occurred while getting recommended followers for user.");
+				}
+			}
+			catch (HttpRequestException ex)
+			{
+				return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
+			}
+		}
+	}
 }
