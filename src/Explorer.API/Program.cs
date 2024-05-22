@@ -36,6 +36,7 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+// app.MapGrpcService<AuthenticationProtoController>(); u ovom obliku dodati svoje kontrolere koje napisete
 
 app.Run();
 
