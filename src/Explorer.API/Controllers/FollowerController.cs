@@ -16,7 +16,7 @@ using System.Text;
 namespace Explorer.API.Controllers
 {
 
-    [Route("api/follower")]
+   // [Route("api/follower")]
     public class FollowerController : BaseApiController
     {
         private readonly IFollowerService _followerService;
@@ -65,7 +65,7 @@ namespace Explorer.API.Controllers
 
 
         //create followers
-        [HttpPost("followers/{userId:int}/{followerId:int}")]
+        //[HttpPost("followers/{userId:int}/{followerId:int}")]
         public async Task<ActionResult<NeoFollowerDto>> Create(int userId, int followerId)
         {
             var content = new StringContent("", Encoding.UTF8, "application/json");
@@ -93,7 +93,7 @@ namespace Explorer.API.Controllers
         }
 
         //get followings iskombinuj sa blogovima sa beka 
-        [HttpGet("getFollowings/{userId:int}")]
+        //[HttpGet("getFollowings/{userId:int}")]
         public async Task<ActionResult<List<BlogPostDto>>> GetFollowingsWithBlogs(int userId)
         {
             var requestUri = $"http://followers:8090/followers/followings/{userId}";
@@ -139,7 +139,7 @@ namespace Explorer.API.Controllers
 
 
 		//get all recommendations  
-		[HttpGet("getAllRecomodations/{userId:int}")]
+		//[HttpGet("getAllRecomodations/{userId:int}")]
 		public async Task<ActionResult<List<NeoUserDto>>> GetUserRecommendations(int userId)
 		{
 			var requestUri = $"http://followers:8090/followers/recommendations/{userId}";
@@ -167,7 +167,7 @@ namespace Explorer.API.Controllers
 		}
 
         //Svi koga prati
-        [HttpGet("findUserFollowings/{userId:int}")]
+        //[HttpGet("findUserFollowings/{userId:int}")]
         public async Task<ActionResult<List<NeoUserDto>>> FindUserFollowings(int userId)
         {
             var requestUri = $"http://followers:8090/followers/followings/{userId}";
