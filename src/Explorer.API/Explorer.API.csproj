@@ -4,7 +4,20 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<IncludeHttpRuleProtos>true</IncludeHttpRuleProtos> <!-- ovo dodala -->
   </PropertyGroup>
+	
+	<!-- ovo dodala -->
+
+	<ItemGroup>
+		<None Remove="Protos\encounter.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Startup\templateMail.html" />
+	</ItemGroup>
+	
+	<!-- do ovde -->
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
@@ -38,5 +51,26 @@
     <ProjectReference Include="..\Modules\Tours\Explorer.Tours.API\Explorer.Tours.API.csproj" />
     <ProjectReference Include="..\Modules\Tours\Explorer.Tours.Infrastructure\Explorer.Tours.Infrastructure.csproj" />
   </ItemGroup>
+	
+	<!-- ovo dodala -->
+
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.26.1" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.62.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.62.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.17" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Controllers\ProtoControllers\" />
+		<Protobuf Include="Protos\encounter.proto" />
+	</ItemGroup>
+
+	<!-- do ovde -->
+	
 
 </Project>

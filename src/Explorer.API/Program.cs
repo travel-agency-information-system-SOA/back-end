@@ -10,6 +10,7 @@ builder.Services.ConfigureAuth();
 
 builder.Services.RegisterModules();
 
+builder.Services.AddGrpc().AddJsonTranscoding();
 
 var app = builder.Build();
 
@@ -29,14 +30,15 @@ else
 
 app.UseRouting();
 app.UseCors(corsPolicy);
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthorization();
 
-
+app.UseStaticFiles();
 
 app.MapControllers();
-// app.MapGrpcService<AuthenticationProtoController>(); u ovom obliku dodati svoje kontrolere koje napisete
+
+app.MapGrpcService<EncounterProtoController>(); 
 
 app.Run();
 

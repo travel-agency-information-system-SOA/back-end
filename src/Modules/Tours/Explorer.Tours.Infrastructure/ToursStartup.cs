@@ -126,7 +126,7 @@ public static class ToursStartup
 		services.AddScoped(typeof(ICrudRepository<CompetitionApply>), typeof(CrudDatabaseRepository<CompetitionApply, ToursContext>));
 		services.AddScoped<ICompetitionRepository, CompetitionRepository>();
 
-		services.AddDbContext<ToursContext>(opt =>
+        services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "tours")));
     }

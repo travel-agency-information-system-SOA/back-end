@@ -19,8 +19,10 @@ using System.Text;
 
 namespace Explorer.API.Controllers.Administrator.Administration;
 
+/*
+
 //[Authorize(Policy = "administratorPolicy")]
-[Route("api/encounters")]
+//[Route("api/encounters")]
 public class EncounterController : BaseApiController
 {
     private readonly IEncounterService _encounterService;
@@ -37,7 +39,8 @@ public class EncounterController : BaseApiController
         _hiddenLocationEncounterService = hiddenLocationEncounterService;
     }
 
-    [HttpGet]
+    //ovo prebacila u rpc
+    //[HttpGet]
     public async Task<ActionResult<PagedResult<EncounterMongoDto>>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
         //async Task< > - potrpis metode da ce biti asinhrono izvrsavanje
@@ -144,7 +147,8 @@ public class EncounterController : BaseApiController
         }
     }
 
-    [HttpPost("hiddenLocation")]
+    //ovo prevodim - NEUSPESNO
+    //[HttpPost("hiddenLocation")]
     public async Task<ActionResult<WholeHiddenLocationEncounterMongoDto>> Create([FromBody] WholeHiddenLocationEncounterMongoDto wholeEncounter)
     {
         var encounterDto = new EncounterMongoDto
@@ -221,7 +225,7 @@ public class EncounterController : BaseApiController
     }
      
     //SOCIAL ENCOUNTER CEO
-    [HttpPost("social")]
+    //[HttpPost("social")]
     public async Task<ActionResult<WholeSocialEncounterMongoDto>> CreateSocialEncounter([FromBody] WholeSocialEncounterMongoDto socialEncounter)
     {
         EncounterMongoDto encounterDto = new EncounterMongoDto
@@ -258,12 +262,7 @@ public class EncounterController : BaseApiController
         // Pozivamo mikroservis za kreiranje socijalnog sastanka (SocialEncounter)
         var result = await CreateSocialEncounterAsync(socialEncounterDto);
 
-        /*
-        if (result.Value == null)
-        {
-            return StatusCode((int)HttpStatusCode.BadRequest, "Error occurred while creating social encounter."); // Vraćamo BadRequest ako je rezultat null
-        }
-        */
+        
 
         var wholeSocialEncounterMongoDto = new WholeSocialEncounterMongoDto
         {
@@ -561,3 +560,4 @@ public class EncounterController : BaseApiController
         }
     }
 }
+*/
