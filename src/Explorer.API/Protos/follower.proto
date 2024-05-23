@@ -84,7 +84,7 @@ message BlogPostRatingDto {
 }
 
 message id {
-    string Id=1;
+    int32 Id=1;
 }
 
 message ListBlogPostDto {

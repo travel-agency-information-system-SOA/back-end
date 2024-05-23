@@ -27,8 +27,6 @@ namespace Explorer.API.Controllers
 			var client = new Follower.FollowerClient(channel);
 			var response = await client.CreateNewFollowingAsync(following);
 
-			// Console.WriteLine(response.AccessToken);
-
 			return await Task.FromResult(new GrpcServiceTranscoding.NeoFollowerDto
 			{
 				UserId = response.UserId,
@@ -47,7 +45,7 @@ namespace Explorer.API.Controllers
 			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
-			//var response = await client.GetUserRecommendations(id);
+			var response = await client.GetUserRecommendationsAsync(id);
 
 			return await Task.FromResult(new ListNeoUserDto
 			{
@@ -64,9 +62,8 @@ namespace Explorer.API.Controllers
 			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
-			//var response = await client.GetFollowingsWithBlogs(id);
+			var response = await client.GetFollowingsWithBlogsAsync(id);
 
-			// Console.WriteLine(response.AccessToken);
 
 			return await Task.FromResult(new ListBlogPostDto
 			{
@@ -82,9 +79,8 @@ namespace Explorer.API.Controllers
 			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
-			//var response = await client.GetFollowersAsync(id);
+			var response = await client.FindUserFollowingsAsync(id);
 
-			// Console.WriteLine(response.AccessToken);
 
 			return await Task.FromResult(new ListNeoUserDto
 			{
