@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceTranscoding";
+import "Protos/google/api/annotations.proto";
+
+service Tour {
+    rpc Create(TourDto) returns (TourDto) {
+        option (google.api.http) = {
+          post: "/api/tour"
+          body: "*"
+        };
+    }
+    rpc GetToursByUserId(UserIdRequest) returns (TourListResponse) {
+        option (google.api.http) = {
+          get: "/api/tour/user/{userId}"
+        };
+    }
+
+    rpc DeleteTour(TourIdRequest) returns (Response) {
+        option (google.api.http) = {
+          delete: "/api/tour/{id}"
+        };
+    }
+
+    rpc PublishTour(TourIdRequest) returns (Response) {
+        option (google.api.http) = {
+          put: "/api/tour/publish/{id}"
+          body: "*"
+        };
+    }
+
+    rpc ArchiveTour(TourIdRequest) returns (Response) {
+        option (google.api.http) = {
+          put: "/api/tour/archive/{id}"
+          body: "*"
+        };
+    }
+}
+
+message TourDto {
+    int64 Id = 1; 
+    string Name = 2;
+    google.protobuf.Timestamp PublishedDateTime = 3;
+    google.protobuf.Timestamp ArchivedDateTime = 4;
+    string Description = 5;
+    string DifficultyLevel = 6;
+    repeated string Tags = 7;
+    int32 Price = 8;
+    string Status = 9;
+    int64 UserId = 10;
+    repeated TourPointDto TourPoints = 11;
+    repeated TourCharacteristicDto TourCharacteristics = 12;
+    repeated TourReviewDto TourReviews = 13;
+}
+
+message TourPointDto {
+    int64 Id = 1;
+    int64 TourId = 2;
+    string Name = 3;
+    string Description = 4;
+    double Latitude = 5;
+    double Longitude = 6;
+    string ImageUrl = 7;
+    string Secret = 8;
+}
+
+message TourCharacteristicDto {
+    double Distance = 1;
+    double Duration = 2;
+    string TransportType = 3;
+}
+
+message TourReviewDto {
+    int64 Id = 1;
+    double Grade = 2;
+    string Comment = 3;
+    int64 TouristId = 4;
+    google.protobuf.Timestamp AttendanceDate = 5;
+    google.protobuf.Timestamp ReviewDate = 6;
+    repeated string Images = 7;
+    int64 TourId = 8;
+}
+
+
+message UserIdRequest {
+    int64 userId = 1;
+}
+
+message TourIdRequest {
+    int64 id = 1;
+}
+
+message Response {
+    bool Success = 1;
+    string Error = 2;
+}
+
+message TourListResponse {
+    repeated TourDto Tours = 1;
+}
