@@ -25,15 +25,14 @@ namespace Explorer.API.Controllers.ProtoControllers
         public override async Task<TourDto> Create(GrpcServiceTranscoding.TourDto message,
            ServerCallContext context)
         {
-            Console.WriteLine("USAO je ovde BEKKK");
+            Console.WriteLine("USAO CREATE:");
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             var channel = GrpcChannel.ForAddress("http://tours:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
 
-            //var client = new TourService.TourServiceClient(channel); izmena?
             var client = new Tour.TourClient(channel);
             var response = await client.CreateAsync(message);
-            Console.WriteLine("OVDE JE RESPONSE");
+            Console.WriteLine("OVDE JE RESPONSE ZA CREATE:");
             Console.WriteLine(response);
 
             var newTourDto = new TourDto
@@ -57,46 +56,61 @@ namespace Explorer.API.Controllers.ProtoControllers
         }
 
 
-        //UserIdRequest, kako da uzmem iz putanje ?
-        /* public override async Task<ActionResult<PagedResult<TourDto>>> GetByUserId(UserIdRequest request, ServerCallContext context)
-         {
-             var httpHandler = new HttpClientHandler();
-             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-             var channel = GrpcChannel.ForAddress("http://localhost:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
-             var client = new Tour.TourClient(channel);
-             var response = await client.GetToursByUserIdAsync(request); //metoda go ?
+        public override async Task<TourListResponse> GetByUserId(PageRequest request, ServerCallContext context)
+        {
+            Console.WriteLine("USAO GET BY USER ID:");
+            Console.WriteLine("Request:");
+            Console.WriteLine(request);
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            var channel = GrpcChannel.ForAddress("http://tours:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
 
-             // Mapiranje vrednosti iz response-a na listu TourDto objekata
-             var tours = new List<TourDto>();
-             foreach (var tour in response.Tours)
-             {
-                 tours.Add(new TourDto
-                 {
-                     Id = tour.Id,
-                     Name = tour.Name,
-                     PublishedDateTime = tour.PublishedDateTime,
-                     ArchivedDateTime = tour.ArchivedDateTime,
-                     Description = tour.Description,
-                     DifficultyLevel = tour.DifficultyLevel,
-                     Tags = { tour.Tags },
-                     Price = tour.Price,
-                     Status = tour.Status,
-                     UserId = tour.UserId,
-                     TourPoints = { tour.TourPoints },
-                     TourCharacteristics = { tour.TourCharacteristics },
-                     TourReviews = { tour.TourReviews }
-                 });
-             }
+            var client = new Tour.TourClient(channel);
+            var response = await client.GetByUserIdAsync(request);
+            Console.WriteLine("Response:");
+            Console.WriteLine(response);
+            // Mapiranje vrednosti iz response-a na listu TourDto objekata
+            var tours = new List<TourDto>();
+            foreach (var tour in response.Results)
+            {
+                tours.Add(new TourDto
+                {
+                    Id = tour.Id,
+                    Name = tour.Name,
+                    PublishedDateTime = tour.PublishedDateTime,
+                    ArchivedDateTime = tour.ArchivedDateTime,
+                    Description = tour.Description,
+                    DifficultyLevel = tour.DifficultyLevel,
+                    Tags = { tour.Tags },
+                    Price = tour.Price,
+                    Status = tour.Status,
+                    UserId = tour.UserId,
+                    TourPoints = { tour.TourPoints },
+                    TourCharacteristics = { tour.TourCharacteristics },
+                    TourReviews = { tour.TourReviews }
+                });
+            }
+
+            // Setovanje total_count na osnovu broja elemenata u listi tours
+            var totalCount = tours.Count;
+
+            // Kreiranje TourListResponse objekta sa učitanim tura objektima i totalCount vrednošću
+            var tourListResponse = new TourListResponse
+            {
+                Results = { tours },
+                TotalCount = totalCount
+            };
+
+            return tourListResponse;
+        }
 
 
-             var pagedResult = new BuildingBlocks.Core.UseCases.PagedResult<TourDto>(tours, tours.Count);
-             return pagedResult;
-         }
-     }
+
+
 
 
      //TourIdRequest, napraviti dto ?
-
+/*
      public override async Task<ActionResult> Delete(TourIdRequest request, ServerCallContext context)
      {
          var httpHandler = new HttpClientHandler();
