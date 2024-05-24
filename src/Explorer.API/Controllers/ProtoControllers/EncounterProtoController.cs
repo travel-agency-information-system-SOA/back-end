@@ -114,13 +114,22 @@ public class EncounterProtoController : Encounter.EncounterBase
 
     public override async Task<GrpcServiceTranscoding.WholeSocialEncounterMongoDto> CreateSocialEncounter(GrpcServiceTranscoding.WholeSocialEncounterMongoDto request, ServerCallContext context)
     {
+        Console.WriteLine("USAO OVDE BEK");
+        Console.WriteLine("Name:", request.Name);
+        Console.WriteLine("Descrpiton:", request.Description);
+        Console.WriteLine("XpPoints:", request.XpPoints);
         var httpHandler = new HttpClientHandler();
         httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-        var channel = GrpcChannel.ForAddress("http://localhost:81", new GrpcChannelOptions { HttpHandler = httpHandler });
+        
+        var channel = GrpcChannel.ForAddress("http://encounters:4000", new GrpcChannelOptions { HttpHandler = httpHandler });
 
         var client = new GrpcServiceTranscoding.Encounter.EncounterClient(channel);
        
         var baseEncounterResponse = await client.CreateSocialEncounterAsync(request);
+
+        // Print the response content
+        Console.WriteLine("Response received:");
+        Console.WriteLine(baseEncounterResponse);
 
         return await Task.FromResult(baseEncounterResponse); //ovi koji imaju listu
     }
