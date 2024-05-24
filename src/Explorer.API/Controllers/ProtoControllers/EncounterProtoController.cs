@@ -112,18 +112,26 @@ public class EncounterProtoController : Encounter.EncounterBase
     }
     */
 
-    public override async Task<GrpcServiceTranscoding.WholeSocialEncounterMongoDto> CreateSocialEncounter(GrpcServiceTranscoding.WholeSocialEncounterMongoDto request, ServerCallContext context)
+    public override async Task<SocialEnocunter> CreateSocialEncounter(SocialEnocunter request, ServerCallContext context)
     {
+        //napomena:
+        //encounterId treba da se doda od napravljenog encountera koji se takodje pravi u go-u
+        //kreiram normalan encounter u go, uzimam njegov id i lepim ga u ovaj social enocunter (taj encounter id)
         Console.WriteLine("USAO OVDE BEK");
+        Console.WriteLine("REQUEST:");
+        Console.WriteLine(request);
         Console.WriteLine("Name:", request.Name);
         Console.WriteLine("Descrpiton:", request.Description);
         Console.WriteLine("XpPoints:", request.XpPoints);
+
         var httpHandler = new HttpClientHandler();
         httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
         
+        //pre ovoga moram da iskreiram obican encounter ili i unutar ovoga da iskreiram obican
+        //id od ovog social se isto napr u go-u
         var channel = GrpcChannel.ForAddress("http://encounters:4000", new GrpcChannelOptions { HttpHandler = httpHandler });
 
-        var client = new GrpcServiceTranscoding.Encounter.EncounterClient(channel);
+        var client = new Encounter.EncounterClient(channel);
        
         var baseEncounterResponse = await client.CreateSocialEncounterAsync(request);
 

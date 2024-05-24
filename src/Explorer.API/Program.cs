@@ -1,4 +1,5 @@
 using Explorer.API.Startup;
+using GrpcServiceTranscoding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,14 @@ builder.Services.ConfigureAuth();
 
 builder.Services.RegisterModules();
 
-builder.Services.AddGrpc().AddJsonTranscoding();
+builder.Services.AddGrpc(); //
+
+//builder.Services.AddGrpc().AddJsonTranscoding();
+
+builder.Services.AddGrpc(options =>
+{
+    options.EnableDetailedErrors = true; // detaljnije greske u razvojnom okruzenju
+}).AddJsonTranscoding();
 
 var app = builder.Build();
 
@@ -38,7 +46,7 @@ app.UseStaticFiles();
 
 app.MapControllers();
 
-app.MapGrpcService<EncounterProtoController>(); 
+app.MapGrpcService<EncounterProtoController>();
 
 app.Run();
 
