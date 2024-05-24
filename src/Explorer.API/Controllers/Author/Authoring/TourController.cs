@@ -1,16 +1,16 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+/*using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Text;
+using System.Text;*/
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    //[Route("api/administration/tour")]
+   /* //[Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
         private readonly ITourService _tourService;
@@ -126,7 +126,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
         //rpc
 		//[HttpDelete("{id:int}")]
-		public async Task<ActionResult> Delete(int id)
+		/*public async Task<ActionResult> Delete(int id)
 		{
 			try
 			{
@@ -206,7 +206,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
         //rpc
 		//[HttpPut("publish/{tourId:int}")]
-		public async Task<ActionResult> Publish(int tourId)
+		/*public async Task<ActionResult> Publish(int tourId)
 		{
 			try
 			{
@@ -252,7 +252,7 @@ namespace Explorer.API.Controllers.Author.Authoring
 
         //rpc
 		//[HttpPut("archive/{id:int}")]
-		public async Task<ActionResult> Archive(int id)
+		/*public async Task<ActionResult> Archive(int id)
 		{
 			try
 			{
@@ -356,9 +356,9 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 		[Authorize(Policy = "touristPolicy")]
 		[HttpGet("lastId")]
-    public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
-    {
-        return _tourService.GetLastTourId(page, pageSize);
-    }
-	}
+        public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
+        {
+            return _tourService.GetLastTourId(page, pageSize);
+        }*/
+	//}
 }
