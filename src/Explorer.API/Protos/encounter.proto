@@ -11,18 +11,18 @@ service Encounter {
             body: "*"
         };
     }
+    */
 
-    rpc CreateWholeHiddenLocationEncounter(CreateWholeHiddenLocationEncounterRequest) returns (CreateWholeHiddenLocationEncounterResponse) {
+    rpc CreateSocialEncounter(SocialEnc) returns (SocialEnc){
         option (google.api.http) = {
-            post: "/api/encounters/createWholeHiddenLocationEncounter"
+            post: "/api/encounters/social"
             body: "*"
         };
     }
-    */
 
-    rpc CreateSocialEncounter(SocialEnocunter) returns (SocialEnocunter){
+    rpc CreateHiddenLocationEncounter(HiddenLocationEnc) returns (HiddenLocationEnc){
         option (google.api.http) = {
-            post: "/api/encounters/social"
+            post: "/api/encounters/hiddenLocation"
             body: "*"
         };
     }
@@ -38,66 +38,9 @@ message GetAllEncountersResponse {
     repeated EncounterMongoDto encounters = 1;
     int32 totalItems = 2;
 }
-
-message EncounterMongoDto {
-    string id = 1;
-    string name = 2;
-    string description = 3;
-    int32 xp_points = 4;
-    string status = 5;
-    string type = 6;
-    double latitude = 7;
-    double longitude = 8;
-    bool should_be_approved = 9;
-}
 */
 
-/*
-message HiddenLocationEncounterMongoDto {
-    string id = 1;
-    EncounterMongoDto encounter = 2;
-    string image_url = 3;
-    double image_latitude = 4;
-    double image_longitude = 5;
-    double distance_treshold = 6;
-}
-
-message CreateWholeHiddenLocationEncounterRequest {
-    string name = 1;
-    string description = 2;
-    int32 xp_points = 3;
-    string status = 4;
-    string type = 5;
-    double latitude = 6;
-    double longitude = 7;
-    bool should_be_approved = 8;
-    double image_latitude = 9;
-    double image_longitude = 10;
-    string image_url = 11;
-    double distance_treshold = 12;
-}
-
-message CreateWholeHiddenLocationEncounterResponse {
-    string id = 1;
-    string name = 2;
-    string description = 3;
-    int32 xp_points = 4;
-    string status = 5;
-    string type = 6;
-    double latitude = 7;
-    double longitude = 8;
-    bool should_be_approved = 9;
-    double image_latitude = 10;
-    double image_longitude = 11;
-    string image_url = 12;
-    double distance_treshold = 13;
-}
-*/
-
-//odavde obrisala ispod:
-//string EncounterId = 1;
-
-message SocialEnocunter {
+message SocialEnc {
         string encounterId = 1;
         string name = 2;
         string description = 3;
@@ -111,4 +54,21 @@ message SocialEnocunter {
         double distanceTreshold = 11;
         repeated int64 touristIDs = 12;
         bool shouldBeApproved = 13;
+}
+
+message HiddenLocationEnc {
+       string id = 1;
+       string name = 2;
+        string description = 3;
+        int32 xpPoints = 4;
+        string status = 5;
+        string type = 6;
+        double latitude = 7;
+        double longitude = 8;
+        string encounterId = 9;
+        string imageURL = 10;
+        double imageLatitude = 11;
+        double imageLongitude = 12;
+        double distanceTreshold = 13;
+        bool shouldBeApproved = 14;
 }

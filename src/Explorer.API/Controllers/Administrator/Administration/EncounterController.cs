@@ -147,7 +147,7 @@ public class EncounterController : BaseApiController
         }
     }
 
-    //ovo prevodim - NEUSPESNO
+    //ovo prevodim
     //[HttpPost("hiddenLocation")]
     public async Task<ActionResult<WholeHiddenLocationEncounterMongoDto>> Create([FromBody] WholeHiddenLocationEncounterMongoDto wholeEncounter)
     {
