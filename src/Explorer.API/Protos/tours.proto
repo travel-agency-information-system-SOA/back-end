@@ -16,6 +16,12 @@ service Tour {
          get: "/api/administration/tour/{userId}"
        };
     }
+    rpc Publish(TourPublishRequest) returns (TourDto) {
+        option (google.api.http) = {
+            put: "/api/administration/tour/publish/{tourId}"
+            body: "*"
+        };
+    }
 }
 
 message TourDto {
@@ -83,4 +89,9 @@ message Response {
 message TourListResponse {
     repeated TourDto results = 1;
     int32 totalCount = 2;
+}
+
+message TourPublishRequest {
+    int64 tourId = 1;
+    TourDto tour = 2;
 }
