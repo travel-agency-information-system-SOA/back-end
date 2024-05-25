@@ -134,6 +134,33 @@ namespace Explorer.API.Controllers.ProtoControllers
             return publishedTourDto;
         }
 
+        public override async Task<TourDto> Archive(TourPublishRequest request, ServerCallContext context)
+        {
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            var channel = GrpcChannel.ForAddress("http://tours:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
+
+            var client = new Tour.TourClient(channel);
+            var response = await client.ArchiveAsync(request);
+
+            var publishedTourDto = new TourDto
+            {
+                Id = response.Id,
+                Name = response.Name,
+                PublishedDateTime = response.PublishedDateTime,
+                ArchivedDateTime = response.ArchivedDateTime,
+                Description = response.Description,
+                DifficultyLevel = response.DifficultyLevel,
+                Tags = { response.Tags },
+                Price = response.Price,
+                Status = response.Status,
+                UserId = response.UserId,
+                TourPoints = { response.TourPoints },
+                TourCharacteristics = { response.TourCharacteristics },
+                TourReviews = { response.TourReviews }
+            };
+            return publishedTourDto;
+        }
 
 
 
