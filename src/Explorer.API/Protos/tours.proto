@@ -29,6 +29,11 @@ service Tour {
             body: "*"
         };
     }
+    rpc Delete(TourIdRequest) returns (TourDto) {
+        option (google.api.http) = {
+            delete: "/api/administration/tour/{id}"
+        };
+    }
 }
 
 message TourDto {

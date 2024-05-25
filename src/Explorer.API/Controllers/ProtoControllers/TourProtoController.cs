@@ -162,6 +162,39 @@ namespace Explorer.API.Controllers.ProtoControllers
             return publishedTourDto;
         }
 
+        public override async Task<TourDto> Delete(TourIdRequest request, ServerCallContext context)
+        {
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            var channel = GrpcChannel.ForAddress("http://tours:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
+
+            var client = new Tour.TourClient(channel);
+
+            var response = await client.DeleteAsync(request);
+            Console.WriteLine("Uspesno obrisana tura:");
+            Console.WriteLine(response);
+           
+            // Vraćanje obrisane ture kao odgovor - provera 
+            var deletedTourDto = new TourDto
+            {
+                Id = response.Id,
+                Name = response.Name,
+                PublishedDateTime = response.PublishedDateTime,
+                ArchivedDateTime = response.ArchivedDateTime,
+                Description = response.Description,
+                DifficultyLevel = response.DifficultyLevel,
+                Tags = { response.Tags },
+                Price = response.Price,
+                Status = response.Status,
+                UserId = response.UserId,
+                TourPoints = { response.TourPoints },
+                TourCharacteristics = { response.TourCharacteristics },
+                TourReviews = { response.TourReviews }
+            };
+
+            return deletedTourDto;
+        }
+
 
 
 
@@ -172,48 +205,9 @@ namespace Explorer.API.Controllers.ProtoControllers
 
         //TourIdRequest, napraviti dto ?
         /*
-             public override async Task<ActionResult> Delete(TourIdRequest request, ServerCallContext context)
-             {
-                 var httpHandler = new HttpClientHandler();
-                 httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                 var channel = GrpcChannel.ForAddress("http://localhost:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
-
-                 var client = new Tour.TourClient(channel);
-
-                 var response = await client.DeleteTourAsync(request);//izmena ?? // Koristimo metodu za brisanje ture iz generisanog gRPC klijenta
-
-                 if (response.Success) 
-                 {
-                     return Ok("Tour deleted successfully."); 
-                 }
-                 else
-                 {
-                     return StatusCode(500, response.Error);
-                 }
-             }
+             
 
              //AddCaracteristics metoda - PROVERITI, ovo je json.. zajebano
-
-             //TourIdRequest izmena!
-
-             public override async Task<ActionResult> Archive(TourIdRequest request, ServerCallContext context)
-             {
-                 var httpHandler = new HttpClientHandler();
-                 httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                 var channel = GrpcChannel.ForAddress("http://localhost:3000", new GrpcChannelOptions { HttpHandler = httpHandler });
-
-                 var client = new Tour.TourClient(channel);
-
-                 var response = await client.ArchiveTourAsync(request); // Koristimo metodu za arhiviranje ture iz generisanog gRPC klijenta
-
-                 if (response.Success) 
-                 {
-                     return Ok("Tour archived successfully."); 
-                 }
-                 else
-                 {
-                     return StatusCode(500, response.Error); 
-                 }
-             }*/
+             */
     }
 }
