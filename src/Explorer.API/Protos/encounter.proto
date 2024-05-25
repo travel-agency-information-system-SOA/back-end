@@ -45,18 +45,18 @@ message SocialEnc {
 message HiddenLocationEnc {
        string id = 1;
        string name = 2;
-        string description = 3;
-        int32 xpPoints = 4;
-        string status = 5;
-        string type = 6;
-        double latitude = 7;
-        double longitude = 8;
-        string encounterId = 9;
-        string imageURL = 10;
-        double imageLatitude = 11;
-        double imageLongitude = 12;
-        double distanceTreshold = 13;
-        bool shouldBeApproved = 14;
+       string description = 3;
+       int32 xpPoints = 4;
+       string status = 5;
+       string type = 6;
+       double latitude = 7;
+       double longitude = 8;
+       string encounterId = 9;
+       string imageURL = 10;
+       double imageLatitude = 11;
+       double imageLongitude = 12;
+       double distanceTreshold = 13;
+       bool shouldBeApproved = 14;
 }
 
 message Enc {
@@ -78,4 +78,8 @@ message ListEnc {
 message PageRequest {
     int32 page = 1;
     int32 pageSize = 2;
+}
+
+message HiddenLocationEncBase {
+    string id = 1;
 }

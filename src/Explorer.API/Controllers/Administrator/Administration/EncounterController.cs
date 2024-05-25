@@ -39,7 +39,7 @@ public class EncounterController : BaseApiController
         _hiddenLocationEncounterService = hiddenLocationEncounterService;
     }
 
-    //ovo prebacila u rpc
+    //PREBACENO
     //[HttpGet]
     public async Task<ActionResult<PagedResult<EncounterMongoDto>>> GetAllEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
@@ -69,6 +69,7 @@ public class EncounterController : BaseApiController
         }
     }
 
+    //NE TREBA
     [HttpGet("social")]
     public async Task<ActionResult<PagedResult<SocialEncounterDto>>> GetAllSocialEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
@@ -90,6 +91,7 @@ public class EncounterController : BaseApiController
         }
     }
 
+    //NE TREBA
     [HttpGet("hiddenLocation")]
     public async Task<ActionResult<PagedResult<HiddenLocationEncounterDto>>> GetAllHiddenLocationEncounters([FromQuery] int page, [FromQuery] int pageSize)
     {
@@ -111,6 +113,7 @@ public class EncounterController : BaseApiController
         }
     }
 
+    //NE TREBA
     [HttpPost]
     public async Task<ActionResult<EncounterDto>> Create([FromBody] EncounterDto encounter)
     {
@@ -147,7 +150,7 @@ public class EncounterController : BaseApiController
         }
     }
 
-    //ovo prevodim
+    //PREBACENO
     //[HttpPost("hiddenLocation")]
     public async Task<ActionResult<WholeHiddenLocationEncounterMongoDto>> Create([FromBody] WholeHiddenLocationEncounterMongoDto wholeEncounter)
     {
@@ -199,6 +202,7 @@ public class EncounterController : BaseApiController
         return StatusCode((int)HttpStatusCode.Created, createdHiddenLocationEncounter);
     }
 
+    //ne treba
     private async Task<ActionResult<EncounterMongoDto>> CreateBaseEncounterAsync(EncounterMongoDto encounterDto)
     {
         string json = JsonConvert.SerializeObject(encounterDto);
@@ -224,6 +228,7 @@ public class EncounterController : BaseApiController
         }
     }
      
+    //PREBACENO
     //SOCIAL ENCOUNTER CEO
     //[HttpPost("social")]
     public async Task<ActionResult<WholeSocialEncounterMongoDto>> CreateSocialEncounter([FromBody] WholeSocialEncounterMongoDto socialEncounter)
@@ -284,6 +289,7 @@ public class EncounterController : BaseApiController
         return StatusCode((int)HttpStatusCode.Created, wholeSocialEncounterMongoDto);
     }
 
+    //ne treba 
     //SOCIAL ENCOUNTER
     private async Task<ActionResult<SocialEncounterMongoDto>> CreateSocialEncounterAsync(SocialEncounterMongoDto socialEncounterDto)
     {
@@ -310,6 +316,7 @@ public class EncounterController : BaseApiController
         }
     }
 
+    //... NE TREBA VRV unutar metode za update hidden location ili social updatovati i ovo
     [HttpPut]
     public async Task<ActionResult<EncounterDto>> Update([FromBody] EncounterDto encounter)
     {
@@ -338,6 +345,8 @@ public class EncounterController : BaseApiController
             return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
         }
     }
+
+/////////////////ODAVDE NASTAVI
 
     [HttpPut("hiddenLocation")]
     public async Task<ActionResult<HiddenLocationEncounterDto>> Update([FromBody] WholeHiddenLocationEncounterDto wholeEncounter)
@@ -451,7 +460,9 @@ public class EncounterController : BaseApiController
             return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
         }
     }
+///////////////////////////////////////////////////////
 
+    //ne treba
     [HttpGet("getEncounter/{encounterId:int}")]
     public async Task<ActionResult<EncounterDto>> GetEncounter(int encounterId)
     {
@@ -469,6 +480,7 @@ public class EncounterController : BaseApiController
         }
     }
 
+    //videti da li i delete
     [HttpDelete("{baseEncounterId:int}")]
     public async Task<ActionResult> DeleteEncounter(int baseEncounterId)
     {
