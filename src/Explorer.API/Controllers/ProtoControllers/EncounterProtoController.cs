@@ -2,6 +2,10 @@
 using System.Net.Security;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.Core.Domain;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.Core.Domain.Tours;
+using FluentResults;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcServiceTranscoding;
@@ -42,7 +46,7 @@ public class EncounterProtoController : Encounter.EncounterBase
         return await Task.FromResult(baseEncounterResponse); //ovi koji imaju listu
     }
 
-    public override async Task<HiddenLocationEnc> CreateHiddenLocationEncounter (HiddenLocationEnc request, ServerCallContext context)
+    public override async Task<HiddenLocationEnc> CreateHiddenLocationEncounter(HiddenLocationEnc request, ServerCallContext context)
     {
         try
         {
@@ -65,4 +69,50 @@ public class EncounterProtoController : Encounter.EncounterBase
             return null;
         }
     }
+
+    public override async Task<ListEnc> GetAllEncounters(PageRequest request, ServerCallContext context)
+    {
+        Console.WriteLine("USAO GET ALL ENC");
+        Console.WriteLine("Request:");
+        Console.WriteLine(request);
+
+        var httpHandler = new HttpClientHandler();
+        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+        var channel = GrpcChannel.ForAddress("http://encounters:4000", new GrpcChannelOptions { HttpHandler = httpHandler });
+
+        var client = new Encounter.EncounterClient(channel);
+
+        var response = await client.GetAllEncountersAsync(request);
+
+        Console.WriteLine("Response:");
+        Console.WriteLine(response);
+
+        var encounters = new List<Enc>();
+
+        foreach (var enc in response.Results)
+        {
+            encounters.Add(new Enc
+            {
+                Id = enc.Id,
+                Name = enc.Name,
+                Description = enc.Description,
+                XpPoints = enc.XpPoints,
+                Type = enc.Type,
+                Latitude = enc.Latitude,
+                Longitude = enc.Longitude,
+                ShouldBeApproved = enc.ShouldBeApproved,
+            });
+        }
+
+        var totalCount = encounters.Count;
+
+        var ListEnc = new ListEnc
+        {
+            Results = { encounters },
+            TotalCount = totalCount
+        };
+
+        return ListEnc;
+    }
+ 
 }

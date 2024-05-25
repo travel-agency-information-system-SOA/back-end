@@ -5,14 +5,6 @@ import "Protos/google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service Encounter {
-    /* rpc GetAllEncounters(GetAllEncountersRequest) returns (GetAllEncountersResponse) {
-        option (google.api.http) = {
-            get: "/api/encounters"
-            body: "*"
-        };
-    }
-    */
-
     rpc CreateSocialEncounter(SocialEnc) returns (SocialEnc){
         option (google.api.http) = {
             post: "/api/encounters/social"
@@ -26,19 +18,13 @@ service Encounter {
             body: "*"
         };
     }
-}
 
-/*
-message GetAllEncountersRequest {
-    int32 page = 1;
-    int32 pageSize = 2;
+     rpc GetAllEncounters(PageRequest) returns (ListEnc){
+          option (google.api.http) = {
+            get: "/api/encounters"
+          };
+     }
 }
-
-message GetAllEncountersResponse {
-    repeated EncounterMongoDto encounters = 1;
-    int32 totalItems = 2;
-}
-*/
 
 message SocialEnc {
         string encounterId = 1;
@@ -71,4 +57,25 @@ message HiddenLocationEnc {
         double imageLongitude = 12;
         double distanceTreshold = 13;
         bool shouldBeApproved = 14;
+}
+
+message Enc {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    int32 xpPoints = 4;
+    string type = 5;
+    double latitude = 6;
+    double longitude = 7;
+    bool shouldBeApproved = 8;
+}
+
+message ListEnc {
+    repeated Enc results=1;
+    int32 totalCount = 2;
+}
+
+message PageRequest {
+    int32 page = 1;
+    int32 pageSize = 2;
 }
