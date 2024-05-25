@@ -16,21 +16,18 @@ service Follower {
     rpc GetUserRecommendations(id) returns (ListNeoUserDto) {
     option (google.api.http) = {
       get: "/api/follower/getAllRecomodations/{Id}"
-      
     };
     }
 
     rpc GetFollowingsWithBlogs(id) returns (ListBlogPostDto) {
     option (google.api.http) = {
       get: "/api/follower/getFollowings/{Id}"
-      
     };
     }
 
     rpc FindUserFollowings(id) returns (ListNeoUserDto) {
     option (google.api.http) = {
       get: "/api/follower/findUserFollowings/{Id}"
-      
     };
     }
    

@@ -1,20 +1,22 @@
 ﻿using Explorer.API.FollowerDtos;
-using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
-using Explorer.Stakeholders.API.Dtos;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
 using GrpcServiceTranscoding;
+using Explorer.Blog.Core.UseCases;
+using NuGet.Packaging;
 
 namespace Explorer.API.Controllers
 {
 	public class FollowerProtoController : Follower.FollowerBase
 	{
 		private readonly ILogger<FollowerProtoController> _logger;
-		public FollowerProtoController(ILogger<FollowerProtoController> logger)
+		private readonly BlogPostService _blogPostService;
+		public FollowerProtoController(ILogger<FollowerProtoController> logger, BlogPostService blogPostService)
 		{
 			_logger = logger;
+			_blogPostService = blogPostService;
 		}
 
 		public override async Task<GrpcServiceTranscoding.NeoFollowerDto> CreateNewFollowing(GrpcServiceTranscoding.UserFollowingDto following,
@@ -55,19 +57,30 @@ namespace Explorer.API.Controllers
 
 
 		public override async Task<ListBlogPostDto> GetFollowingsWithBlogs(id id,
-			   ServerCallContext context)
+		 ServerCallContext context)
 		{
 			var httpHandler = new HttpClientHandler();
 			httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
-			var response = await client.GetFollowingsWithBlogsAsync(id);
+			var followers = await client.FindUserFollowingsAsync(id); 
+			var allBlogPosts = new List<GrpcServiceTranscoding.BlogPostDto>();
 
+			foreach (var follower in followers.ResponseList)
+			{
+				var blogsResult = _blogPostService.GetAllByAuthorIds(follower.Id);
+
+				if (blogsResult.IsSuccess) //proveriti
+				{
+					var blogs = blogsResult.Value;
+					allBlogPosts.AddRange((IEnumerable<BlogPostDto>)blogs);
+				}
+			}
 
 			return await Task.FromResult(new ListBlogPostDto
 			{
-				ResponseList = { response.ResponseList }
+				ResponseList = { allBlogPosts }
 			});
 		}
 
