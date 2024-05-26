@@ -12,8 +12,8 @@ namespace Explorer.API.Controllers
 	public class FollowerProtoController : Follower.FollowerBase
 	{
 		private readonly ILogger<FollowerProtoController> _logger;
-		private readonly BlogPostService _blogPostService;
-		public FollowerProtoController(ILogger<FollowerProtoController> logger, BlogPostService blogPostService)
+		private readonly IBlogPostService _blogPostService;
+		public FollowerProtoController(ILogger<FollowerProtoController> logger, IBlogPostService blogPostService)
 		{
 			_logger = logger;
 			_blogPostService = blogPostService;
@@ -24,7 +24,7 @@ namespace Explorer.API.Controllers
 		{
 			var httpHandler = new HttpClientHandler();
 			httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
+			var channel = GrpcChannel.ForAddress("http://followers:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
 			var response = await client.CreateNewFollowingAsync(following);
@@ -44,7 +44,7 @@ namespace Explorer.API.Controllers
 		{
 			var httpHandler = new HttpClientHandler();
 			httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
+			var channel = GrpcChannel.ForAddress("http://followers:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
 			var response = await client.GetUserRecommendationsAsync(id);
@@ -61,7 +61,7 @@ namespace Explorer.API.Controllers
 		{
 			var httpHandler = new HttpClientHandler();
 			httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
+			var channel = GrpcChannel.ForAddress("http://followers:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
 			var followers = await client.FindUserFollowingsAsync(id); 
@@ -87,15 +87,18 @@ namespace Explorer.API.Controllers
 		public override async Task<ListNeoUserDto> FindUserFollowings(id id,
 			   ServerCallContext context)
 		{
+
+			Console.WriteLine("USAO JE FindUserFollowings!!!!");
 			var httpHandler = new HttpClientHandler();
 			httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-			var channel = GrpcChannel.ForAddress("http://localhost:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
+			var channel = GrpcChannel.ForAddress("http://followers:8090", new GrpcChannelOptions { HttpHandler = httpHandler });
 
 			var client = new Follower.FollowerClient(channel);
 			var response = await client.FindUserFollowingsAsync(id);
+            Console.WriteLine("OVO JE RESPONSE!!!!");
+            Console.WriteLine(response);
 
-
-			return await Task.FromResult(new ListNeoUserDto
+            return await Task.FromResult(new ListNeoUserDto
 			{
 				ResponseList = { response.ResponseList }
 			});

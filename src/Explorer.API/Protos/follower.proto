@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 service Follower {
     rpc CreateNewFollowing(UserFollowingDto) returns (NeoFollowerDto) {
     option (google.api.http) = {
-      post: "/api/follower/followers"
+      post: "/api/follower/followers/{userId}/{followerId}"
       body: "*"
     };
     }
@@ -27,7 +27,7 @@ service Follower {
 
     rpc FindUserFollowings(id) returns (ListNeoUserDto) {
     option (google.api.http) = {
-      get: "/api/follower/findUserFollowings/{Id}"
+      get: "/api/follower/findUserFollowings/{Id}" 
     };
     }
    
@@ -35,49 +35,49 @@ service Follower {
 
 
 message UserFollowingDto {
-     int32 UserId=1;
-     int32 FollowerId=2;
+     int32 userId=1;
+     int32 followerId=2;
 }
 
 message NeoFollowerDto {
-    string UserId=1;
-    string Username=2;
-    string FollowingUserId=3;
-    string FollowingUsername=4;
+    string userId=1;
+    string username=2;
+    string followingUserId=3;
+    string followingUsername=4;
 }
 
 message NeoUserDto {
-    int32 Id=1;
-    string Username=2;
+    int32 id=1;
+    string username=2;
 }
 
 
 message BlogPostDto {
-    int32 Id=1;
-    int32 AuthorId=2;
-    int32 TourId=3;
-    string AuthorUsername=4;
-    string Title=5;
-    string Description=6;
-    google.protobuf.Timestamp CreationDate=7; 
-    repeated string ImageURLs=8;
-    repeated BlogPostCommentDto Comments=9;
-    repeated BlogPostRatingDto Ratings=10;
-    string Status=11;
+    int32 id=1;
+    int32 authorId=2;
+    int32 tourId=3;
+    string authorUsername=4;
+    string title=5;
+    string description=6;
+    google.protobuf.Timestamp creationDate=7; 
+    repeated string imageURLs=8;
+    repeated BlogPostCommentDto comments=9;
+    repeated BlogPostRatingDto ratings=10;
+    string status=11;
 }
 
 message BlogPostCommentDto {
-    string Text=1;
-    int32 UserId=2;
-    string Username=3;
-    google.protobuf.Timestamp CreationTime=4;
-    google.protobuf.Timestamp LastUpdatedTime=5;
+    string text=1;
+    int32 userId=2;
+    string username=3;
+    google.protobuf.Timestamp creationTime=4;
+    google.protobuf.Timestamp lastUpdatedTime=5;
 }
 
 message BlogPostRatingDto {
-    bool IsPositive=1;
-    google.protobuf.Timestamp CreationTime=2;
-    int32 UserId=3;
+    bool isPositive=1;
+    google.protobuf.Timestamp creationTime=2;
+    int32 userId=3;
 }
 
 message id {

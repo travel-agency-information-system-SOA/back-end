@@ -17,7 +17,7 @@ namespace Explorer.API.Controllers
 {
 
    // [Route("api/follower")]
-    public class FollowerController : BaseApiController
+   /* public class FollowerController : BaseApiController
     {
         private readonly IFollowerService _followerService;
         private readonly IUserService _userService;
@@ -160,5 +160,5 @@ namespace Explorer.API.Controllers
                 return StatusCode(500, $"Error occurred while sending request: {ex.Message}");
             }
         }
-    }
+    }*/
 }
