@@ -1,16 +1,16 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+/*using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Text;
+using System.Text;*/
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    [Route("api/administration/tour")]
+   /* //[Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
         private readonly ITourService _tourService;
@@ -22,8 +22,8 @@ namespace Explorer.API.Controllers.Author.Authoring
            
         }
 
-
-        [HttpPost]
+        //rpc
+        //[HttpPost] 
         public async Task<ActionResult<TourDTO>> Create([FromBody] TourDTO tour)
         {
             tour.Status = "Draft";
@@ -81,7 +81,8 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
 
-        [HttpGet("{userId:int}")]
+        //rpc
+        // [HttpGet("{userId:int}")]
         public async Task<ActionResult<PagedResult<TourDTO>>> GetByUserId(int userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
             try
@@ -123,8 +124,9 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }*/
 
-		[HttpDelete("{id:int}")]
-		public async Task<ActionResult> Delete(int id)
+        //rpc
+		//[HttpDelete("{id:int}")]
+		/*public async Task<ActionResult> Delete(int id)
 		{
 			try
 			{
@@ -166,7 +168,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }
 
-        [HttpPut("caracteristics/{id:int}")]
+        //[HttpPut("caracteristics/{id:int}")]
         public async Task<ActionResult<TourDTO>> AddCaracteristics(int id, [FromBody] TourCharacteristicDTO tourCharacteristic)
         {
             //var result = _tourService.SetTourCharacteristic(id, tourCharacteristic.Distance, tourCharacteristic.Duration, tourCharacteristic.TransportType);
@@ -202,8 +204,9 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }*/
 
-		[HttpPut("publish/{tourId:int}")]
-		public async Task<ActionResult> Publish(int tourId)
+        //rpc
+		//[HttpPut("publish/{tourId:int}")]
+		/*public async Task<ActionResult> Publish(int tourId)
 		{
 			try
 			{
@@ -247,8 +250,9 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }*/
 
-		[HttpPut("archive/{id:int}")]
-		public async Task<ActionResult> Archive(int id)
+        //rpc
+		//[HttpPut("archive/{id:int}")]
+		/*public async Task<ActionResult> Archive(int id)
 		{
 			try
 			{
@@ -352,9 +356,9 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 		[Authorize(Policy = "touristPolicy")]
 		[HttpGet("lastId")]
-    public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
-    {
-        return _tourService.GetLastTourId(page, pageSize);
-    }
-	}
+        public long GetLastTourId([FromQuery] int page,[FromQuery] int pageSize)
+        {
+            return _tourService.GetLastTourId(page, pageSize);
+        }*/
+	//}
 }
