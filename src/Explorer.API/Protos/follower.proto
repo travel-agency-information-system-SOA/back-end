@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 service Follower {
     rpc CreateNewFollowing(UserFollowingDto) returns (NeoFollowerDto) {
     option (google.api.http) = {
-      post: "/api/follower/followers/{userId}/{followerId}"
+      post: "/api/follower/followers/followUser"
       body: "*"
     };
     }
@@ -91,3 +91,4 @@ message ListBlogPostDto {
 message ListNeoUserDto {
     repeated NeoUserDto ResponseList=1 ;
 }
+
