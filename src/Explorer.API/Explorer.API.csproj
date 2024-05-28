@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Protos\tours.proto" />
+		<None Remove="Protos\tour.proto" />
 	</ItemGroup>
 
 
@@ -25,6 +25,10 @@
 	<!-- do ovde -->
 
 	<!-- ovo dodala -->
+
+	<ItemGroup>
+		<None Remove="Protos\tours.proto" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\Explorer.BuildingBlocks.Core\Explorer.BuildingBlocks.Core.csproj" />
@@ -57,7 +61,7 @@
 	<ItemGroup>
 		<Folder Include="Controllers\ProtoControllers\" />
 		<Protobuf Include="Protos\encounter.proto" />
-		<Protobuf Include="Protos\tours.proto" />
+		<Protobuf Include="Protos\tour.proto" />
 	</ItemGroup>
 
 	<!-- do ovde -->
