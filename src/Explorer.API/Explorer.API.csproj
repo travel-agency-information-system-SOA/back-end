@@ -14,21 +14,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Protos\tour.proto" />
-	</ItemGroup>
-
-
-	<ItemGroup>
 		<Content Include="Startup\templateMail.html" />
 	</ItemGroup>
 	
 	<!-- do ovde -->
 
-	<!-- ovo dodala -->
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<None Remove="Protos\tours.proto" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.10" />
+    <PackageReference Include="QRCoder" Version="1.4.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\Explorer.BuildingBlocks.Core\Explorer.BuildingBlocks.Core.csproj" />
@@ -61,7 +68,6 @@
 	<ItemGroup>
 		<Folder Include="Controllers\ProtoControllers\" />
 		<Protobuf Include="Protos\encounter.proto" />
-		<Protobuf Include="Protos\tour.proto" />
 	</ItemGroup>
 
 	<!-- do ovde -->
