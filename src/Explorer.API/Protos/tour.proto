@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+option csharp_namespace = "Explorer.API.Protos";
+import "Protos/google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service Tour {
+    rpc Create(TourDto) returns (TourDto) {
+        option (google.api.http) = {
+           post: "/api/administration/tour"
+          body: "*"
+        };
+    }
+    rpc GetByUserId(PageRequestTour) returns (TourListResponse) {
+       option (google.api.http) = {
+         get: "/api/administration/tour/{userId}"
+       };
+    }
+    rpc Publish(TourPublishRequest) returns (TourDto) {
+        option (google.api.http) = {
+            put: "/api/administration/tour/publish/{tourId}"
+            body: "*"
+        };
+    }
+
+    rpc Archive(TourPublishRequest) returns (TourDto) {
+        option (google.api.http) = {
+            put: "/api/administration/tour/archive/{tourId}"
+            body: "*"
+        };
+    }
+    rpc Delete(TourIdRequest) returns (TourDto) {
+        option (google.api.http) = {
+            delete: "/api/administration/tour/{id}"
+        };
+    }
+}
+
+
+message TourDto {
+    int64 id = 1; 
+    string name = 2;
+    google.protobuf.Timestamp publishedDateTime = 3;
+    google.protobuf.Timestamp archivedDateTime = 4;
+    string description = 5;
+    string difficultyLevel = 6;
+    repeated string tags = 7;
+    int32 price = 8;
+    string status = 9;
+    int64 UserId = 10;
+    repeated TourPointDto tourPoints = 11;
+    repeated TourCharacteristicDto tourCharacteristics = 12;
+    repeated TourReviewDto tourReviews = 13;
+}
+
+message TourPointDto {
+    int64 id = 1;
+    int64 tourId = 2;
+    string name = 3;
+    string description = 4;
+    double latitude = 5;
+    double longitude = 6;
+    string imageUrl = 7;
+    string secret = 8;
+}
+
+message TourCharacteristicDto {
+    double distance = 1;
+    double duration = 2;
+    string transportType = 3;
+}
+
+message TourReviewDto {
+    int64 id = 1;
+    double grade = 2;
+    string comment = 3;
+    int64 touristId = 4;
+    google.protobuf.Timestamp attendanceDate = 5;
+    google.protobuf.Timestamp reviewDate = 6;
+    repeated string images = 7;
+    int64 tourId = 8;
+}
+message PageRequestTour {
+    int64 userId = 1;
+    int32 page = 2;
+    int32 pageSize = 3;
+}
+
+message UserIdRequest {
+    int64 userId = 1;
+}
+
+message TourIdRequest {
+    int64 id = 1;
+}
+
+message Response {
+    bool success = 1;
+    string error = 2;
+}
+
+message TourListResponse {
+    repeated TourDto results = 1;
+    int32 totalCount = 2;
+}
+
+message TourPublishRequest {
+    int64 tourId = 1;
+    TourDto tour = 2;
+}

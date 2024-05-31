@@ -1,3 +1,4 @@
+using Explorer.API.Controllers.ProtoControllers;
 using Explorer.API.Startup;
 using GrpcServiceTranscoding;
 
@@ -47,6 +48,7 @@ app.UseStaticFiles();
 app.MapControllers();
 
 app.MapGrpcService<EncounterProtoController>();
+app.MapGrpcService<TourProtoController>();
 
 app.Run();
 

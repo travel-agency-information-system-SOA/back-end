@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    [Route("api/administration/tour")]
+   /* [Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
         private readonly ITourService _tourService;
@@ -123,7 +123,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }*/
 
-		[HttpDelete("{id:int}")]
+		/*[HttpDelete("{id:int}")]
 		public async Task<ActionResult> Delete(int id)
 		{
 			try
@@ -202,7 +202,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }*/
 
-		[HttpPut("publish/{tourId:int}")]
+		/*[HttpPut("publish/{tourId:int}")]
 		public async Task<ActionResult> Publish(int tourId)
 		{
 			try
@@ -247,7 +247,7 @@ namespace Explorer.API.Controllers.Author.Authoring
             return CreateResponse(result);
         }*/
 
-		[HttpPut("archive/{id:int}")]
+		/*[HttpPut("archive/{id:int}")]
 		public async Task<ActionResult> Archive(int id)
 		{
 			try
@@ -356,5 +356,5 @@ namespace Explorer.API.Controllers.Author.Authoring
     {
         return _tourService.GetLastTourId(page, pageSize);
     }
-	}
+	}*/
 }
