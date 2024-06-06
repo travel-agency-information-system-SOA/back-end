@@ -27,7 +27,7 @@ namespace Explorer.API.Controllers.ProtoControllers
             Console.WriteLine("USAO CREATE:");
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            var channel = GrpcChannel.ForAddress("http://tours:3200", new GrpcChannelOptions { HttpHandler = httpHandler });
+            var channel = GrpcChannel.ForAddress("http://tours:3300", new GrpcChannelOptions { HttpHandler = httpHandler });
 
             var client = new Tour.TourClient(channel);
             var response = await client.CreateAsync(message);
@@ -62,7 +62,7 @@ namespace Explorer.API.Controllers.ProtoControllers
             Console.WriteLine(request);
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            var channel = GrpcChannel.ForAddress("http://tours:3200", new GrpcChannelOptions { HttpHandler = httpHandler });
+            var channel = GrpcChannel.ForAddress("http://tours:3300", new GrpcChannelOptions { HttpHandler = httpHandler });
 
             var client = new Tour.TourClient(channel);
             var response = await client.GetByUserIdAsync(request);
@@ -108,7 +108,7 @@ namespace Explorer.API.Controllers.ProtoControllers
         {
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            var channel = GrpcChannel.ForAddress("http://tours:3200", new GrpcChannelOptions { HttpHandler = httpHandler });
+            var channel = GrpcChannel.ForAddress("http://tours:3300", new GrpcChannelOptions { HttpHandler = httpHandler });
 
             var client = new Tour.TourClient(channel);
             var response = await client.PublishAsync(request);
@@ -136,7 +136,7 @@ namespace Explorer.API.Controllers.ProtoControllers
         {
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            var channel = GrpcChannel.ForAddress("http://tours:3200", new GrpcChannelOptions { HttpHandler = httpHandler });
+            var channel = GrpcChannel.ForAddress("http://tours:3300", new GrpcChannelOptions { HttpHandler = httpHandler });
 
             var client = new Tour.TourClient(channel);
             var response = await client.ArchiveAsync(request);
@@ -164,7 +164,7 @@ namespace Explorer.API.Controllers.ProtoControllers
         {
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            var channel = GrpcChannel.ForAddress("http://tours:3200", new GrpcChannelOptions { HttpHandler = httpHandler });
+            var channel = GrpcChannel.ForAddress("http://tours:3300", new GrpcChannelOptions { HttpHandler = httpHandler });
 
             var client = new Tour.TourClient(channel);
 
