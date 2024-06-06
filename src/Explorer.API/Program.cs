@@ -1,4 +1,5 @@
 using Explorer.API.Controllers.ProtoControllers;
+using Explorer.API.Controllers;
 using Explorer.API.Startup;
 using GrpcServiceTranscoding;
 
@@ -49,6 +50,7 @@ app.MapControllers();
 
 app.MapGrpcService<EncounterProtoController>();
 app.MapGrpcService<TourProtoController>();
+app.MapGrpcService<FollowerProtoController>();
 
 app.Run();
 
