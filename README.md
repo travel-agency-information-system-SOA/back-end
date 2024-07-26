@@ -14,7 +14,6 @@ Our back-end has largely evolved into an **API Gateway** that offers a RESTful A
 
 The microservices that make up our application, which are called through the back-end (API Gateway), include:
 - Tours
-- Stakeholders
 - Encounters
 - Followers
 
@@ -44,7 +43,6 @@ To gain a better understanding of our system's functioning and to simplify error
   - ***Encounters***: Go (Golang) with a document-oriented databse (MongoDB)
   - ***Followers***: Go (Golang) with a  graph database (Neo4J)
   - ***Tours***: Go (Golang) with a relational database (PostgreSQL)
-  - ***Stakeholders***: Go (Golang) with a relational database (PostgreSQL)
  
 - ***Client platform***: Angular (TypeScript, HTML, CSS) with RESTful services for the front-end interface
 
