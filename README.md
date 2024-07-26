@@ -4,6 +4,8 @@ This project represents an upgrade in software design, where we transitioned fro
 
 You can find more information about the project's basis [here](https://github.com/travel-agency-information-system/back-end).
 
+# Back-end
+
 The central part of our application, which we refer to as the **back-end**, represents the remaining portion of our monolithic application. Over time, we gradually deactivated its services and moved the logic into separate applications (microservices) written in different languages, each using its own database.
 
 Initially, we called the microservices methods through controllers by accessing the appropriate paths. Eventually, we transitioned to RPC (gRPC) where we invoked remote service methods by sending protobuf messages.
